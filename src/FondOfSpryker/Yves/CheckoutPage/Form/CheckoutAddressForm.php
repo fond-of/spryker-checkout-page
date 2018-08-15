@@ -38,8 +38,8 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
             'label' => 'customer.address.email',
             'required' => true,
             'constraints' => [
-                $this->createEmailValidConstraints($options)
-            ]
+                $this->createEmailValidConstraints($options),
+            ],
         ]);
 
         return $this;
@@ -48,7 +48,7 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
     protected function createEmailValidConstraints(array $options)
     {
         return new Email([
-            'message' => 'email.validation.error'
+            'message' => 'email.validation.error',
         ]);
     }
 }

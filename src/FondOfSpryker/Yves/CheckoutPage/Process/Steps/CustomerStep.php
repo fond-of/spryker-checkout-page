@@ -2,9 +2,9 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use Generated\Shared\Transfer\CustomerTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\CustomerStep as SprykerShopCustomerStep;
-use Generated\Shared\Transfer\CustomerTransfer;
 use Symfony\Component\HttpFoundation\Request;
 
 class CustomerStep extends SprykerShopCustomerStep
@@ -12,6 +12,7 @@ class CustomerStep extends SprykerShopCustomerStep
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
      * @return \Generated\Shared\Transfer\QuoteTransfer|void
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
@@ -27,6 +28,7 @@ class CustomerStep extends SprykerShopCustomerStep
 
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
      * @return bool
      */
     public function requireInput(AbstractTransfer $quoteTransfer): bool
@@ -36,6 +38,7 @@ class CustomerStep extends SprykerShopCustomerStep
 
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
      * @return bool
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool

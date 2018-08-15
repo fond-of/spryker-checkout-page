@@ -4,7 +4,6 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use Generated\Shared\Transfer\AddressTransfer;
 use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressCollectionForm as SprykerShopCheckoutAddressCollectionForm;
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressForm;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 

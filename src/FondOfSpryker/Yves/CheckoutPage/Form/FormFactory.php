@@ -79,7 +79,6 @@ class FormFactory extends SprykerShopFormFactory
 
     /**
      * @return mixed
-     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     public function getBillingAddressFormTypes()
     {
