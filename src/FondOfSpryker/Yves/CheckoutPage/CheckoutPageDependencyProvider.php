@@ -2,11 +2,11 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage;
 
-use Pyz\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
-use Pyz\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
+use FondOfSpryker\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
+use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
 use Spryker\Yves\Kernel\Container;
-use Pyz\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
+use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use SprykerShop\Yves\CustomerPage\Form\CustomerCheckoutForm;
 use SprykerShop\Yves\CustomerPage\Form\DataProvider\CheckoutAddressFormDataProvider;
 use SprykerShop\Yves\CustomerPage\Form\GuestForm;
