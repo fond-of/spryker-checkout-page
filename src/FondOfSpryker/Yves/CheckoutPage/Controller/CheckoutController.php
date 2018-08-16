@@ -6,7 +6,7 @@ use SprykerShop\Yves\CheckoutPage\Controller\CheckoutController as SprykerShopCh
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @method \Pyz\Yves\CheckoutPage\CheckoutPageFactory getFactory()
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
  */
 class CheckoutController extends SprykerShopCheckoutController
 {
@@ -86,6 +86,26 @@ class CheckoutController extends SprykerShopCheckoutController
             $response,
             $this->getFactory()->getCustomerPageWidgetPlugins(),
             '@CheckoutPage/views/billing-address/billing-address.twig'
+        );
+    }
+
+    public function shippingAddressAction(Request $request)
+    {
+        $response = $this->createStepProcess()->process(
+            $request,
+            $this->getFactory()
+                ->createCheckoutFormFactory()
+                ->createShippingAddressFormCollection()
+        );
+
+        if (!is_array($response)) {
+            return $response;
+        }
+
+        return $this->view(
+            $response,
+            $this->getFactory()->getCustomerPageWidgetPlugins(),
+            '@CheckoutPage/views/shipping-address/shipping-address.twig'
         );
     }
 

@@ -19,7 +19,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
-     * @return \Pyz\Yves\CheckoutPage\Process\StepFactory
+     * @return \FondOfSpryker\Yves\CheckoutPage\Process\StepFactory
      */
     public function createStepFactory(): StepFactory
     {
@@ -27,7 +27,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
-     * @return \Pyz\Yves\CheckoutPage\Form\FormFactory
+     * @return \FondOfSpryker\Yves\CheckoutPage\Form\FormFactory
      */
     public function createCheckoutFormFactory(): FormFactory
     {

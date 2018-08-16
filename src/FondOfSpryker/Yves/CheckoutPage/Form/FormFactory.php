@@ -12,6 +12,21 @@ use SprykerShop\Yves\CheckoutPage\Form\FormFactory as SprykerShopFormFactory;
 class FormFactory extends SprykerShopFormFactory
 {
     /**
+     * @param \Symfony\Component\Form\FormTypeInterface[] $formTypes
+     * @param \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null $dataProvider
+     *
+     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
+     */
+    public function createFormCollection(array $formTypes, ?StepEngineFormDataProviderInterface $dataProvider = null): FormCollectionHandler
+    {
+        return new FormCollectionHandler(
+            $formTypes,
+            $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY),
+            $dataProvider
+        );
+    }
+
+    /**
      * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
      */
     public function createCustomerFormCollection()
@@ -39,21 +54,6 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @param \Symfony\Component\Form\FormTypeInterface[] $formTypes
-     * @param \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null $dataProvider
-     *
-     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
-     */
-    public function createFormCollection(array $formTypes, ?StepEngineFormDataProviderInterface $dataProvider = null): FormCollectionHandler
-    {
-        return new FormCollectionHandler(
-            $formTypes,
-            $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY),
-            $dataProvider
-        );
-    }
-
-    /**
      * @return \Symfony\Component\Form\FormTypeInterface[]
      */
     public function getAddressFormTypes()
@@ -69,6 +69,33 @@ class FormFactory extends SprykerShopFormFactory
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::ADDRESS_STEP_FORM_DATA_PROVIDER);
     }
 
+    /**
+     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandler|\Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
+     */
+    public function createShippingAddressFormCollection()
+    {
+        return $this->createFormCollection(
+            $this->getShippingAddressFormTypes(),
+            $this->getShippingAddressFormDataProvider()
+        );
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getShippingAddressFormTypes()
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::BILLING_ADDRESS_STEP_SUB_FORM);
+    }
+
+    protected function getShippingAddressFormDataProvider()
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::SHIPPING_ADDRESS_FORM_DATA_PROVIDER);
+    }
+
+    /**
+     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandler|\Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
+     */
     public function createBillingAddressFormCollection()
     {
         return $this->createFormCollection(
@@ -87,7 +114,7 @@ class FormFactory extends SprykerShopFormFactory
 
     public function getBillingAddressFormDataProvider()
     {
-        return $this->getProvidedDependency(CheckoutPageDependencyProvider::BILLING_ADDRESS_FROM_DATA_PROVIDER);
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::BILLING_ADDRESS_FORM_DATA_PROVIDER);
     }
 
     /**

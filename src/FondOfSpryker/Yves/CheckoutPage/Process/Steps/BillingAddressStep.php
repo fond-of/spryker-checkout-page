@@ -5,10 +5,9 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep as SprykerShopAddressStep;
 use Symfony\Component\HttpFoundation\Request;
 
-class BillingAddressStep extends SprykerShopAddressStep
+class BillingAddressStep extends AddressStep
 {
     /**
      * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer

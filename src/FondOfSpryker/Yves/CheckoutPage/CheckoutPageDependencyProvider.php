@@ -4,7 +4,9 @@ namespace FondOfSpryker\Yves\CheckoutPage;
 
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
+use FondOfSpryker\Yves\CustomerPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
+use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
 use Spryker\Yves\Kernel\Container;
 use Spryker\Yves\Kernel\Plugin\Pimple;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
@@ -17,7 +19,10 @@ use SprykerShop\Yves\CustomerPage\Form\RegisterForm;
 class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyProvider
 {
     const BILLING_ADDRESS_STEP_SUB_FORM = 'BILLING_ADDRESS_STEP_SUB_FORM';
-    const BILLING_ADDRESS_FROM_DATA_PROVIDER = 'BILLING_ADDRESS_FROM_DATA_PROVIDER';
+    const BILLING_ADDRESS_FORM_DATA_PROVIDER = 'BILLING_ADDRESS_FORM_DATA_PROVIDER';
+
+    const SHIPPING_ADDRESS_STEP_SUB_FORM = 'SHIPPING_ADDRESS_STEP_SUB_FORM';
+    const SHIPPING_ADDRESS_FORM_DATA_PROVIDER = 'SHIPPING_ADDRESS_FORM_DATA_PROVIDER';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
@@ -62,6 +67,8 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
 
         $container = $this->addBillingAddressStepSubForm($container);
         $container = $this->addBillingAddressFormDataProvider($container);
+        $container = $this->addShippingAddressStepSubForm($container);
+        $container = $this->addShippingAddressFormDataProvider($container);
 
         return $container;
     }
@@ -121,7 +128,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @return \Pyz\Yves\CheckoutPage\Form\FormFactory
+     * @return \FondOfSpryker\Yves\CheckoutPage\Form\FormFactory
      */
     private function getFormFactory()
     {
@@ -169,7 +176,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
      */
     protected function addBillingAddressFormDataProvider(Container $container): Container
     {
-        $container[self::BILLING_ADDRESS_FROM_DATA_PROVIDER] = function (Container $container) {
+        $container[self::BILLING_ADDRESS_FORM_DATA_PROVIDER] = function (Container $container) {
             return $this->getBillingAddressFormDataProvider($container);
         };
 
@@ -189,11 +196,57 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @param \Spryker\Yves\Kernel\Container $container
      *
-     * @return \Pyz\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider
+     * @return \FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider
      */
     protected function getBillingAddressFormDataProvider(Container $container): CheckoutBillingAddressFormDataProvider
     {
         return new CheckoutBillingAddressFormDataProvider(
+            $this->getCustomerClient($container),
+            $this->getStore()
+        );
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
+    protected function addShippingAddressStepSubForm(Container $container): Container
+    {
+        $container[self::SHIPPING_ADDRESS_STEP_SUB_FORM] = function () {
+            return $this->getShippingAddressStepSubForm();
+        };
+
+        return $container;
+    }
+
+    protected function addShippingAddressFormDataProvider(Container $container): Container
+    {
+        $container[self::SHIPPING_ADDRESS_FORM_DATA_PROVIDER] = function (Container $container) {
+            return $this->getShippingAddressFormDataProvider($container);
+        };
+
+        return $container;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getShippingAddressStepSubForm(): array
+    {
+        return [
+            CheckoutShippingAddressCollectionForm::class,
+        ];
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider
+     */
+    protected function getShippingAddressFormDataProvider(Container $container): CheckoutShippingAddressFormDataProvider
+    {
+        return new CheckoutShippingAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getStore()
         );

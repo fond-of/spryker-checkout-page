@@ -8,6 +8,7 @@ use SprykerShop\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
 class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerProvider
 {
     const CHECKOUT_BILLING_ADDRESS = 'checkout-billing-address';
+    const CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
 
     /**
      * @param \Silex\Application $app
@@ -19,6 +20,7 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
         $this->addCheckoutIndexRoute()
             ->addCustomerStepRoute()
             ->addBillingAddressStepRoute()
+            ->addShippingAddressStepRoute()
             ->addAddressStepRoute()
             ->addShipmentStepRoute()
             ->addPaymentStepRoute()
@@ -34,6 +36,16 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
     protected function addBillingAddressStepRoute(): self
     {
         $this->createController('/{checkout}/billing-address', self::CHECKOUT_BILLING_ADDRESS, 'CheckoutPage', 'Checkout', 'billingAddress')
+            ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
+            ->value('checkout', 'checkout')
+            ->method('GET|POST');
+
+        return $this;
+    }
+
+    protected function addShippingAddressStepRoute(): self
+    {
+        $this->createController('/{checkout}/shipping-address', self::CHECKOUT_SHIPPING_ADDRESS, 'CheckoutPage', 'Checkout', 'shippingAddress')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
             ->value('checkout', 'checkout')
             ->method('GET|POST');
