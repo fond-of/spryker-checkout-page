@@ -5,7 +5,9 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process;
 use FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\BillingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\CustomerStep;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
+use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
@@ -75,5 +77,27 @@ class StepFactory extends SprykerShopStepFactory
             CheckoutPageControllerProvider::CHECKOUT_SHIPPING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME
         );
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep
+     */
+    public function createShipmentStep(): AbstractBaseStep
+    {
+        return new ShipmentStep(
+            $this->getCalculationClient(),
+            $this->getShipmentPlugins(),
+            $this->createShipmentConfig(),
+            CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
+            HomePageControllerProvider::ROUTE_HOME
+        );
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\Shipment\ShipmentConfig
+     */
+    protected function createShipmentConfig(): ShipmentConfig
+    {
+        return new ShipmentConfig();
     }
 }

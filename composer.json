@@ -20,6 +20,7 @@
     "spryker-shop/customer-page": "^1.2.0",
     "fond-of-spryker/customer-page": "dev-master",
     "fond-of-spryker/customer": "dev-master",
+    "fond-of-spryker/shipment": "dev-master",
     "spryker/shipment": "^6.5.0"
   },
   "require-dev": {
