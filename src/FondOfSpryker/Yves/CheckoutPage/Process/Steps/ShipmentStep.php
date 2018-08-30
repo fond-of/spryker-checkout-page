@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ShipmentStep extends SprykerShopShipmentStep
 {
     /**
-     * @var ShipmentConfig
+     * @var \FondOfSpryker\Yves\Shipment\ShipmentConfig
      */
     protected $shipmentConfig;
 
@@ -34,6 +34,7 @@ class ShipmentStep extends SprykerShopShipmentStep
 
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
      * @return bool
      */
     public function requireInput(AbstractTransfer $quoteTransfer): bool
@@ -44,6 +45,7 @@ class ShipmentStep extends SprykerShopShipmentStep
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer): QuoteTransfer
@@ -60,6 +62,7 @@ class ShipmentStep extends SprykerShopShipmentStep
 
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     protected function setDefaultShipmentMethod(QuoteTransfer $quoteTransfer): QuoteTransfer
