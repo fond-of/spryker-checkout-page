@@ -154,7 +154,7 @@ class CheckoutController extends SprykerShopCheckoutController
 
         return $this->view(
             $viewData,
-            [],
+            $this->getFactory()->getSummaryPageWidgetPlugins(),
             '@CheckoutPage/views/summary/summary.twig'
         );
     }
