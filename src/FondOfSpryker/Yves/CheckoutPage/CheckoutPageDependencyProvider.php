@@ -93,9 +93,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     protected function getSummaryPageWidgetPlugins(): array
     {
         return [
-            CheckoutVoucherFormWidgetPlugin::class,
-            CartNoteQuoteItemNoteWidgetPlugin::class, #CartNoteFeature
-            CartNoteQuoteNoteWidgetPlugin::class, #CartNoteFeature
         ];
     }
 
