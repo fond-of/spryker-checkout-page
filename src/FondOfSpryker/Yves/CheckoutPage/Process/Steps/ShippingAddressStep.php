@@ -66,7 +66,7 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
     /**
      * @return string
      */
-    public function getBreadcrumbItemTitle(): string
+    public function getBreadcrumbItemTitle()
     {
         return 'checkout.step.shipping-address.title';
     }

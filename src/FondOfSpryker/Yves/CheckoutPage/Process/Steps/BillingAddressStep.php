@@ -6,8 +6,9 @@ use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Symfony\Component\HttpFoundation\Request;
+use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
 
-class BillingAddressStep extends AddressStep
+class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
 {
     /**
      * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer
@@ -70,5 +71,13 @@ class BillingAddressStep extends AddressStep
         }
 
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBreadcrumbItemTitle()
+    {
+        return 'checkout.step.billing-address.title';
     }
 }

@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\Steps\PaymentForm;
+use FondOfSpryker\Yves\CheckoutPage\Form\Steps\SummaryForm;
 use Spryker\Shared\Application\ApplicationConstants;
 use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
 use Spryker\Yves\StepEngine\Form\FormCollectionHandler;
@@ -126,5 +127,31 @@ class FormFactory extends SprykerShopFormFactory
         $subFormDataProvider = $this->createSubFormDataProvider($createPaymentSubForms);
 
         return $this->createSubFormCollection(PaymentForm::class, $subFormDataProvider);
+    }
+
+    /**
+     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
+     */
+    public function createSummaryFormCollection()
+    {
+        return $this->createFormCollection($this->getSummaryFormTypes());
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSummaryFormTypes()
+    {
+        return [
+            $this->getSummaryForm(),
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSummaryForm()
+    {
+        return SummaryForm::class;
     }
 }

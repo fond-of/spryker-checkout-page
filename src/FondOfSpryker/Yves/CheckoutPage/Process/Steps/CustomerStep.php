@@ -4,10 +4,12 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Generated\Shared\Transfer\CustomerTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
+use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
+use Spryker\Yves\StepEngine\Dependency\Step\StepWithExternalRedirectInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\CustomerStep as SprykerShopCustomerStep;
 use Symfony\Component\HttpFoundation\Request;
 
-class CustomerStep extends SprykerShopCustomerStep
+class CustomerStep extends SprykerShopCustomerStep implements StepWithBreadcrumbInterface, StepWithExternalRedirectInterface
 {
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -63,6 +65,16 @@ class CustomerStep extends SprykerShopCustomerStep
             }
         }
 
+        return true;
+    }
+
+    /**
+     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
+     * @return bool
+     */
+    public function isBreadcrumbItemHidden(AbstractTransfer $quoteTransfer)
+    {
         return true;
     }
 }
