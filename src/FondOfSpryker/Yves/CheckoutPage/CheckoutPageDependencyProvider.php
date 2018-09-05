@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\CheckoutShippingAddressCollectionForm;
@@ -23,6 +24,9 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
 
     const SHIPPING_ADDRESS_STEP_SUB_FORM = 'SHIPPING_ADDRESS_STEP_SUB_FORM';
     const SHIPPING_ADDRESS_FORM_DATA_PROVIDER = 'SHIPPING_ADDRESS_FORM_DATA_PROVIDER';
+
+    const CLIENT_PAYONE = 'CLIENT_PAYONE';
+    const CLIENT_SALES = 'CLIENT_SALES';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
@@ -70,6 +74,37 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addShippingAddressStepSubForm($container);
         $container = $this->addShippingAddressFormDataProvider($container);
 
+        $container = $this->addPayoneClient($container);
+        $container = $this->addSalesClient($container);
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
+    protected function addPayoneClient(Container $container): Container
+    {
+        $container[self::CLIENT_PAYONE] = function (Container $container) {
+            return $container->getLocator()->payone()->client();
+        };
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
+    protected function addSalesClient(Container $container): Container
+    {
+        $container[self::CLIENT_SALES] = function (Container $container) {
+            return $container->getLocator()->sales()->client();
+        };
+
         return $container;
     }
 
@@ -82,6 +117,20 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         $container[self::CUSTOMER_STEP_SUB_FORMS] = function () {
             return $this->getCustomerStepSubForms();
+        };
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
+    protected function addCustomerClient(Container $container): Container
+    {
+        $container[self::CLIENT_CUSTOMER] = function (Container $container) {
+            return new CheckoutPageToCustomerClientBridge($container->getLocator()->customer()->client());
         };
 
         return $container;

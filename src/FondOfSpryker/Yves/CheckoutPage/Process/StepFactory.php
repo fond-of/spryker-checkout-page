@@ -2,11 +2,14 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process;
 
+use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
 use FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\BillingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\CustomerStep;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
 use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
@@ -91,6 +94,59 @@ class StepFactory extends SprykerShopStepFactory
             CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
             HomePageControllerProvider::ROUTE_HOME
         );
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\PlaceOrderStep
+     */
+    public function createPlaceOrderStep()
+    {
+        return new PlaceOrderStep(
+            $this->getCheckoutClient(),
+            $this->getFlashMessenger(),
+            $this->getStore()->getCurrentLocale(),
+            $this->getGlossaryStorageClient(),
+            CheckoutPageControllerProvider::CHECKOUT_PLACE_ORDER,
+            HomePageControllerProvider::ROUTE_HOME,
+            [
+                'payment failed' => CheckoutPageControllerProvider::CHECKOUT_PAYMENT,
+                'shipment failed' => CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
+            ]
+        );
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\SuccessStep
+     */
+    public function createSuccessStep()
+    {
+        return new SuccessStep(
+            $this->getCustomerClient(),
+            $this->getCartClient(),
+            $this->getConfig(),
+            $this->getPayoneClient(),
+            $this->getSalesClient(),
+            CheckoutPageControllerProvider::CHECKOUT_SUCCESS,
+            HomePageControllerProvider::ROUTE_HOME
+        );
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getPayoneClient()
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_PAYONE);
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getSalesClient()
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_SALES);
     }
 
     /**
