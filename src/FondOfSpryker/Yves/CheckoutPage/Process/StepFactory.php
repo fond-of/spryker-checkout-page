@@ -132,7 +132,6 @@ class StepFactory extends SprykerShopStepFactory
     }
 
     /**
-     *
      * @return mixed
      */
     public function getPayoneClient()
@@ -141,7 +140,6 @@ class StepFactory extends SprykerShopStepFactory
     }
 
     /**
-     *
      * @return mixed
      */
     public function getSalesClient()

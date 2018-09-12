@@ -104,7 +104,7 @@ class CheckoutController extends SprykerShopCheckoutController
 
         return $this->view(
             $response,
-            $this->getFactory()->getCustomerPageWidgetPlugins(),
+            $this->getFactory()->getCheckoutPageBillingAddress(),
             '@CheckoutPage/views/shipping-address/shipping-address.twig'
         );
     }

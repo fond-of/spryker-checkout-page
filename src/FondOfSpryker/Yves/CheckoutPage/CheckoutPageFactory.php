@@ -41,4 +41,17 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::PAYMENT_SUB_FORMS);
     }
+
+    /**
+     * @return string[]
+     */
+    public function getCustomerPageWidgetPlugins(): array
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_CUSTOMER_PAGE_WIDGETS);
+    }
+
+    public function getCheckoutPageBillingAddress(): array
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS);
+    }
 }
