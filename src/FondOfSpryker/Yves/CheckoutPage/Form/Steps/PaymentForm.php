@@ -26,6 +26,8 @@ class PaymentForm extends SprykerShopPaymentForm
                 'required' => true,
                 'placeholder' => false,
                 'property_path' => self::PAYMENT_SELECTION_PROPERTY_PATH,
+                'choice_translation_domain' => 'global.payment.',
+                'placeholder' => 'global.please_select',
                 'constraints' => [
                     new NotBlank(),
                 ],
@@ -55,7 +57,7 @@ class PaymentForm extends SprykerShopPaymentForm
      */
     protected function getPaymentMethodChoices(array $paymentMethodSubForms): array
     {
-        $choices = ['Bitte auswählen' => 0];
+        //$choices = ['Bitte auswählen' => 0];
 
         foreach ($paymentMethodSubForms as $paymentMethodSubForm) {
             $subFormName = ucfirst($paymentMethodSubForm->getName());
