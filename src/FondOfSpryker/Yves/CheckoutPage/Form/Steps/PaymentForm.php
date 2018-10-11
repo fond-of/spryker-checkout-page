@@ -57,8 +57,6 @@ class PaymentForm extends SprykerShopPaymentForm
      */
     protected function getPaymentMethodChoices(array $paymentMethodSubForms): array
     {
-        //$choices = ['Bitte auswählen' => 0];
-
         foreach ($paymentMethodSubForms as $paymentMethodSubForm) {
             $subFormName = ucfirst($paymentMethodSubForm->getName());
 

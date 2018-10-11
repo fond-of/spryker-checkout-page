@@ -30,7 +30,7 @@ class SummaryForm extends SprykerShopSummaryForm
     {
         $builder->add('acceptTerms', CheckboxType::class, [
             'required' => true,
-            'label' => false,
+            'label' => 'affenzahn.checkout.summaryForm.accept_terms',
         ]);
     }
 
@@ -44,7 +44,7 @@ class SummaryForm extends SprykerShopSummaryForm
     {
         $builder->add('signupNewsletter', CheckboxType::class, [
             'required' => false,
-            'label' => false,
+            'label' => 'affenzahn.checkout.summaryForm.signup_newsletter',
         ]);
     }
 }
