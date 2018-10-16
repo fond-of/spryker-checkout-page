@@ -19,9 +19,6 @@
     "spryker-shop/checkout-page": "^1.2.0",
     "spryker-shop/customer-page": "^1.2.0",
     "spryker/shipment": "^6.5.0",
-    "fond-of-spryker/customer-page": "^1.0.1-RC1",
-    "fond-of-spryker/customer": "^1.0.1-RC1",
-    "fond-of-spryker/shipment": "^1.0.0-RC1"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.11",
