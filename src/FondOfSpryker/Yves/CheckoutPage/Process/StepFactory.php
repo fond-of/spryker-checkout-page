@@ -7,6 +7,7 @@ use FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvid
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\BillingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\CustomerStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PaymentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
@@ -95,6 +96,20 @@ class StepFactory extends SprykerShopStepFactory
             HomePageControllerProvider::ROUTE_HOME
         );
     }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep
+     */
+    public function createPaymentStep(): PaymentStep
+{
+    return new PaymentStep(
+        $this->getPaymentMethodHandler(),
+        CheckoutPageControllerProvider::CHECKOUT_PAYMENT,
+        HomePageControllerProvider::ROUTE_HOME,
+        $this->getFlashMessenger(),
+        $this->getCalculationClient()
+    );
+}
 
     /**
      * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\PlaceOrderStep
