@@ -16,6 +16,7 @@ class PlaceOrderStep extends SprykerShopPlaceOrderStep
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
     {
+        $quoteTransfer->setLocale($this->currentLocale);
         $checkoutResponseTransfer = $this->checkoutClient->placeOrder($quoteTransfer);
 
         if ($checkoutResponseTransfer->getIsExternalRedirect()) {

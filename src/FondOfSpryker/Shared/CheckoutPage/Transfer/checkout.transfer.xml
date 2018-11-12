@@ -6,5 +6,6 @@
     <transfer name="Quote">
         <property name="signupNewsletter" type="bool"/>
         <property name="acceptTerms" type="bool"/>
+        <property name="locale" type="string"/>
     </transfer>
 </transfers>
