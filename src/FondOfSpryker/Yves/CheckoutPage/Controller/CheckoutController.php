@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Controller;
 
+use FondOfSpryker\Shared\Customer\CustomerConstants;
 use SprykerShop\Yves\CheckoutPage\Controller\CheckoutController as SprykerShopCheckoutController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -71,6 +72,7 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function billingAddressAction(Request $request)
     {
+        $countriesInEU = ['countriesInEU' => CustomerConstants::COUNTRIES_IN_EU];
         $response = $this->createStepProcess()->process(
             $request,
             $this->getFactory()
@@ -83,7 +85,7 @@ class CheckoutController extends SprykerShopCheckoutController
         }
 
         return $this->view(
-            $response,
+            array_merge($response, $countriesInEU),
             $this->getFactory()->getCustomerPageWidgetPlugins(),
             '@CheckoutPage/views/billing-address/billing-address.twig'
         );

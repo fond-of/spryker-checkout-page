@@ -71,12 +71,12 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
      */
     protected function createRegexEmailConstraint(array $options): Constraint
     {
-        $validationGroup = $this->getValidationGroup($options);
+        //$validationGroup = $this->getValidationGroup($options);
 
         return new Regex([
             'pattern' => static::VALIDATE_REGEX_EMAIL,
             'message' => 'validation.regex.email.message',
-            'groups' => $validationGroup,
+            //'groups' => $validationGroup,
         ]);
     }
 
@@ -85,13 +85,13 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
      *
      * @return \Symfony\Component\Validator\Constraints\Length
      */
-    protected function createMinLengthConstraint(array $options)
+    protected function createMinLengthConstraint(array $options): Constraint
     {
-        $validationGroup = $this->getValidationGroup($options);
+       // $validationGroup = $this->getValidationGroup($options);
 
         return new Length([
             'min' => static::VALIDATE_MIN_LENGTH,
-            'groups' => $validationGroup,
+            //'groups' => $validationGroup,
             'minMessage' => 'validation.length.min.message',
         ]);
     }
