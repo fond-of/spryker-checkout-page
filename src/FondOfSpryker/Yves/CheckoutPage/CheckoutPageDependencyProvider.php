@@ -3,7 +3,7 @@
 namespace FondOfSpryker\Yves\CheckoutPage;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
+use FondOfSpryker\Yves\CustomerPage\Form\CheckoutAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
@@ -11,6 +11,7 @@ use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutShippingAddressFor
 use Generated\Shared\Transfer\PaymentTransfer;
 use Spryker\Yves\Kernel\Container;
 use Spryker\Yves\Kernel\Plugin\Pimple;
+use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
@@ -278,6 +279,11 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return $container;
     }
 
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
     protected function addShippingAddressFormDataProvider(Container $container): Container
     {
         $container[self::SHIPPING_ADDRESS_FORM_DATA_PROVIDER] = function (Container $container) {
@@ -358,10 +364,13 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return $container;
     }
 
+    /**
+     * @return array
+     */
     protected function getBillingAddressPageWidgetPlugins(): array
     {
         return [
-            MiniCartWidgetPlugin::class
+            MiniCartWidgetPlugin::class,
         ];
     }
 }

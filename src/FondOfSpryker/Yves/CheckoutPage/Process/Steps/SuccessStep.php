@@ -32,6 +32,15 @@ class SuccessStep extends SprykerShopSuccessStep
      */
     protected $payoneClient;
 
+    /**
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface $customerClient
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCartClientInterface $cartClient
+     * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
+     * @param \SprykerEco\Client\Payone\PayoneClientInterface $payoneClient
+     * @param \Spryker\Client\Sales\SalesClient $salesClient
+     * @param string $stepRoute
+     * @param string $escapeRoute
+     */
     public function __construct(
         CheckoutPageToCustomerClientInterface $customerClient,
         CheckoutPageToCartClientInterface $cartClient,
@@ -52,6 +61,12 @@ class SuccessStep extends SprykerShopSuccessStep
         $this->salesClient = $salesClient;
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuoteTransfer
+     */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
     {
         $this->customerClient->markCustomerAsDirty();

@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Controller;
 
+use FondOfSpryker\Shared\Customer\CustomerConstants;
 use SprykerShop\Yves\CheckoutPage\Controller\CheckoutController as SprykerShopCheckoutController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,9 +18,7 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function indexAction(Request $request)
     {
-        $response = $this->createStepProcess()->process($request);
-
-        return $response;
+        return $this->createStepProcess()->process($request);
     }
 
     /**
@@ -82,6 +81,8 @@ class CheckoutController extends SprykerShopCheckoutController
             return $response;
         }
 
+        $response['countriesInEU'] = CustomerConstants::COUNTRIES_IN_EU;
+
         return $this->view(
             $response,
             $this->getFactory()->getCustomerPageWidgetPlugins(),
@@ -89,6 +90,11 @@ class CheckoutController extends SprykerShopCheckoutController
         );
     }
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return array|\Spryker\Yves\Kernel\View\View|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function shippingAddressAction(Request $request)
     {
         $response = $this->createStepProcess()->process(

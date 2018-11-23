@@ -7,7 +7,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
 class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
@@ -15,8 +14,6 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
     const FIELD_EMAIL = 'email';
 
     const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
-
-    const VALIDATE_MIN_LENGTH = 3;
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
@@ -26,11 +23,9 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this
-            ->addEmailField($builder, $options)
+        $this->addEmailField($builder, $options)
             ->addFirstNameField($builder, $options)
             ->addLastNameField($builder, $options)
-            ->addCompanyField($builder)
             ->addAddress1Field($builder, $options)
             ->addAddress3Field($builder)
             ->addZipCodeField($builder, $options)
@@ -39,6 +34,12 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
             ->addPhoneField($builder);
     }
 
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return $this
+     */
     protected function addEmailField(FormBuilderInterface $builder, array $options)
     {
         $builder->add(self::FIELD_EMAIL, EmailType::class, [
@@ -56,6 +57,7 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
 
     /**
      * @param array $options
+     *
      * @return \Symfony\Component\Validator\Constraint
      */
     protected function createEmailValidConstraints(array $options): Constraint
@@ -67,6 +69,7 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
 
     /**
      * @param array $options
+     *
      * @return \Symfony\Component\Validator\Constraint
      */
     protected function createRegexEmailConstraint(array $options): Constraint
@@ -77,22 +80,6 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
             'pattern' => static::VALIDATE_REGEX_EMAIL,
             'message' => 'validation.regex.email.message',
             'groups' => $validationGroup,
-        ]);
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return \Symfony\Component\Validator\Constraints\Length
-     */
-    protected function createMinLengthConstraint(array $options)
-    {
-        $validationGroup = $this->getValidationGroup($options);
-
-        return new Length([
-            'min' => static::VALIDATE_MIN_LENGTH,
-            'groups' => $validationGroup,
-            'minMessage' => 'validation.length.min.message',
         ]);
     }
 }

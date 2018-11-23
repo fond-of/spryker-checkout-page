@@ -50,6 +50,9 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_CUSTOMER_PAGE_WIDGETS);
     }
 
+    /**
+     * @return array
+     */
     public function getCheckoutPageBillingAddress(): array
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS);
