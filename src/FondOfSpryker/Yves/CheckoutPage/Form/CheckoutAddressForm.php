@@ -30,13 +30,13 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
             ->addEmailField($builder, $options)
             ->addFirstNameField($builder, $options)
             ->addLastNameField($builder, $options)
-            ->addCompanyField($builder, $options)
+            ->addCompanyField($builder)
             ->addAddress1Field($builder, $options)
-            ->addAddress3Field($builder, $options)
+            ->addAddress3Field($builder)
             ->addZipCodeField($builder, $options)
             ->addCityField($builder, $options)
             ->addIso2CodeField($builder, $options)
-            ->addPhoneField($builder, $options);
+            ->addPhoneField($builder);
     }
 
     protected function addEmailField(FormBuilderInterface $builder, array $options)
