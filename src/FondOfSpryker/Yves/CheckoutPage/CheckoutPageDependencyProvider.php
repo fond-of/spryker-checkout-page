@@ -3,26 +3,19 @@
 namespace FondOfSpryker\Yves\CheckoutPage;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
-use FondOfSpryker\Yves\CustomerPage\Form\CheckoutAddressCollectionForm;
-use FondOfSpryker\Yves\CustomerPage\Form\CheckoutBillingAddressCollectionForm;
-use FondOfSpryker\Yves\CustomerPage\Form\CheckoutShippingAddressCollectionForm;
-use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
-use FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
+use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
+use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
+use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
+use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
+use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Spryker\Yves\Kernel\Container;
-use Spryker\Yves\Kernel\Plugin\Pimple;
-use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneEWalletSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneHandlerPlugin;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
-use SprykerShop\Yves\CustomerPage\Form\CustomerCheckoutForm;
-use SprykerShop\Yves\CustomerPage\Form\DataProvider\CheckoutAddressFormDataProvider;
-use SprykerShop\Yves\CustomerPage\Form\GuestForm;
-use SprykerShop\Yves\CustomerPage\Form\LoginForm;
-use SprykerShop\Yves\CustomerPage\Form\RegisterForm;
 use SprykerShop\Yves\MultiCartWidget\Plugin\ShopUi\MiniCartWidgetPlugin;
 
 class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyProvider
@@ -152,51 +145,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @return string[]
      */
-    protected function getSummaryPageWidgetPlugins(): array
-    {
-        return [
-        ];
-    }
-
-    /**
-     * @return mixed[]
-     */
-    protected function getCustomerStepSubForms(): array
-    {
-        return [
-            LoginForm::class,
-            $this->getCustomerCheckoutForm(RegisterForm::class, RegisterForm::BLOCK_PREFIX),
-            $this->getCustomerCheckoutForm(GuestForm::class, GuestForm::BLOCK_PREFIX),
-        ];
-    }
-
-    /**
-     * @param string $subForm
-     * @param string $blockPrefix
-     *
-     * @return \SprykerShop\Yves\CustomerPage\Form\CustomerCheckoutForm|\Symfony\Component\Form\FormInterface
-     */
-    protected function getCustomerCheckoutForm($subForm, $blockPrefix)
-    {
-        return $this->getFormFactory()->createNamed(
-            $blockPrefix,
-            CustomerCheckoutForm::class,
-            null,
-            [CustomerCheckoutForm::SUB_FORM_CUSTOMER => $subForm]
-        );
-    }
-
-    /**
-     * @return \FondOfSpryker\Yves\CheckoutPage\Form\FormFactory
-     */
-    private function getFormFactory()
-    {
-        return (new Pimple())->getApplication()['form.factory'];
-    }
-
-    /**
-     * @return string[]
-     */
     protected function getAddressStepSubForms(): string
     {
         return [
@@ -207,9 +155,9 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @param \Spryker\Yves\Kernel\Container $container
      *
-     * @return \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null
+     * @return \FondOfSpryker\Yves\CheckoutPage\CheckoutAddressFormDataProvider
      */
-    protected function getAddressStepFormDataProvider(Container $container): ?StepEngineFormDataProviderInterface
+    protected function getAddressStepFormDataProvider(Container $container): CheckoutAddressFormDataProvider
     {
         return new CheckoutAddressFormDataProvider($this->getCustomerClient($container), $this->getStore());
     }
@@ -255,7 +203,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @param \Spryker\Yves\Kernel\Container $container
      *
-     * @return \FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider
+     * @return \FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider
      */
     protected function getBillingAddressFormDataProvider(Container $container): CheckoutBillingAddressFormDataProvider
     {
@@ -306,7 +254,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @param \Spryker\Yves\Kernel\Container $container
      *
-     * @return \FondOfSpryker\Yves\CustomerPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider
+     * @return \FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider
      */
     protected function getShippingAddressFormDataProvider(Container $container): CheckoutShippingAddressFormDataProvider
     {

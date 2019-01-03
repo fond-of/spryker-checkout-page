@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Controller;
 
 use FondOfSpryker\Shared\Customer\CustomerConstants;
 use SprykerShop\Yves\CheckoutPage\Controller\CheckoutController as SprykerShopCheckoutController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -88,6 +89,16 @@ class CheckoutController extends SprykerShopCheckoutController
             $this->getFactory()->getCustomerPageWidgetPlugins(),
             '@CheckoutPage/views/billing-address/billing-address.twig'
         );
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function regionsByCountryAction(Request $request)
+    {
+        return new JsonResponse(['foo' => 'bar']);
     }
 
     /**

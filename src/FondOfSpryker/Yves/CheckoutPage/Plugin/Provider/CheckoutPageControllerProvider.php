@@ -9,6 +9,7 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
 {
     const CHECKOUT_BILLING_ADDRESS = 'checkout-billing-address';
     const CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
+    const CHECKOUT_REGION_BY_COUNTRY = 'checkout-region-by-country';
 
     /**
      * @param \Silex\Application $app
@@ -27,11 +28,12 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
             ->addCheckoutSummaryStepRoute()
             ->addPlaceOrderStepRoute()
             ->addCheckoutErrorRoute()
-            ->addCheckoutSuccessRoute();
+            ->addCheckoutSuccessRoute()
+            ->addRegionByCountry();
     }
 
     /**
-     * @return $this
+     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
      */
     protected function addBillingAddressStepRoute(): self
     {
@@ -43,9 +45,25 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
         return $this;
     }
 
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
+     */
     protected function addShippingAddressStepRoute(): self
     {
         $this->createController('/{checkout}/shipping-address', self::CHECKOUT_SHIPPING_ADDRESS, 'CheckoutPage', 'Checkout', 'shippingAddress')
+            ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
+            ->value('checkout', 'checkout')
+            ->method('GET|POST');
+
+        return $this;
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
+     */
+    protected function addRegionByCountry(): self
+    {
+        $this->createController('/{checkout}/region-by-country', self::CHECKOUT_REGION_BY_COUNTRY, 'CheckoutPage', 'Checkout', 'regionsByCountry')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
             ->value('checkout', 'checkout')
             ->method('GET|POST');
