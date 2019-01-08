@@ -57,4 +57,12 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS);
     }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig
+     */
+    public function getCheckoutPageConfig(): CheckoutPageConfig
+    {
+        return $this->getConfig();
+    }
 }

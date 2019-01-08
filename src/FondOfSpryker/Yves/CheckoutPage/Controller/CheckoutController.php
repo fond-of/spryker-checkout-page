@@ -94,16 +94,6 @@ class CheckoutController extends SprykerShopCheckoutController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function regionsByCountryAction(Request $request)
-    {
-        return new JsonResponse(['foo' => 'bar']);
-    }
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return array|\Spryker\Yves\Kernel\View\View|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function shippingAddressAction(Request $request)
@@ -182,5 +172,23 @@ class CheckoutController extends SprykerShopCheckoutController
     protected function createStepProcess()
     {
         return $this->getFactory()->createCheckoutProcess();
+    }
+
+    /**
+     * @param string $country
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getRegionsByCountryAction(string $country): ?JsonResponse
+    {
+        $config = $this->getFactory()->getCheckoutPageConfig();
+
+        if (!in_array($country, $config->getRegionsForCountries())) {
+            return null;
+        }
+
+        $regions = [];
+
+        return $this->jsonResponse($regions);
     }
 }
