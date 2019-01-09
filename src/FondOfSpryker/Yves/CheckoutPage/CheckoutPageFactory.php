@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\FormFactory;
 use FondOfSpryker\Yves\CheckoutPage\Process\StepFactory;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageFactory as SprykerShopCheckoutPageFactory;
@@ -64,5 +65,13 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     public function getCheckoutPageConfig(): CheckoutPageConfig
     {
         return $this->getConfig();
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface
+     */
+    public function getCountryClient(): CheckoutPageToCountryInterface
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_COUNTRY);
     }
 }

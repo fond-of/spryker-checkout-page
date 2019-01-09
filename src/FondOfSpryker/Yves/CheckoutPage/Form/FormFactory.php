@@ -113,6 +113,9 @@ class FormFactory extends SprykerShopFormFactory
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::BILLING_ADDRESS_STEP_SUB_FORM);
     }
 
+    /**
+     * @return mixed
+     */
     public function getBillingAddressFormDataProvider()
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::BILLING_ADDRESS_FORM_DATA_PROVIDER);

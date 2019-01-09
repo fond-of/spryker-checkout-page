@@ -15,6 +15,8 @@ class CheckoutAddressForm extends SprykerShopCheckoutAddressForm
 
     const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
+    const OPTION_REGION_CHOICES = 'region_choices';
+
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options

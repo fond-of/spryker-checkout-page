@@ -5,12 +5,36 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
+use Spryker\Shared\Kernel\Store;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
-use SprykerShop\Yves\CustomerPage\Form\DataProvider\AbstractAddressFormDataProvider;
+use SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface;
 
-class CheckoutBillingAddressFormDataProvider extends AbstractAddressFormDataProvider implements StepEngineFormDataProviderInterface
+class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
+    public const OPTION_REGION_CHOICES = 'region_choices';
+    public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
+
+    /**
+     * @var \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface
+     */
+    protected $customerClient;
+
+    /**
+     * @var \Spryker\Shared\Kernel\Store
+     */
+    protected $store;
+
+    /**
+     * @param \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface $customerClient
+     * @param \Spryker\Shared\Kernel\Store $store
+     */
+    public function __construct(CustomerPageToCustomerClientInterface $customerClient, Store $store)
+    {
+        $this->customerClient = $customerClient;
+        $this->store = $store;
+    }
+
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
@@ -32,7 +56,18 @@ class CheckoutBillingAddressFormDataProvider extends AbstractAddressFormDataProv
         return [
             CheckoutAddressCollectionForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
             CheckoutAddressCollectionForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
+            self::OPTION_REGION_CHOICES => $this->getRegionChoices(),
         ];
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
+     * @return array
+     */
+    protected function getRegionChoices(QuoteTransfer $quoteTransfer): array
+    {
+        return [];
     }
 
     /**
@@ -92,5 +127,19 @@ class CheckoutBillingAddressFormDataProvider extends AbstractAddressFormDataProv
         }
 
         return $choices;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAvailableCountries(): array
+    {
+        $countries = [];
+
+        foreach ($this->store->getCountries() as $iso2Code) {
+            $countries[$iso2Code] = self::COUNTRY_GLOSSARY_PREFIX . $iso2Code;
+        }
+
+        return $countries;
     }
 }

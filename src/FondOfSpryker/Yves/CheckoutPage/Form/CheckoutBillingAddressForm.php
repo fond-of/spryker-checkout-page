@@ -3,16 +3,20 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use FondOfSpryker\Shared\Customer\CustomerConstants;
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class CheckoutBillingAddressForm extends CheckoutAddressForm
 {
+    const FIELD_REGION = 'region';
+    const OPTION_REGION_CHOICES = 'region_choices';
+
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
@@ -25,6 +29,25 @@ class CheckoutBillingAddressForm extends CheckoutAddressForm
 
         $this->prepareEmailField($builder, $options);
         $this->preparePhoneField($builder, $options);
+        $this->addRegionField($builder, $options);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $option
+     *
+     * @return $this
+     */
+    protected function addRegionField(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(self::FIELD_REGION, ChoiceType::class, [
+            'label' => 'customer.address.region',
+            'required' => true,
+            'choices' => $options['region_choices'],
+            'constraints' => [],
+        ]);
+
+        return $this;
     }
 
     /**
@@ -108,5 +131,16 @@ class CheckoutBillingAddressForm extends CheckoutAddressForm
         }
 
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefined(self::OPTION_REGION_CHOICES);
+        $resolver->setDefault(self::OPTION_REGION_CHOICES, []);
     }
 }

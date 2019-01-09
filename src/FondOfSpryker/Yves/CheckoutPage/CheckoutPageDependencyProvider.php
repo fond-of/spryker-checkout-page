@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
@@ -28,6 +29,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
 
     const CLIENT_PAYONE = 'CLIENT_PAYONE';
     const CLIENT_SALES = 'CLIENT_SALES';
+    const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
 
     const PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS = 'PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS';
 
@@ -82,6 +84,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
         $container = $this->addCustomerPageWidgetPlugins($container);
+        $container = $this->addCountryClient($container);
 
         return $container;
     }
@@ -137,6 +140,20 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         $container[self::CLIENT_CUSTOMER] = function (Container $container) {
             return new CheckoutPageToCustomerClientBridge($container->getLocator()->customer()->client());
+        };
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \Spryker\Yves\Kernel\Container
+     */
+    protected function addCountryClient(Container $container): Container
+    {
+        $container[self::CLIENT_COUNTRY] = function (Container $container) {
+            return new CheckoutPageToCountryBridge($container->getLocator()->country()->client());
         };
 
         return $container;
