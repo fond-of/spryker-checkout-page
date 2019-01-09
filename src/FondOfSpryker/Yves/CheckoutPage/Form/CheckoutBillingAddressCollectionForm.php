@@ -14,8 +14,8 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
 {
     const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
     const FIELD_BILLING_ADDRESS = 'billingAddress';
-    const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
-
+    public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
+    
     const OPTION_ADDRESS_CHOICES = 'address_choices';
     const OPTION_COUNTRY_CHOICES = 'country_choices';
     const OPTION_REGION_CHOICES = 'region_choices';
@@ -108,7 +108,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
             CheckoutBillingAddressForm::OPTION_VALIDATION_GROUP => self::GROUP_BILLING_ADDRESS,
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
-            CheckoutBillingAddressForm::OPTION_REGION_CHOICES => ['a', 'b', 'c'],
+            //CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $options[self::OPTION_REGION_CHOICES],
         ];
 
         $builder->add(self::FIELD_BILLING_ADDRESS, CheckoutBillingAddressForm::class, $options);

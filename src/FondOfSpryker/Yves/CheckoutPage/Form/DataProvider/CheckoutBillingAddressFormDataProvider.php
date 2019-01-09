@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
+use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
@@ -55,9 +56,9 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public function getOptions(AbstractTransfer $quoteTransfer)
     {
         return [
-            self::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
-            self::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
-            //self::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
+            CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
+            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
+            //CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
         ];
     }
 

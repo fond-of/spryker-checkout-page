@@ -2,10 +2,9 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressForm;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class CheckoutShippingAddressForm extends CheckoutAddressForm
+class CheckoutShippingAddressForm extends CheckoutBillingAddressForm
 {
     const FIELD_ADDITIONAL_ADDRESS = 'additional_address';
 

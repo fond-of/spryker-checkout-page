@@ -30,12 +30,13 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_CITY = 'city';
     public const FIELD_ISO_2_CODE = 'iso2_code';
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
+    public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
 
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
     public const OPTION_REGION_CHOICES = 'region_choices';
-    public const OPTION_ADDRESS_CHOICES = 'addresses_choices';
+    public const OPTION_ADDRESS_CHOICES = 'address_choices';
 
     protected const VALIDATION_NOT_BLANK_MESSAGE = 'validation.not_blank';
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';
@@ -57,8 +58,8 @@ class CheckoutBillingAddressForm extends AbstractType
         $resolver->setRequired(static::OPTION_VALIDATION_GROUP);
         $resolver->setDefined(static::OPTION_ADDRESS_CHOICES);
 
-        $resolver->setDefined(self::OPTION_REGION_CHOICES);
-        $resolver->setDefault(self::OPTION_REGION_CHOICES, []);
+        //$resolver->setRequired(self::OPTION_REGION_CHOICES);
+        //$resolver->setDefault(self::OPTION_REGION_CHOICES, []);
     }
 
     /**
@@ -227,7 +228,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(self::FIELD_REGION, ChoiceType::class, [
             'label' => 'customer.address.region',
             'required' => true,
-            'choices' => $options['region_choices'],
+            'choices' => [],
             'constraints' => [],
         ]);
 

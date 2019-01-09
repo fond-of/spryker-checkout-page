@@ -89,6 +89,9 @@ class FormFactory extends SprykerShopFormFactory
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::SHIPPING_ADDRESS_STEP_SUB_FORM);
     }
 
+    /**
+     * @return mixed
+     */
     protected function getShippingAddressFormDataProvider()
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::SHIPPING_ADDRESS_FORM_DATA_PROVIDER);
