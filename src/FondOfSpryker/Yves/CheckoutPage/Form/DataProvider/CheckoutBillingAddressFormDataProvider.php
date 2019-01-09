@@ -2,7 +2,6 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
@@ -12,8 +11,10 @@ use SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClient
 
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
-    public const OPTION_REGION_CHOICES = 'region_choices';
     public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
+    public const OPTION_REGION_CHOICES = 'region_choices';
+    public const OPTION_ADDRESS_CHOICES = 'address_choices';
+    public const OPTION_COUNTRY_CHOICES = 'country_choices';
 
     /**
      * @var \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface
@@ -54,9 +55,9 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public function getOptions(AbstractTransfer $quoteTransfer)
     {
         return [
-            CheckoutAddressCollectionForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
-            CheckoutAddressCollectionForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
-            self::OPTION_REGION_CHOICES => $this->getRegionChoices(),
+            self::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
+            self::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
+            //self::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
         ];
     }
 

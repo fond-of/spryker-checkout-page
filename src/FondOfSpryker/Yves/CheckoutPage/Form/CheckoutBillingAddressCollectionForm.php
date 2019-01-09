@@ -99,16 +99,16 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
         $options = [
             'data_class' => AddressTransfer::class,
             'validation_groups' => function (FormInterface $form) {
-                if (!$form->has(CheckoutAddressForm::FIELD_ID_CUSTOMER_ADDRESS) || !$form->get(CheckoutAddressForm::FIELD_ID_CUSTOMER_ADDRESS)->getData()) {
+                if (!$form->has(CheckoutBillingAddressForm::FIELD_ID_CUSTOMER_ADDRESS) || !$form->get(CheckoutAddressForm::FIELD_ID_CUSTOMER_ADDRESS)->getData()) {
                     return [self::GROUP_BILLING_ADDRESS];
                 }
 
                 return false;
             },
-            CheckoutAddressForm::OPTION_VALIDATION_GROUP => self::GROUP_BILLING_ADDRESS,
-            CheckoutAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
-            CheckoutAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
-            self::OPTION_REGION_CHOICES => ['a', 'b', 'c'],
+            CheckoutBillingAddressForm::OPTION_VALIDATION_GROUP => self::GROUP_BILLING_ADDRESS,
+            CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
+            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
+            CheckoutBillingAddressForm::OPTION_REGION_CHOICES => ['a', 'b', 'c'],
         ];
 
         $builder->add(self::FIELD_BILLING_ADDRESS, CheckoutBillingAddressForm::class, $options);
