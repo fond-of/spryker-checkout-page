@@ -55,11 +55,9 @@ class CheckoutBillingAddressForm extends AbstractType
         ]);
 
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
-        $resolver->setRequired(static::OPTION_VALIDATION_GROUP);
-        $resolver->setDefined(static::OPTION_ADDRESS_CHOICES);
-
-        //$resolver->setRequired(self::OPTION_REGION_CHOICES);
-        //$resolver->setDefault(self::OPTION_REGION_CHOICES, []);
+        $resolver->setRequired(self::OPTION_VALIDATION_GROUP);
+        $resolver->setRequired(self::OPTION_REGION_CHOICES);
+        $resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
     }
 
     /**
@@ -225,11 +223,12 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
+        //dump($options[self::OPTION_REGION_CHOICES]);
+
         $builder->add(self::FIELD_REGION, ChoiceType::class, [
             'label' => 'customer.address.region',
-            'required' => true,
-            'choices' => [],
-            'constraints' => [],
+            'required' => false,
+            'choices' => array_flip($options[self::OPTION_REGION_CHOICES]),
         ]);
 
         return $this;

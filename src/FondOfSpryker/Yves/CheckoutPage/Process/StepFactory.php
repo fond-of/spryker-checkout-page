@@ -64,6 +64,7 @@ class StepFactory extends SprykerShopStepFactory
         return new BillingAddressStep(
             $this->getCustomerClient(),
             $this->getCalculationClient(),
+            $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_BILLING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME
         );
@@ -145,6 +146,14 @@ class StepFactory extends SprykerShopStepFactory
     public function getSalesClient()
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_SALES);
+    }
+
+    /**
+     * @return void
+     */
+    public function getCountryClient()
+    {
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_COUNTRY);
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\CountryTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
@@ -23,6 +25,11 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $customerClient;
 
     /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface
+     */
+    protected $countryClient;
+
+    /**
      * @var \Spryker\Shared\Kernel\Store
      */
     protected $store;
@@ -31,9 +38,13 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      * @param \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface $customerClient
      * @param \Spryker\Shared\Kernel\Store $store
      */
-    public function __construct(CustomerPageToCustomerClientInterface $customerClient, Store $store)
-    {
+    public function __construct(
+        CustomerPageToCustomerClientInterface $customerClient,
+        CheckoutPageToCountryInterface $countryClient,
+        Store $store
+    ) {
         $this->customerClient = $customerClient;
+        $this->countryClient = $countryClient;
         $this->store = $store;
     }
 
@@ -45,6 +56,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public function getData(AbstractTransfer $quoteTransfer)
     {
         $quoteTransfer->setBillingAddress($this->getBillingAddress($quoteTransfer));
+
         return $quoteTransfer;
     }
 
@@ -58,7 +70,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
         return [
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
-            //CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
+            CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
         ];
     }
 
@@ -69,7 +81,33 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      */
     protected function getRegionChoices(QuoteTransfer $quoteTransfer): array
     {
-        return [];
+        $countryTransfer = new CountryTransfer();
+        $countryTransfer
+            ->setIso2Code('DE')
+            ->setIdCountry('60');
+
+        $quoteTransfer->getBillingAddress()->setCountry($countryTransfer);
+
+        if (!$quoteTransfer->getBillingAddress() instanceof AddressTransfer) {
+            return [];
+        }
+
+        if ($quoteTransfer->getBillingAddress()->getCountry() === null) {
+            return [];
+        }
+
+        $countryTransfer = $this->countryClient->getRegionsByCountryTransfer(
+            $quoteTransfer->getBillingAddress()->getCountry()
+        );
+
+        $quoteTransfer->getBillingAddress()->setCountry($countryTransfer);
+
+        /** @var \Generated\Shared\Transfer\RegionTransfer $region */
+        foreach ($quoteTransfer->getBillingAddress()->getCountry()->getRegions() as $region) {
+            $regions[$region->getIso2Code()] = $region->getName();
+        }
+
+        return $regions;
     }
 
     /**

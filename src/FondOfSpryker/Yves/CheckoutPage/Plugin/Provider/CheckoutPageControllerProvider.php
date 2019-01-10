@@ -63,7 +63,7 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
      */
     protected function addRegionByCountry(): self
     {
-        $this->createController('/{checkout}/region-by-country/{country}', self::CHECKOUT_REGION_BY_COUNTRY, 'CheckoutPage', 'Checkout', 'getRegionsByCountry')
+        $this->createController('/{checkout}/region-by-country/{country}', self::CHECKOUT_REGION_BY_COUNTRY, 'CheckoutPage', 'Checkout', 'regionsByCountry')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
             ->value('checkout', 'checkout')
             ->value('country', 'de')

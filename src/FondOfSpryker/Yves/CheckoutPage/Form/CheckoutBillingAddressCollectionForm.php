@@ -12,16 +12,16 @@ use Symfony\Component\Validator\Constraint;
 
 class CheckoutBillingAddressCollectionForm extends AbstractType
 {
-    const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
-    const FIELD_BILLING_ADDRESS = 'billingAddress';
+    public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
+    public const FIELD_BILLING_ADDRESS = 'billingAddress';
     public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
     
-    const OPTION_ADDRESS_CHOICES = 'address_choices';
-    const OPTION_COUNTRY_CHOICES = 'country_choices';
-    const OPTION_REGION_CHOICES = 'region_choices';
+    public const OPTION_ADDRESS_CHOICES = 'address_choices';
+    public const OPTION_COUNTRY_CHOICES = 'country_choices';
+    public const OPTION_REGION_CHOICES = 'region_choices';
 
-    const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
-    const GROUP_BILLING_ADDRESS = self::FIELD_BILLING_ADDRESS;
+    public const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
+    public const GROUP_BILLING_ADDRESS = self::FIELD_BILLING_ADDRESS;
 
     /**
      * @return string
@@ -54,6 +54,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
 
         $resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
+        $resolver->setRequired(self::OPTION_REGION_CHOICES);
     }
 
     /**
@@ -108,7 +109,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
             CheckoutBillingAddressForm::OPTION_VALIDATION_GROUP => self::GROUP_BILLING_ADDRESS,
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
-            //CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $options[self::OPTION_REGION_CHOICES],
+            CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $options[self::OPTION_REGION_CHOICES],
         ];
 
         $builder->add(self::FIELD_BILLING_ADDRESS, CheckoutBillingAddressForm::class, $options);

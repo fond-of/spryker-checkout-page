@@ -160,6 +160,16 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
+     * @param \Spryker\Yves\Kernel\Container $container
+     *
+     * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge
+     */
+    protected function getCountryClient(Container $container)
+    {
+        return new CheckoutPageToCountryBridge($container->getLocator()->country()->client());
+    }
+
+    /**
      * @return string[]
      */
     protected function getAddressStepSubForms(): string
@@ -226,6 +236,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         return new CheckoutBillingAddressFormDataProvider(
             $this->getCustomerClient($container),
+            $this->getCountryClient($container),
             $this->getStore()
         );
     }
@@ -277,6 +288,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         return new CheckoutShippingAddressFormDataProvider(
             $this->getCustomerClient($container),
+            $this->getCountryClient($container),
             $this->getStore()
         );
     }

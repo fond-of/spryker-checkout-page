@@ -4,10 +4,10 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
-use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep as SprykerShopAddressStep;
 use Symfony\Component\HttpFoundation\Request;
 
-class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
+class ShippingAddressStep extends SprykerShopAddressStep implements StepWithBreadcrumbInterface
 {
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
