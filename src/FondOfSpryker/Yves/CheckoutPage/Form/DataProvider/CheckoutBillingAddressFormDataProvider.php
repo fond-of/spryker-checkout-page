@@ -14,7 +14,6 @@ use SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClient
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
     public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
-    public const OPTION_REGION_CHOICES = 'region_choices';
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
     public const COUNTRY_CLIENT = 'country_client';
@@ -70,40 +69,8 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
         return [
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
-            CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
         ];
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     *
-     * @return array
-     */
-    protected function getRegionChoices(QuoteTransfer $quoteTransfer): array
-    {
-        if (!$quoteTransfer->getBillingAddress() instanceof AddressTransfer) {
-            return [];
-        }
-
-        if ($quoteTransfer->getBillingAddress()->getIso2Code() === null) {
-            return [];
-        }
-
-        $countryTransfer = $this->countryClient->getRegionByIso2Code(
-            $quoteTransfer->getBillingAddress()->getIso2Code()
-        );
-
-        $quoteTransfer->getBillingAddress()->setCountry($countryTransfer);
-
-        $regions = [];
-
-        /** @var \Generated\Shared\Transfer\RegionTransfer $region */
-        foreach ($quoteTransfer->getBillingAddress()->getCountry()->getRegions() as $region) {
-            $regions[$region->getIso2Code()] = $region->getName();
-        }
-
-        return $regions;
     }
 
     /**
