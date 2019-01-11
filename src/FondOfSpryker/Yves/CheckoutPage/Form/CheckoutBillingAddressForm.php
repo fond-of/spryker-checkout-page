@@ -9,6 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
@@ -42,6 +45,8 @@ class CheckoutBillingAddressForm extends AbstractType
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';
     protected const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
+    public const COUNTRY_CLIENT = 'country_client';
+
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      *
@@ -57,7 +62,8 @@ class CheckoutBillingAddressForm extends AbstractType
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
         $resolver->setRequired(self::OPTION_VALIDATION_GROUP);
         $resolver->setRequired(self::OPTION_REGION_CHOICES);
-        $resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
+        $resolver->setRequired(self::COUNTRY_CLIENT);
+        //$resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
     }
 
     /**
@@ -207,6 +213,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'choices' => array_flip($options[self::OPTION_COUNTRY_CHOICES]),
             'choices_as_values' => true,
+            'placeholder' => 'global.please_select',
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
@@ -223,13 +230,34 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        //dump($options[self::OPTION_REGION_CHOICES]);
+        /** @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge $countryClient */
+        $countryClient = $options[self::COUNTRY_CLIENT];
 
-        $builder->add(self::FIELD_REGION, ChoiceType::class, [
-            'label' => 'customer.address.region',
-            'required' => false,
-            'choices' => array_flip($options[self::OPTION_REGION_CHOICES]),
-        ]);
+        $formModifier = function (FormInterface $form, $iso2code = null) use ($builder, $options) {
+            if ($iso2code === null) {
+                return $this;
+            }
+
+            $form->add(self::FIELD_REGION, ChoiceType::class, [
+                'required' => true,
+                'label' => 'customer.address.region',
+                'choices' => array_flip($options[self::OPTION_REGION_CHOICES]),
+            ]);
+        };
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($formModifier) {
+            /** @var \Generated\Shared\Transfer\AddressTransfer $data */
+            $data = $event->getData();
+            $iso2code = $data instanceof AddressTransfer ? $data->getIso2Code() : $data;
+
+            $formModifier($event->getForm(), $iso2code);
+        });
+
+        $builder->get(self::FIELD_ISO_2_CODE)->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) use ($formModifier) {
+            $iso2code = $event->getForm()->getData();
+
+            $formModifier($event->getForm()->getParent(), $iso2code);
+        });
 
         return $this;
     }

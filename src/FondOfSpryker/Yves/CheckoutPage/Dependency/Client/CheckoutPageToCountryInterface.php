@@ -12,4 +12,11 @@ interface CheckoutPageToCountryInterface
      * @return \Generated\Shared\Transfer\CountryTransfer
      */
     public function getRegionsByCountryTransfer(CountryTransfer $countryTransfer): CountryTransfer;
+
+    /**
+     * @param string $iso2code
+     *
+     * @return \Generated\Shared\Transfer\CountryTransfer
+     */
+    public function getRegionByIso2Code(string $iso2code): CountryTransfer;
 }

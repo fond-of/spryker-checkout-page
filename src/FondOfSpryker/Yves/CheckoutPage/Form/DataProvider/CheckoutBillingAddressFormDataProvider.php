@@ -5,7 +5,6 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
-use Generated\Shared\Transfer\CountryTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
@@ -18,6 +17,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public const OPTION_REGION_CHOICES = 'region_choices';
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
+    public const COUNTRY_CLIENT = 'country_client';
 
     /**
      * @var \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface
@@ -71,6 +71,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
             CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $this->getRegionChoices($quoteTransfer),
+            CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
         ];
     }
 
@@ -81,26 +82,21 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      */
     protected function getRegionChoices(QuoteTransfer $quoteTransfer): array
     {
-        $countryTransfer = new CountryTransfer();
-        $countryTransfer
-            ->setIso2Code('DE')
-            ->setIdCountry('60');
-
-        $quoteTransfer->getBillingAddress()->setCountry($countryTransfer);
-
         if (!$quoteTransfer->getBillingAddress() instanceof AddressTransfer) {
             return [];
         }
 
-        if ($quoteTransfer->getBillingAddress()->getCountry() === null) {
+        if ($quoteTransfer->getBillingAddress()->getIso2Code() === null) {
             return [];
         }
 
-        $countryTransfer = $this->countryClient->getRegionsByCountryTransfer(
-            $quoteTransfer->getBillingAddress()->getCountry()
+        $countryTransfer = $this->countryClient->getRegionByIso2Code(
+            $quoteTransfer->getBillingAddress()->getIso2Code()
         );
 
         $quoteTransfer->getBillingAddress()->setCountry($countryTransfer);
+
+        $regions = [];
 
         /** @var \Generated\Shared\Transfer\RegionTransfer $region */
         foreach ($quoteTransfer->getBillingAddress()->getCountry()->getRegions() as $region) {

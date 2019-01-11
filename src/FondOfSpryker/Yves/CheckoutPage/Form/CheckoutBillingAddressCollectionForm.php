@@ -23,6 +23,8 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
     public const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
     public const GROUP_BILLING_ADDRESS = self::FIELD_BILLING_ADDRESS;
 
+    public const COUNTRY_CLIENT = 'country_client';
+
     /**
      * @return string
      */
@@ -53,6 +55,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
         ]);
 
         $resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
+        $resolver->setRequired(self::COUNTRY_CLIENT);
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
         $resolver->setRequired(self::OPTION_REGION_CHOICES);
     }
@@ -110,6 +113,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
             CheckoutBillingAddressForm::OPTION_REGION_CHOICES => $options[self::OPTION_REGION_CHOICES],
+            CheckoutBillingAddressForm::COUNTRY_CLIENT => $options[self::COUNTRY_CLIENT],
         ];
 
         $builder->add(self::FIELD_BILLING_ADDRESS, CheckoutBillingAddressForm::class, $options);
