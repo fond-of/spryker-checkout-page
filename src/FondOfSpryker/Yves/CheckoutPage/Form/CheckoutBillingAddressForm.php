@@ -20,6 +20,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+/**
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
+ */
 class CheckoutBillingAddressForm extends AbstractType
 {
     public const FIELD_EMAIL = 'email';
@@ -230,19 +233,29 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        /** @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge $countryClient */
-        $countryClient = $options[self::COUNTRY_CLIENT];
-
-        $formModifier = function (FormInterface $form, $iso2code = null) use ($builder, $options) {
+        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options) {
             if ($iso2code === null) {
                 return $this;
             }
 
-            $form->add(self::FIELD_REGION, ChoiceType::class, [
-                'required' => true,
-                'label' => 'customer.address.region',
-                'choices' => array_flip($options[self::OPTION_REGION_CHOICES]),
-            ]);
+            $countryClient = $this->getFactory()->getCountryClient();
+            $countryTransfer = $countryClient->getRegionByIso2Code($iso2code);
+
+            if (count($countryTransfer->getRegions()) > 0) {
+                $regions = [];
+
+                foreach ($countryTransfer->getRegions() as $region) {
+                    $regions[$region->getIso2Code()] = $region->getName();
+                }
+
+                $form->add(self::FIELD_REGION, ChoiceType::class, [
+                    'required' => true,
+                    'label' => 'customer.address.region',
+                    'choices' => array_flip($regions),
+                ]);
+            } else {
+                $form->remove(self::FIELD_REGION);
+            }
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($formModifier) {

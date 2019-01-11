@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 
+/**
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
+ */
 class CheckoutBillingAddressCollectionForm extends AbstractType
 {
     public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
