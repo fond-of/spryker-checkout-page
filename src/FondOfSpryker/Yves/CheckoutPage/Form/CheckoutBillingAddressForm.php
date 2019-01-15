@@ -232,8 +232,15 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options) {
-            if ($iso2code === null) {
+        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options)
+        {
+
+            if ($iso2code == null) {
+
+                if ($form->has(self::FIELD_REGION)) {
+                    $form->remove(self::FIELD_REGION);
+                }
+
                 return $this;
             }
 
@@ -261,7 +268,6 @@ class CheckoutBillingAddressForm extends AbstractType
             /** @var \Generated\Shared\Transfer\AddressTransfer $data */
             $data = $event->getData();
             $iso2code = $data instanceof AddressTransfer ? $data->getIso2Code() : $data;
-
             $formModifier($event->getForm(), $iso2code);
         });
 
