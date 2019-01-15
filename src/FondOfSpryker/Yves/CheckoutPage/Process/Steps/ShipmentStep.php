@@ -67,7 +67,7 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     protected function setDefaultShipmentMethod(QuoteTransfer $quoteTransfer): QuoteTransfer
     {
-        $defaultShipmentMehtodId = 1;
+        $defaultShipmentMehtodId = $this->shipmentConfig->getDefaultShipmentMethodId();
 
         $shipmentTransfer = (new ShipmentTransfer())
             ->setShipmentSelection($defaultShipmentMehtodId);
