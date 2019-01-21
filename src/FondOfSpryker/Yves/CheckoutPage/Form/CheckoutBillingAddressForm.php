@@ -37,6 +37,7 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_ISO_2_CODE = 'iso2_code';
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
     public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
+    public const FIELD_SHOW_REGION = 'show_region';
 
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
@@ -225,28 +226,28 @@ class CheckoutBillingAddressForm extends AbstractType
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $option
+     * @param array $options
      *
      * @return $this
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options)
-        {
+        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options) {
+            $showRegions = $this->getFactory()
+                ->getCheckoutPageConfig()
+                ->getRegionsForCountries();
 
-            if ($iso2code == null) {
-
+            if ($iso2code === null || !in_array(strtoupper($iso2code), $showRegions)) {
                 if ($form->has(self::FIELD_REGION)) {
                     $form->remove(self::FIELD_REGION);
                 }
-
                 return $this;
             }
 
             $countryClient = $this->getFactory()->getCountryClient();
             $countryTransfer = $countryClient->getRegionByIso2Code($iso2code);
 
-            if (count($countryTransfer->getRegions()) > 0) {
+            if (count($countryTransfer->getRegions()) > 0 && in_array(strtoupper($iso2code), $showRegions)) {
                 $regions = [];
 
                 foreach ($countryTransfer->getRegions() as $region) {
