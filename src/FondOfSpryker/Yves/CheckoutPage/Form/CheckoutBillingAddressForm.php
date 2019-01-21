@@ -65,7 +65,6 @@ class CheckoutBillingAddressForm extends AbstractType
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
         $resolver->setRequired(self::OPTION_VALIDATION_GROUP);
         $resolver->setRequired(self::COUNTRY_CLIENT);
-        //$resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
     }
 
     /**

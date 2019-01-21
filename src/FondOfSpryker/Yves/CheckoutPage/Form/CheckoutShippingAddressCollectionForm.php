@@ -9,10 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CheckoutShippingAddressCollectionForm extends AbstractType
 {
-    const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
-    const OPTION_ADDRESS_CHOICES = 'address_choices';
-    const OPTION_COUNTRY_CHOICES = 'country_choices';
-    const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
+    public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
+    public const OPTION_ADDRESS_CHOICES = 'address_choices';
+    public const OPTION_COUNTRY_CHOICES = 'country_choices';
+    public const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
+    public const COUNTRY_CLIENT = 'country_client';
 
     /**
      * @return string
@@ -37,6 +38,7 @@ class CheckoutShippingAddressCollectionForm extends AbstractType
 
         $resolver->setDefined(self::OPTION_ADDRESS_CHOICES);
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
+        $resolver->setRequired(self::COUNTRY_CLIENT);
     }
 
     /**
@@ -65,6 +67,7 @@ class CheckoutShippingAddressCollectionForm extends AbstractType
             CheckoutShippingAddressForm::OPTION_VALIDATION_GROUP => self::GROUP_SHIPPING_ADDRESS,
             CheckoutShippingAddressForm::OPTION_ADDRESS_CHOICES => $options[self::OPTION_ADDRESS_CHOICES],
             CheckoutShippingAddressForm::OPTION_COUNTRY_CHOICES => $options[self::OPTION_COUNTRY_CHOICES],
+            CheckoutShippingAddressForm::COUNTRY_CLIENT => $options[self::COUNTRY_CLIENT],
         ];
 
         $builder->add(self::FIELD_SHIPPING_ADDRESS, CheckoutShippingAddressForm::class, $options);
