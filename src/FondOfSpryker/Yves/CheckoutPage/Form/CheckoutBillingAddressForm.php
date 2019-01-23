@@ -251,7 +251,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $regions = [];
 
                 foreach ($countryTransfer->getRegions() as $region) {
-                    $regions[$region->getIso2Code()] = $region->getName();
+                    $regions[$region->getIso2Code()] = 'region.iso.' . $region->getIso2Code();
                 }
 
                 $form->add(self::FIELD_REGION, ChoiceType::class, [

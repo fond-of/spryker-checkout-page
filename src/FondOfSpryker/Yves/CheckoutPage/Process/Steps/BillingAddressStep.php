@@ -45,12 +45,6 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
      */
     public function preCondition(AbstractTransfer $dataTransfer): bool
     {
-        /*if (!$dataTransfer->getBillingAddress() instanceof AddressTransfer &&
-            $dataTransfer->getBillingAddress()->getCountry() === null) {
-            $countryTransfer = new CountryTransfer();
-            $countryTransfer->setIso2Code('DE');
-        }*/
-
         return true;
     }
 
@@ -91,8 +85,6 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
         if ($quoteTransfer->getBillingSameAsShipping() === true) {
             $quoteTransfer->setShippingAddress(clone $quoteTransfer->getBillingAddress());
         }
-
-        $quoteTransfer->getBillingAddress()->setIsDefaultBilling(true);
 
         return $this->calculationClient->recalculate($quoteTransfer);
     }

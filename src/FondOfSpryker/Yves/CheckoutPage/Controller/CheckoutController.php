@@ -3,9 +3,7 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Controller;
 
 use FondOfSpryker\Shared\Customer\CustomerConstants;
-use Generated\Shared\Transfer\CountryTransfer;
 use SprykerShop\Yves\CheckoutPage\Controller\CheckoutController as SprykerShopCheckoutController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -173,30 +171,5 @@ class CheckoutController extends SprykerShopCheckoutController
     protected function createStepProcess()
     {
         return $this->getFactory()->createCheckoutProcess();
-    }
-
-    /**
-     * @param string $country
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function regionsByCountryAction(string $country): ?JsonResponse
-    {
-        $config = $this->getFactory()->getCheckoutPageConfig();
-
-        if (!in_array(strtoupper($country), $config->getRegionsForCountries())) {
-            return $this->jsonResponse(false);
-        }
-
-        $countryTransfer = new CountryTransfer();
-        $countryTransfer->setIso2Code(strtoupper($country));
-        $countryTransfer = $this->getFactory()->getCountryClient()->getRegionsByCountryTransfer($countryTransfer);
-
-        /** @var \Generated\Shared\Transfer\RegionTransfer $region */
-        foreach ($countryTransfer->getRegions() as $region) {
-            $regions[$region->getIso2Code()] = $region->getName();
-        }
-
-        return $this->jsonResponse($regions);
     }
 }
