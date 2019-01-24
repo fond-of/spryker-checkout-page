@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -210,12 +211,15 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addIso2CodeField(FormBuilderInterface $builder, array $options)
     {
+        $selected = current(array_flip($options[self::OPTION_COUNTRY_CHOICES]));
+
         $builder->add(self::FIELD_ISO_2_CODE, ChoiceType::class, [
             'label' => 'customer.address.country',
             'required' => true,
             'choices' => array_flip($options[self::OPTION_COUNTRY_CHOICES]),
             'choices_as_values' => true,
-            'placeholder' => 'global.please_select',
+            'placeholder' => (count($options[self::OPTION_COUNTRY_CHOICES]) > 1) ? 'global.please_select' : false,
+            'empty_data' => (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) ? $selected : false,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
@@ -225,6 +229,8 @@ class CheckoutBillingAddressForm extends AbstractType
     }
 
     /**
+     * @see https://symfony.com/doc/3.4/form/dynamic_form_modification.html
+     *
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      *
@@ -232,6 +238,19 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
+        if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
+            $iso2code = ($builder->get(self::FIELD_ISO_2_CODE)->getData()
+                ?: current(array_flip($options[self::OPTION_COUNTRY_CHOICES])));
+
+            $builder->add(self::FIELD_REGION, ChoiceType::class, [
+                'required' => true,
+                'label' => 'customer.address.region',
+                'choices' => array_flip($this->getRegions($iso2code)),
+            ]);
+
+            return $this;
+        }
+
         $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options) {
             $showRegions = $this->getFactory()
                 ->getCheckoutPageConfig()
@@ -241,19 +260,13 @@ class CheckoutBillingAddressForm extends AbstractType
                 if ($form->has(self::FIELD_REGION)) {
                     $form->remove(self::FIELD_REGION);
                 }
+
                 return $this;
             }
 
-            $countryClient = $this->getFactory()->getCountryClient();
-            $countryTransfer = $countryClient->getRegionByIso2Code($iso2code);
+            $regions = $this->getRegions($iso2code);
 
-            if (count($countryTransfer->getRegions()) > 0 && in_array(strtoupper($iso2code), $showRegions)) {
-                $regions = [];
-
-                foreach ($countryTransfer->getRegions() as $region) {
-                    $regions[$region->getIso2Code()] = 'region.iso.' . $region->getIso2Code();
-                }
-
+            if (count($regions) > 0 && in_array(strtoupper($iso2code), $showRegions)) {
                 $form->add(self::FIELD_REGION, ChoiceType::class, [
                     'required' => true,
                     'label' => 'customer.address.region',
@@ -267,6 +280,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($formModifier) {
             /** @var \Generated\Shared\Transfer\AddressTransfer $data */
             $data = $event->getData();
+
             $iso2code = $data instanceof AddressTransfer ? $data->getIso2Code() : $data;
             $formModifier($event->getForm(), $iso2code);
         });
@@ -433,5 +447,23 @@ class CheckoutBillingAddressForm extends AbstractType
         }
 
         return $validationGroup;
+    }
+
+    /**
+     * @param string $iso2code
+     *
+     * @return array
+     */
+    protected function getRegions(string $iso2code): array
+    {
+        $regions = [];
+        $countryClient = $this->getFactory()->getCountryClient();
+        $countryTransfer = $countryClient->getRegionByIso2Code($iso2code);
+
+        foreach ($countryTransfer->getRegions() as $region) {
+            $regions[$region->getIso2Code()] = 'region.iso.' . $region->getIso2Code();
+        }
+
+        return $regions;
     }
 }
