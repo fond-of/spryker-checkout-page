@@ -18,7 +18,7 @@
     "spryker/customer": "^7.25.0",
     "spryker-shop/checkout-page": "^3.0.0",
     "spryker-shop/customer-page": "^2.0.0",
-    "spryker/shipment": "^6.10.0"
+    "spryker/shipment": "^7.0.0"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.14.7",
