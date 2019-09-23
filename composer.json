@@ -16,9 +16,9 @@
     "spryker/kernel": "^3.37.5",
     "spryker/zed-request": "^3.8.1",
     "spryker/customer": "^7.25.0",
-    "spryker-shop/checkout-page": "^2.2.0",
-    "spryker-shop/customer-page": "^1.25.0",
-    "spryker/shipment": "^6.9.1"
+    "spryker-shop/checkout-page": "^3.0.0",
+    "spryker-shop/customer-page": "^2.0.1",
+    "spryker/shipment": "^7.0.0"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.14.7",
