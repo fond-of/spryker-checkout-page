@@ -102,7 +102,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraint($options),
+                $this->createMinLengthConstraintFirstName($options),
             ],
         ]);
 
@@ -122,7 +122,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraint($options),
+                $this->createMinLengthConstraintLastName($options),
             ],
         ]);
 
@@ -142,7 +142,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraint($options),
+                $this->createMinLengthConstraintDefault($options),
             ],
         ]);
 
@@ -196,7 +196,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraint($options),
+                $this->createMinLengthConstraintDefault($options),
             ],
         ]);
 
@@ -307,7 +307,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraint($options),
+                $this->createMinLengthConstraintDefault($options),
                 $this->createRegexEmailConstraint($options),
             ],
         ]);
@@ -401,19 +401,42 @@ class CheckoutBillingAddressForm extends AbstractType
     }
 
     /**
+     * @param  array  $options
+     * @param  int|null  $minLength
+     * @return \Symfony\Component\Validator\Constraints\Length
+     */
+    protected function createMinLengthConstraintDefault(array $options, ?int $minLength = null)
+    {
+        $validationGroup = $this->getValidationGroup($options);
+        if ($minLength === null){
+            $minLength = $this->getConfig()->getDefaultMinLength();
+        }
+
+        return new Length([
+            'min' => $minLength,
+            'groups' => $validationGroup,
+            'minMessage' => sprintf('%s_%s',static::VALIDATION_MIN_LENGTH_MESSAGE, $minLength),
+        ]);
+    }
+
+    /**
      * @param array $options
      *
      * @return \Symfony\Component\Validator\Constraints\Length
      */
-    protected function createMinLengthConstraint(array $options)
+    protected function createMinLengthConstraintFirstName(array $options)
     {
-        $validationGroup = $this->getValidationGroup($options);
+        return $this->createMinLengthConstraintDefault($options, $this->getConfig()->getFirstNameMinLength());
+    }
 
-        return new Length([
-            'min' => 3,
-            'groups' => $validationGroup,
-            'minMessage' => static::VALIDATION_MIN_LENGTH_MESSAGE,
-        ]);
+    /**
+     * @param array $options
+     *
+     * @return \Symfony\Component\Validator\Constraints\Length
+     */
+    protected function createMinLengthConstraintLastName(array $options)
+    {
+        return $this->createMinLengthConstraintDefault($options, $this->getConfig()->getLastNameMinLength());
     }
 
     /**
