@@ -27,6 +27,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class CheckoutBillingAddressForm extends AbstractType
 {
     public const FIELD_EMAIL = 'email';
+    public const FIELD_SALUTATION = 'salutation';
     public const FIELD_FIRST_NAME = 'first_name';
     public const FIELD_LAST_NAME = 'last_name';
     public const FIELD_ADDRESS_1 = 'address1';
@@ -45,6 +46,7 @@ class CheckoutBillingAddressForm extends AbstractType
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
     public const OPTION_REGION_CHOICES = 'region_choices';
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+    public const OPTION_SALUTATIONS = 'salutations';
 
     protected const VALIDATION_NOT_BLANK_MESSAGE = 'validation.not_blank';
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';
@@ -67,6 +69,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
         $resolver->setRequired(self::OPTION_VALIDATION_GROUP);
         $resolver->setRequired(self::COUNTRY_CLIENT);
+        $resolver->setRequired(self::OPTION_SALUTATIONS);
     }
 
     /**
@@ -77,7 +80,8 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->addFirstNameField($builder, $options)
+        $this->addSalutationField($builder, $options)
+            ->addFirstNameField($builder, $options)
             ->addLastNameField($builder, $options)
             ->addAddress1Field($builder, $options)
             ->addAddress3Field($builder)
@@ -87,6 +91,25 @@ class CheckoutBillingAddressForm extends AbstractType
             ->addRegionField($builder, $options)
             ->prepareEmailField($builder, $options)
             ->preparePhoneField($builder, $options);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return $this
+     */
+    protected function addSalutationField(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(self::FIELD_SALUTATION, ChoiceType::class, [
+            'label' => 'customer.address.salutation',
+            'required' => false,
+            'choices' => array_flip($options[self::OPTION_SALUTATIONS]),
+            'choices_as_values' => true,
+            'placeholder' => (count($options[self::OPTION_SALUTATIONS]) > 1) ? 'global.please_select' : false,
+        ]);
+
+        return $this;
     }
 
     /**
@@ -401,21 +424,22 @@ class CheckoutBillingAddressForm extends AbstractType
     }
 
     /**
-     * @param  array  $options
-     * @param  int|null  $minLength
+     * @param array $options
+     * @param int|null $minLength
+     *
      * @return \Symfony\Component\Validator\Constraints\Length
      */
     protected function createMinLengthConstraintDefault(array $options, ?int $minLength = null)
     {
         $validationGroup = $this->getValidationGroup($options);
-        if ($minLength === null){
+        if ($minLength === null) {
             $minLength = $this->getConfig()->getDefaultMinLength();
         }
 
         return new Length([
             'min' => $minLength,
             'groups' => $validationGroup,
-            'minMessage' => sprintf('%s_%s',static::VALIDATION_MIN_LENGTH_MESSAGE, $minLength),
+            'minMessage' => sprintf('%s_%s', static::VALIDATION_MIN_LENGTH_MESSAGE, $minLength),
         ]);
     }
 
