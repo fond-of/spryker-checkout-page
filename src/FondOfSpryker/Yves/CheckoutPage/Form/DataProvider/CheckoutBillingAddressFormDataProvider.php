@@ -155,7 +155,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
         return [
             'Mr' => 'customer.salutation.mr',
             'Ms' => 'customer.salutation.ms',
-            'diverse' => 'customer.salutation.diverse',
+            'Diverse' => 'customer.salutation.diverse',
         ];
     }
 }
