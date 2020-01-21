@@ -70,6 +70,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
+            CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
         ];
     }
 
@@ -144,5 +145,17 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
         }
 
         return $countries;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSalutationOptions(): array
+    {
+        return [
+            'Mr' => 'customer.salutation.mr',
+            'Ms' => 'customer.salutation.ms',
+            'Diverse' => 'customer.salutation.diverse',
+        ];
     }
 }
