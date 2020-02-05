@@ -61,6 +61,7 @@ class CustomerStep extends SprykerShopCustomerStep implements StepWithBreadcrumb
 
             if (!$customerTransfer) {
                 $this->externalRedirect = $this->logoutRoute;
+
                 return false;
             }
         }

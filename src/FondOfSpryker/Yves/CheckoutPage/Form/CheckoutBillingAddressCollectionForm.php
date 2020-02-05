@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use Generated\Shared\Transfer\AddressTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
+use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressForm;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraint;
 
 /**
  * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
  */
 class CheckoutBillingAddressCollectionForm extends AbstractType
 {
@@ -79,7 +81,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      *
-     * @return \FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm
+     * @return $this
      */
     protected function addSameAsShipmentCheckbox(FormBuilderInterface $builder)
     {
@@ -99,7 +101,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      *
-     * @return \FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm
+     * @return $this
      */
     protected function addBillingAddressSubForm(FormBuilderInterface $builder, array $options)
     {

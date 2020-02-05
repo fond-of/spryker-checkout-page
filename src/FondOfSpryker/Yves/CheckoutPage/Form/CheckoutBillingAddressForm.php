@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
  */
 class CheckoutBillingAddressForm extends AbstractType
 {
@@ -274,7 +275,7 @@ class CheckoutBillingAddressForm extends AbstractType
             return $this;
         }
 
-        $formModifier = function (FormInterface $form, ?string $iso2code = null) use ($builder, $options) {
+        $formModifier = function (FormInterface $form, ?string $iso2code = null) {
             $showRegions = $this->getFactory()
                 ->getCheckoutPageConfig()
                 ->getRegionsForCountries();
@@ -474,7 +475,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $phoneNumber = $addressTransfer->getPhone();
         $countryIsoCode = $addressTransfer->getIso2Code();
 
-        if ($phoneNumber === null && !\in_array($countryIsoCode, $countriesInEU, true)) {
+        if ($phoneNumber === null && !in_array($countryIsoCode, $countriesInEU, true)) {
             return false;
         }
 

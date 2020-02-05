@@ -2,12 +2,16 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
-use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep as SprykerShopAddressStep;
+use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ShippingAddressStep extends SprykerShopAddressStep implements StepWithBreadcrumbInterface
+class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
 {
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer

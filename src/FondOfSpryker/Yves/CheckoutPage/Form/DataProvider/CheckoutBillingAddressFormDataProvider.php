@@ -54,7 +54,9 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      */
     public function getData(AbstractTransfer $quoteTransfer)
     {
-        $quoteTransfer->setBillingAddress($this->getBillingAddress($quoteTransfer));
+        if (get_class($quoteTransfer) === QuoteTransfer::class){
+            $quoteTransfer->setBillingAddress($this->getBillingAddress($quoteTransfer));
+        }
 
         return $quoteTransfer;
     }

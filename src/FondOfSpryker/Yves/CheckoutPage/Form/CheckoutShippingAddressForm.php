@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class CheckoutShippingAddressForm extends CheckoutBillingAddressForm
 {
-    const FIELD_ADDITIONAL_ADDRESS = 'additional_address';
+    public const FIELD_ADDITIONAL_ADDRESS = 'additional_address';
 
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder

@@ -7,39 +7,17 @@ use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
+use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
 {
     /**
-     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface
-     */
-    protected $countryClient;
-
-    /**
-     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface $customerClient
-     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
-     * @param string $stepRoute
-     * @param string $escapeRoute
-     */
-    public function __construct(
-        CheckoutPageToCustomerClientInterface $customerClient,
-        CheckoutPageToCalculationClientInterface $calculationClient,
-        CheckoutPageToCountryInterface $countryClient,
-        $stepRoute,
-        $escapeRoute
-    ) {
-        parent::__construct($customerClient, $calculationClient, $stepRoute, $escapeRoute);
-
-        $this->calculationClient = $calculationClient;
-        $this->customerClient = $customerClient;
-        $this->countryClient = $countryClient;
-    }
-
-    /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
+     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $dataTransfer
      *
      * @return bool
      */
@@ -49,21 +27,23 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
     }
 
     /**
-     * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer
-     * @param \Generated\Shared\Transfer\AddressTransfer $billingAddress
+     * @param  \Generated\Shared\Transfer\CustomerTransfer  $customerTransfer
+     * @param  \Generated\Shared\Transfer\AddressTransfer  $billingAddress
      *
      * @return \Generated\Shared\Transfer\CustomerTransfer
      */
-    protected function updateCustomerDataFromBillingAddress(CustomerTransfer $customerTransfer, AddressTransfer $billingAddress)
-    {
+    protected function updateCustomerDataFromBillingAddress(
+        CustomerTransfer $customerTransfer,
+        AddressTransfer $billingAddress
+    ) {
         $customerTransfer->fromArray($billingAddress->toArray(), true);
 
         return $customerTransfer;
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer|void
      */
@@ -90,7 +70,7 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
      *
      * @return bool
      */
@@ -100,13 +80,7 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
             return false;
         }
 
-        $billingIsEmpty = $this->isAddressEmpty($quoteTransfer->getBillingAddress());
-
-        if ($billingIsEmpty) {
-            return false;
-        }
-
-        return true;
+        return $this->isAddressEmpty($quoteTransfer->getBillingAddress());
     }
 
     /**

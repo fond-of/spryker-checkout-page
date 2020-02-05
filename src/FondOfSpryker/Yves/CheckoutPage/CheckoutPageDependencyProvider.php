@@ -4,7 +4,6 @@ namespace FondOfSpryker\Yves\CheckoutPage;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
-use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
@@ -17,24 +16,28 @@ use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneEWalletSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneHandlerPlugin;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductBundleClientBridge;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToShipmentClientBridge;
+use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressCollectionForm;
+use SprykerShop\Yves\CustomerPage\Form\DataProvider\CheckoutAddressFormDataProvider;
 use SprykerShop\Yves\MultiCartWidget\Plugin\ShopUi\MiniCartWidgetPlugin;
 
 class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyProvider
 {
-    const BILLING_ADDRESS_STEP_SUB_FORM = 'BILLING_ADDRESS_STEP_SUB_FORM';
-    const BILLING_ADDRESS_FORM_DATA_PROVIDER = 'BILLING_ADDRESS_FORM_DATA_PROVIDER';
+    public const BILLING_ADDRESS_STEP_SUB_FORM = 'BILLING_ADDRESS_STEP_SUB_FORM';
+    public const BILLING_ADDRESS_FORM_DATA_PROVIDER = 'BILLING_ADDRESS_FORM_DATA_PROVIDER';
 
-    const SHIPPING_ADDRESS_STEP_SUB_FORM = 'SHIPPING_ADDRESS_STEP_SUB_FORM';
-    const SHIPPING_ADDRESS_FORM_DATA_PROVIDER = 'SHIPPING_ADDRESS_FORM_DATA_PROVIDER';
+    public const SHIPPING_ADDRESS_STEP_SUB_FORM = 'SHIPPING_ADDRESS_STEP_SUB_FORM';
+    public const SHIPPING_ADDRESS_FORM_DATA_PROVIDER = 'SHIPPING_ADDRESS_FORM_DATA_PROVIDER';
 
-    const CLIENT_PAYONE = 'CLIENT_PAYONE';
-    const CLIENT_SALES = 'CLIENT_SALES';
-    const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
+    public const CLIENT_PAYONE = 'CLIENT_PAYONE';
+    public const CLIENT_SALES = 'CLIENT_SALES';
+    public const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
 
-    const PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS = 'PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS';
+    public const PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS = 'PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS';
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -46,7 +49,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addCustomerClient($container);
         $container = $this->addCartClient($container);
         $container = $this->addShipmentClient($container);
-        $container = $this->addGlossaryClient($container);
+//        $container = $this->addGlossaryClient($container);
         $container = $this->addPriceClient($container);
         $container = $this->addProductBundleClient($container);
 
@@ -90,7 +93,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -104,7 +107,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -118,7 +121,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -132,7 +135,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -146,7 +149,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -160,7 +163,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge
      */
@@ -172,7 +175,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @return string[]
      */
-    protected function getAddressStepSubForms(): string
+    protected function getAddressStepSubForms(): array
     {
         return [
             CheckoutAddressCollectionForm::class,
@@ -180,17 +183,23 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
-     * @return \FondOfSpryker\Yves\CheckoutPage\CheckoutAddressFormDataProvider
+     * @return \SprykerShop\Yves\CustomerPage\Form\DataProvider\CheckoutAddressFormDataProvider
      */
     protected function getAddressStepFormDataProvider(Container $container): CheckoutAddressFormDataProvider
     {
-        return new CheckoutAddressFormDataProvider($this->getCustomerClient($container), $this->getStore());
+        return new CheckoutAddressFormDataProvider(
+            $this->getCustomerClient($container),
+            $this->getStore(),
+            $this->getCustomerService(),
+            $this->getShipmentClient(),
+            $this->getProductBundleClient()
+        );
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -204,7 +213,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -228,7 +237,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider
      */
@@ -242,7 +251,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -256,7 +265,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -280,7 +289,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider
      */
@@ -294,7 +303,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -311,24 +320,25 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
     protected function extendPaymentMethodHandler(Container $container): Container
     {
-        $container->extend(self::PAYMENT_METHOD_HANDLER, function (StepHandlerPluginCollection $handlerPluginCollection) {
-            $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
-            $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
+        $container->extend(self::PAYMENT_METHOD_HANDLER,
+            function (StepHandlerPluginCollection $handlerPluginCollection) {
+                $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
+                $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
 
-            return $handlerPluginCollection;
-        });
+                return $handlerPluginCollection;
+            });
 
         return $container;
     }
 
     /**
-     * @param \Spryker\Yves\Kernel\Container $container
+     * @param  \Spryker\Yves\Kernel\Container  $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
@@ -349,5 +359,23 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return [
             MiniCartWidgetPlugin::class,
         ];
+    }
+
+    /**
+     * @param  \Spryker\Yves\Kernel\Container  $container
+     * @return \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToShipmentClientBridge
+     */
+    protected function getShipmentClient(Container $container)
+    {
+        return new CheckoutPageToShipmentClientBridge($container->getLocator()->shipment()->client());
+    }
+
+    /**
+     * @param  \Spryker\Yves\Kernel\Container  $container
+     * @return \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductBundleClientBridge
+     */
+    protected function getProductBundleClient(Container $container)
+    {
+        return new CheckoutPageToProductBundleClientBridge($container->getLocator()->productBundle()->client());
     }
 }

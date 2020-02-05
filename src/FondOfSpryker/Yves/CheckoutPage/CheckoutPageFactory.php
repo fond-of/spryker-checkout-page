@@ -7,6 +7,9 @@ use FondOfSpryker\Yves\CheckoutPage\Form\FormFactory;
 use FondOfSpryker\Yves\CheckoutPage\Process\StepFactory;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageFactory as SprykerShopCheckoutPageFactory;
 
+/**
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
+ */
 class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
 {
     /**

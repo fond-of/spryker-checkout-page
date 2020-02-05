@@ -66,7 +66,11 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCalculationClient(),
             $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_BILLING_ADDRESS,
-            HomePageControllerProvider::ROUTE_HOME
+            HomePageControllerProvider::ROUTE_HOME,
+            $this->createAddressStepExecutor(),
+            $this->createAddressStepPostConditionChecker(),
+            $this->getConfig(),
+            $this->getCheckoutAddressStepEnterPreCheckPlugins()
         );
     }
 
@@ -78,8 +82,13 @@ class StepFactory extends SprykerShopStepFactory
         return new ShippingAddressStep(
             $this->getCustomerClient(),
             $this->getCalculationClient(),
+            $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_SHIPPING_ADDRESS,
-            HomePageControllerProvider::ROUTE_HOME
+            HomePageControllerProvider::ROUTE_HOME,
+            $this->createAddressStepExecutor(),
+            $this->createShipmentStepPostConditionChecker(),
+            $this->getConfig(),
+            $this->getCheckoutAddressStepEnterPreCheckPlugins()
         );
     }
 

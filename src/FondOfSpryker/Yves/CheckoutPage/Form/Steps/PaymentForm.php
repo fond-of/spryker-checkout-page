@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\Steps;
 
+use Spryker\Yves\StepEngine\Dependency\Form\SubFormProviderNameInterface;
 use SprykerShop\Yves\CheckoutPage\Form\Steps\PaymentForm as SprykerShopPaymentForm;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +16,7 @@ class PaymentForm extends SprykerShopPaymentForm
      *
      * @return $this
      */
-    protected function addPaymentMethodChoices(FormBuilderInterface $builder, array $paymentMethodChoices): PaymentForm
+    protected function addPaymentMethodChoices(FormBuilderInterface $builder, array $paymentMethodChoices)
     {
         $builder->add(
             self::PAYMENT_SELECTION,
@@ -24,7 +25,6 @@ class PaymentForm extends SprykerShopPaymentForm
                 'choices' => $paymentMethodChoices,
                 'label' => false,
                 'required' => true,
-                'placeholder' => false,
                 'property_path' => self::PAYMENT_SELECTION_PROPERTY_PATH,
                 'choice_translation_domain' => 'global.payment.',
                 'placeholder' => 'global.please_select',
@@ -47,6 +47,7 @@ class PaymentForm extends SprykerShopPaymentForm
         foreach ($this->getFactory()->getPaymentMethodSubForms() as $paymentMethodSubFormPlugin) {
             $paymentMethodSubForms[] = $this->createSubForm($paymentMethodSubFormPlugin);
         }
+
         return $paymentMethodSubForms;
     }
 

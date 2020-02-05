@@ -7,9 +7,9 @@ use SprykerShop\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
 
 class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerProvider
 {
-    const CHECKOUT_BILLING_ADDRESS = 'checkout-billing-address';
-    const CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
-    const CHECKOUT_REGION_BY_COUNTRY = 'checkout-region-by-country';
+    public const CHECKOUT_BILLING_ADDRESS = 'checkout-billing-address';
+    public const CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
+    public const CHECKOUT_REGION_BY_COUNTRY = 'checkout-region-by-country';
 
     /**
      * @param \Silex\Application $app
@@ -33,9 +33,9 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
     }
 
     /**
-     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
+     * @return $this
      */
-    protected function addBillingAddressStepRoute(): self
+    protected function addBillingAddressStepRoute()
     {
         $this->createController('/{checkout}/billing-address', self::CHECKOUT_BILLING_ADDRESS, 'CheckoutPage', 'Checkout', 'billingAddress')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
@@ -46,9 +46,9 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
     }
 
     /**
-     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
+     * @return $this
      */
-    protected function addShippingAddressStepRoute(): self
+    protected function addShippingAddressStepRoute()
     {
         $this->createController('/{checkout}/shipping-address', self::CHECKOUT_SHIPPING_ADDRESS, 'CheckoutPage', 'Checkout', 'shippingAddress')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')
@@ -59,9 +59,9 @@ class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerPr
     }
 
     /**
-     * @return \FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
+     * @return $this
      */
-    protected function addRegionByCountry(): self
+    protected function addRegionByCountry()
     {
         $this->createController('/{checkout}/region-by-country/{country}', self::CHECKOUT_REGION_BY_COUNTRY, 'CheckoutPage', 'Checkout', 'regionsByCountry')
             ->assert('checkout', $this->getAllowedLocalesPattern() . 'checkout|checkout')

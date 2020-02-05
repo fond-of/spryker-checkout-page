@@ -7,6 +7,9 @@ use Spryker\Yves\Kernel\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
+ */
 class CheckoutShippingAddressCollectionForm extends AbstractType
 {
     public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
@@ -58,7 +61,7 @@ class CheckoutShippingAddressCollectionForm extends AbstractType
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
      *
-     * @return \FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm
+     * @return $this
      */
     protected function addShippingAddressSubForm(FormBuilderInterface $builder, array $options)
     {
