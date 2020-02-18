@@ -10,6 +10,8 @@ use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Shared\Shipment\ShipmentConstants;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\ShipmentStep as SprykerShopShipmentStep;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,11 +25,14 @@ class ShipmentStep extends SprykerShopShipmentStep
     public function __construct(
         CheckoutPageToCalculationClientInterface $calculationClient,
         StepHandlerPluginCollection $shipmentPlugins,
-        ShipmentConfig $shipmentConfig,
-        string $stepRoute,
-        string $escapeRoute
+        PostConditionCheckerInterface $postConditionChecker,
+        GiftCardItemsCheckerInterface $giftCardItemsChecker,
+        $stepRoute,
+        $escapeRoute,
+        array $checkoutShipmentStepEnterPreCheckPlugins,
+        ShipmentConfig $shipmentConfig
     ) {
-        parent::__construct($calculationClient, $shipmentPlugins, $stepRoute, $escapeRoute);
+        parent::__construct($calculationClient, $shipmentPlugins, $postConditionChecker, $giftCardItemsChecker, $stepRoute, $escapeRoute, $checkoutShipmentStepEnterPreCheckPlugins);
 
         $this->shipmentConfig = $shipmentConfig;
     }

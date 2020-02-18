@@ -43,6 +43,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
      */
     public function provideDependencies(Container $container)
     {
+        $container = parent::provideDependencies($container);
         $container = $this->addQuoteClient($container);
         $container = $this->addCalculationClient($container);
         $container = $this->addCheckoutClient($container);

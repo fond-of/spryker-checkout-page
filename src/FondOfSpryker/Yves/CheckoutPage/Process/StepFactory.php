@@ -100,10 +100,14 @@ class StepFactory extends SprykerShopStepFactory
         return new ShipmentStep(
             $this->getCalculationClient(),
             $this->getShipmentPlugins(),
-            $this->createShipmentConfig(),
+            $this->createShipmentStepPostConditionChecker(),
+            $this->createGiftCardItemsChecker(),
             CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
-            HomePageControllerProvider::ROUTE_HOME
+            HomePageControllerProvider::ROUTE_HOME,
+            $this->getCheckoutShipmentStepEnterPreCheckPlugins(),
+            $this->createShipmentConfig()
         );
+
     }
 
     /**
@@ -158,7 +162,8 @@ class StepFactory extends SprykerShopStepFactory
     }
 
     /**
-     * @return void
+     * @return mixed
+     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     public function getCountryClient()
     {
