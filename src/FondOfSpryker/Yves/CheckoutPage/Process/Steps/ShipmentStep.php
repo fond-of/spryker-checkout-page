@@ -5,7 +5,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
 use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Generated\Shared\Transfer\ShipmentTransfer;
+use Generated\Shared\Transfer\ShipmentMethodTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Shared\Shipment\ShipmentConstants;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -32,13 +32,14 @@ class ShipmentStep extends SprykerShopShipmentStep
         array $checkoutShipmentStepEnterPreCheckPlugins,
         ShipmentConfig $shipmentConfig
     ) {
-        parent::__construct($calculationClient, $shipmentPlugins, $postConditionChecker, $giftCardItemsChecker, $stepRoute, $escapeRoute, $checkoutShipmentStepEnterPreCheckPlugins);
+        parent::__construct($calculationClient, $shipmentPlugins, $postConditionChecker, $giftCardItemsChecker,
+            $stepRoute, $escapeRoute, $checkoutShipmentStepEnterPreCheckPlugins);
 
         $this->shipmentConfig = $shipmentConfig;
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
      *
      * @return bool
      */
@@ -48,25 +49,38 @@ class ShipmentStep extends SprykerShopShipmentStep
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer): QuoteTransfer
     {
+        if (!$this->executeCheckoutShipmentStepEnterPreCheckPlugins($quoteTransfer)) {
+            return $quoteTransfer;
+        }
+
         if (!$this->requireInput($quoteTransfer)) {
             $quoteTransfer = $this->setDefaultShipmentMethod($quoteTransfer);
         }
 
         $shipmentHandler = $this->shipmentPlugins->get(CheckoutPageDependencyProvider::PLUGIN_SHIPMENT_STEP_HANDLER);
-        $shipmentHandler->addToDataClass($request, $quoteTransfer);
 
-        return $this->calculationClient->recalculate($quoteTransfer);
+        return $shipmentHandler->addToDataClass($request, $quoteTransfer);
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param  \Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
+     *
+     * @return bool
+     */
+    public function postCondition(AbstractTransfer $quoteTransfer)
+    {
+        return $this->postConditionChecker->check($quoteTransfer);
+    }
+
+    /**
+     * @param  \Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
@@ -74,10 +88,14 @@ class ShipmentStep extends SprykerShopShipmentStep
     {
         $defaultShipmentMehtodId = $this->shipmentConfig->getDefaultShipmentMethodId();
 
-        $shipmentTransfer = (new ShipmentTransfer())
-            ->setShipmentSelection($defaultShipmentMehtodId);
-
-        $quoteTransfer->setShipment($shipmentTransfer);
+        $shipmentMethodTransfer = new ShipmentMethodTransfer();
+        $shipmentMethodTransfer->setIdShipmentMethod($defaultShipmentMehtodId);
+        foreach ($quoteTransfer->getItems() as $item) {
+            $shipment = $item->getShipment();
+            $shipment->setMethod($shipmentMethodTransfer);
+            $shipment->setShipmentSelection((string)$defaultShipmentMehtodId);
+            $item->setShipment($shipment);
+        }
 
         return $quoteTransfer;
     }

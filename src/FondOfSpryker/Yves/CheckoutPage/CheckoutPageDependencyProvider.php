@@ -44,51 +44,17 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     public function provideDependencies(Container $container)
     {
         $container = parent::provideDependencies($container);
-        $container = $this->addQuoteClient($container);
-        $container = $this->addCalculationClient($container);
-        $container = $this->addCheckoutClient($container);
-        $container = $this->addCustomerClient($container);
-        $container = $this->addCartClient($container);
-        $container = $this->addShipmentClient($container);
-//        $container = $this->addGlossaryClient($container);
-        $container = $this->addPriceClient($container);
-        $container = $this->addProductBundleClient($container);
-
-        $container = $this->addApplication($container);
-        $container = $this->provideStore($container);
-        $container = $this->addUtilValidateService($container);
-
-        $container = $this->addSubFormPluginCollection($container);
-        $container = $this->addPaymentMethodHandlerPluginCollection($container);
-        $container = $this->extendPaymentMethodHandler($container);
-        $container = $this->extendPaymentSubForms($container);
-        $container = $this->addCustomerStepHandlerPlugin($container);
-        $container = $this->addShipmentHandlerPluginCollection($container);
-        $container = $this->addShipmentFormDataProviderPlugin($container);
-        $container = $this->addMoneyPlugin($container);
-        $container = $this->addCheckoutBreadcrumbPlugin($container);
-        $container = $this->addCustomerPageWidgetPlugins($container);
-        $container = $this->addAddressPageWidgetPlugins($container);
-        $container = $this->addShipmentPageWidgetPlugins($container);
-        $container = $this->addPaymentPageWidgetPlugins($container);
-        $container = $this->addSummaryPageWidgetPlugins($container);
-        $container = $this->addSummaryPageWidgetPlugins($container);
-        $container = $this->addSuccessPageWidgetPlugins($container);
-
-        $container = $this->addCustomerStepSubForms($container);
-        $container = $this->addAddressStepSubForms($container);
-        $container = $this->addAddressStepFormDataProvider($container);
-        $container = $this->addGlossaryStorageClient($container);
 
         $container = $this->addBillingAddressStepSubForm($container);
         $container = $this->addBillingAddressFormDataProvider($container);
         $container = $this->addShippingAddressStepSubForm($container);
         $container = $this->addShippingAddressFormDataProvider($container);
-
         $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
-        $container = $this->addCustomerPageWidgetPlugins($container);
         $container = $this->addCountryClient($container);
+
+        $container = $this->extendPaymentMethodHandler($container);
+        $container = $this->extendPaymentSubForms($container);
 
         return $container;
     }
@@ -193,9 +159,9 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getStore(),
-            $this->getCustomerService(),
-            $this->getShipmentClient(),
-            $this->getProductBundleClient()
+            $this->getCustomerService($container),
+            $this->getShipmentClient($container),
+            $this->getProductBundleClient($container)
         );
     }
 

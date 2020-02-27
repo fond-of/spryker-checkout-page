@@ -58,6 +58,8 @@ class StepFactory extends SprykerShopStepFactory
 
     /**
      * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep
+     *
+     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     protected function createBillingAddressStep(): AbstractBaseStep
     {

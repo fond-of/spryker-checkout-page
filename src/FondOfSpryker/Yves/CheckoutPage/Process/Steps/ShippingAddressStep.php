@@ -3,6 +3,8 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\ShipmentTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
@@ -32,15 +34,30 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
     {
-        $shippingAddressTransfer = $quoteTransfer->getShippingAddress();
         $customerTransfer = $this->customerClient->getCustomer() ?? $quoteTransfer->getCustomer();
 
-        $shippingAddressTransfer = $this->hydrateCustomerAddress(
-            $shippingAddressTransfer,
-            $customerTransfer
-        );
+        /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
+        foreach ($quoteTransfer->getItems() as $item){
+            $shipment = $item->getShipment();
 
-        $quoteTransfer->setShippingAddress($shippingAddressTransfer);
+            if ($shipment === null){
+                $shipment = new ShipmentTransfer();
+            }
+
+            $shippingAddressTransfer = $shipment->getShippingAddress();
+
+            if ($shippingAddressTransfer === null){
+                $shippingAddressTransfer = new AddressTransfer();
+            }
+
+            $shippingAddressTransfer = $this->hydrateCustomerAddress(
+                $shippingAddressTransfer,
+                $customerTransfer
+            );
+
+            $shipment->setShippingAddress($shippingAddressTransfer);
+            $item->setShipment($shipment);
+        }
         $quoteTransfer->getBillingAddress()->setIsDefaultBilling(true);
 
         return $this->calculationClient->recalculate($quoteTransfer);
@@ -54,14 +71,16 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
         /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
-        if ($quoteTransfer->getShippingAddress() === null) {
-            return false;
-        }
 
-        $shippingIsEmpty = $quoteTransfer->getBillingSameAsShipping() === false && $this->isAddressEmpty($quoteTransfer->getShippingAddress());
+        foreach ($quoteTransfer->getItems() as $item) {
+            $shipment = $item->getShipment();
+            if ($shipment === null || $shipment->getShippingAddress() === null){
+                return false;
+            }
 
-        if ($shippingIsEmpty) {
-            return false;
+            if ($quoteTransfer->getBillingSameAsShipping() === false && $this->isAddressEmpty($shipment->getShippingAddress()) === true){
+                return false;
+            }
         }
 
         return true;

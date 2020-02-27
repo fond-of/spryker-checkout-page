@@ -34,8 +34,11 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $store;
 
     /**
-     * @param \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface $customerClient
-     * @param \Spryker\Shared\Kernel\Store $store
+     * CheckoutBillingAddressFormDataProvider constructor.
+     *
+     * @param  \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface  $customerClient
+     * @param  \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface  $countryClient
+     * @param  \Spryker\Shared\Kernel\Store  $store
      */
     public function __construct(
         CustomerPageToCustomerClientInterface $customerClient,
@@ -48,9 +51,9 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
      *
-     * @return \Spryker\Shared\Kernel\Transfer\AbstractTransfer
+     * @return \Generated\Shared\Transfer\QuoteTransfer|\Spryker\Shared\Kernel\Transfer\AbstractTransfer
      */
     public function getData(AbstractTransfer $quoteTransfer)
     {

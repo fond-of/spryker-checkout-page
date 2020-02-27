@@ -25,10 +25,16 @@ class AddressStep extends SprykerShopAddressStep
     protected $customerClient;
 
     /**
+     * AddressStep constructor.
      * @param  \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface  $customerClient
      * @param  \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface  $calculationClient
-     * @param  string  $stepRoute
-     * @param  string  $escapeRoute
+     * @param  \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface  $countryClient
+     * @param $stepRoute
+     * @param $escapeRoute
+     * @param  \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface  $stepExecutor
+     * @param  \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface  $postConditionChecker
+     * @param  \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig  $checkoutPageConfig
+     * @param  array  $checkoutAddressStepEnterPreCheckPlugins
      */
     public function __construct(
         CheckoutPageToCustomerClientInterface $customerClient,

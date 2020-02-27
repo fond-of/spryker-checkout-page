@@ -5,6 +5,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
+use Generated\Shared\Transfer\ShipmentTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
@@ -58,12 +59,19 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
                 $billingAddressTransfer,
                 $customerTransfer
             );
-
+            $quoteTransfer = $this->stepExecutor->execute($request, $quoteTransfer);
             $quoteTransfer->setBillingAddress($billingAddressTransfer);
         }
 
         if ($quoteTransfer->getBillingSameAsShipping() === true) {
-            $quoteTransfer->setShippingAddress(clone $quoteTransfer->getBillingAddress());
+            foreach ($quoteTransfer->getItems() as $item) {
+                $shipment = $item->getShipment();
+                if ($shipment === null){
+                    $shipment = new ShipmentTransfer();
+                }
+                $shipment->setShippingAddress(clone $quoteTransfer->getBillingAddress());
+                $item->setShipment($shipment);
+            }
         }
 
         return $this->calculationClient->recalculate($quoteTransfer);
@@ -80,7 +88,7 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
             return false;
         }
 
-        return $this->isAddressEmpty($quoteTransfer->getBillingAddress());
+        return $this->isAddressEmpty($quoteTransfer->getBillingAddress()) === false;
     }
 
     /**
