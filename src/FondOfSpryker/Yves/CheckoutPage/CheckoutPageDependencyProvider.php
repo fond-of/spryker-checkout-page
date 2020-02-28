@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutAddressCollectionForm;
@@ -9,6 +10,7 @@ use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
+use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutStoreCountryDataProvider;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Spryker\Yves\Kernel\Container;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
@@ -237,6 +239,19 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutBillingAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
+            $this->getCheckoutStoreCountryProvider($container)
+        );
+    }
+
+    /**
+     * @param Container $container
+     *
+     * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface
+     */
+    protected function getCheckoutStoreCountryProvider(Container $container): CheckoutStoreCountryDataProviderInterface
+    {
+        return new CheckoutStoreCountryDataProvider(
+            $container[static::CLIENT_GLOSSARY_STORAGE],
             $this->getStore()
         );
     }
