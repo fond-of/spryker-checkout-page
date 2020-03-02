@@ -2,21 +2,19 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Spryker\Shared\Kernel\Store;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
 use SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface;
 
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
-    public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
-    public const COUNTRY_CLIENT = 'country_client';
 
     /**
      * @var \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface
@@ -29,22 +27,22 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $countryClient;
 
     /**
-     * @var \Spryker\Shared\Kernel\Store
+     * @var CheckoutStoreCountryDataProviderInterface
      */
-    protected $store;
+    protected $countryDataProvider;
 
     /**
      * @param \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface $customerClient
-     * @param \Spryker\Shared\Kernel\Store $store
+     * @param CheckoutPageToCountryInterface $countryClient
      */
     public function __construct(
         CustomerPageToCustomerClientInterface $customerClient,
         CheckoutPageToCountryInterface $countryClient,
-        Store $store
+        CheckoutStoreCountryDataProviderInterface $countryDataProvider
     ) {
         $this->customerClient = $customerClient;
         $this->countryClient = $countryClient;
-        $this->store = $store;
+        $this->countryDataProvider = $countryDataProvider;
     }
 
     /**
@@ -138,13 +136,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      */
     protected function getAvailableCountries(): array
     {
-        $countries = [];
-
-        foreach ($this->store->getCountries() as $iso2Code) {
-            $countries[$iso2Code] = self::COUNTRY_GLOSSARY_PREFIX . $iso2Code;
-        }
-
-        return $countries;
+        return $this->countryDataProvider->getCountries();
     }
 
     /**
