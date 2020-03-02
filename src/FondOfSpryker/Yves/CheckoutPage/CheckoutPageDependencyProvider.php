@@ -305,7 +305,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutShippingAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
-            $this->getStore()
+            $this->getCheckoutStoreCountryProvider($container)
         );
     }
 
