@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
 use Spryker\Shared\Kernel\Store;
+use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge;
 
 class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProviderInterface
@@ -18,16 +19,26 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
      */
     protected $store;
 
+    /**
+     * @var CheckoutPageConfig
+     */
+    private $config;
+
     public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
 
     /**
-     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface $glossaryStorageClient
+     * @param CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient
      * @param Store $store
+     * @param CheckoutPageConfig $config
      */
-    public function __construct(CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient, Store $store)
-    {
+    public function __construct(
+        CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient,
+        Store $store,
+        CheckoutPageConfig $config
+    ) {
         $this->glossaryStorageClient = $glossaryStorageClient;
         $this->store = $store;
+        $this->config = $config;
     }
 
     /**
@@ -50,7 +61,7 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
      */
     protected function getComStoreCountries()
     {
-        $priorityCountriesIso2Codes = ['DE', 'AT', 'CH', 'FR', 'IT'];
+        $priorityCountriesIso2Codes = $this->config->getPriorityCountriesComStore();
 
         $allCountries = $this->getDefault();
         $priorityCountries = [];

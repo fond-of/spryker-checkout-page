@@ -252,7 +252,8 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         return new CheckoutStoreCountryDataProvider(
             $container[static::CLIENT_GLOSSARY_STORAGE],
-            $this->getStore()
+            $this->getStore(),
+            $this->getConfig()
         );
     }
 
