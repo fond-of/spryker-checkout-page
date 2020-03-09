@@ -99,15 +99,4 @@ class ShipmentStep extends SprykerShopShipmentStep
 
         return $quoteTransfer;
     }
-
-    protected function isShipmentSet(QuoteTransfer $quoteTransfer): bool
-    {
-        foreach ($quoteTransfer->getExpenses() as $expenseTransfer) {
-            if ($expenseTransfer->getType() === ShipmentConstants::SHIPMENT_EXPENSE_TYPE) {
-                return $quoteTransfer->getShipment()->getShipmentSelection() !== null;
-            }
-        }
-
-        return false;
-    }
 }
