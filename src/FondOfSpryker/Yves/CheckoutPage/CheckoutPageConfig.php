@@ -46,4 +46,12 @@ class CheckoutPageConfig extends SprykerCheckoutPageConfig
     {
         return $this->get(CheckoutPageConstants::CHECKOUT_PAGE_DEFAULT_VALIDATION_MIN_LENGTH_COUNT, 3);
     }
+
+    /**
+     * @return array
+     */
+    public function getPriorityCountriesComStore(): array
+    {
+        return $this->get(CheckoutPageConstants::CHECKOUT_PAGE_PRIORITY_COUNTRIES_COM_STORE, ['DE', 'AT', 'CH', 'FR', 'IT']);
+    }
 }
