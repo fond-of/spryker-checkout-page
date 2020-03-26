@@ -147,6 +147,7 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function summaryAction(Request $request)
     {
+        $taxInPercent = [];
         $viewData = $this->createStepProcess()->process(
             $request,
             $this->getFactory()
@@ -158,8 +159,17 @@ class CheckoutController extends SprykerShopCheckoutController
             return $viewData;
         }
 
+        /** @var \Generated\Shared\Transfer\ItemTransfer $item */
+        foreach ($viewData['cartItems'] as $item) {
+            if (\in_array($item->getTaxRate(), $taxInPercent)) {
+                continue;
+            }
+
+            $taxInPercent[] = $item->getTaxRate();
+        }
+
         return $this->view(
-            $viewData,
+            \array_merge($viewData, ['taxInPercent' => $taxInPercent]),
             $this->getFactory()->getSummaryPageWidgetPlugins(),
             '@CheckoutPage/views/summary/summary.twig'
         );
