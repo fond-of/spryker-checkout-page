@@ -4,12 +4,12 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressForm;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
-use SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface;
 
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
@@ -17,7 +17,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
 
     /**
-     * @var \SprykerShop\Yves\CustomerPage\Dependency\Client\CustomerPageToCustomerClientInterface
+     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge
      */
     protected $customerClient;
 
@@ -32,12 +32,12 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $countryDataProvider;
 
     /**
-     * @param CustomerPageToCustomerClientInterface $customerClient
+     * @param CheckoutPageToCustomerClientBridge $customerClient
      * @param CheckoutPageToCountryInterface $countryClient
      * @param CheckoutStoreCountryDataProviderInterface $countryDataProvider
      */
     public function __construct(
-        CustomerPageToCustomerClientInterface $customerClient,
+        CheckoutPageToCustomerClientBridge $customerClient,
         CheckoutPageToCountryInterface $countryClient,
         CheckoutStoreCountryDataProviderInterface $countryDataProvider
     ) {

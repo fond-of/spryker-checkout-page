@@ -5,12 +5,14 @@ namespace FondOfSpryker\Yves\CheckoutPage;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutStoreCountryDataProvider;
 use Generated\Shared\Transfer\PaymentTransfer;
+use Spryker\Shared\Kernel\Store;
 use Spryker\Yves\Kernel\Container;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -35,15 +37,16 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     public const CLIENT_PAYONE = 'CLIENT_PAYONE';
     public const CLIENT_SALES = 'CLIENT_SALES';
     public const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
+    public const CLIENT_CUSTOMER = 'CLIENT_CUSTOMER';
 
     public const PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS = 'PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS';
 
     /**
-     * @param  \Spryker\Yves\Kernel\Container  $container
+     * @param \Spryker\Yves\Kernel\Container $container
      *
      * @return \Spryker\Yves\Kernel\Container
      */
-    public function provideDependencies(Container $container)
+    public function provideDependencies(Container $container): Container
     {
         $container = parent::provideDependencies($container);
 
@@ -110,8 +113,9 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
      */
     protected function addCustomerClient(Container $container): Container
     {
-        $container[self::CLIENT_CUSTOMER] = function (Container $container) {
-            return new CheckoutPageToCustomerClientBridge($container->getLocator()->customer()->client());
+        $customerClient = $this->getCustomerClient($container);
+        $container[self::CLIENT_CUSTOMER] = function () use ($customerClient) {
+            return $customerClient;
         };
 
         return $container;
@@ -149,22 +153,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return [
             CheckoutAddressCollectionForm::class,
         ];
-    }
-
-    /**
-     * @param  \Spryker\Yves\Kernel\Container  $container
-     *
-     * @return \SprykerShop\Yves\CustomerPage\Form\DataProvider\CheckoutAddressFormDataProvider
-     */
-    protected function getAddressStepFormDataProvider(Container $container): CheckoutAddressFormDataProvider
-    {
-        return new CheckoutAddressFormDataProvider(
-            $this->getCustomerClient($container),
-            $this->getStore(),
-            $this->getCustomerService($container),
-            $this->getShipmentClient($container),
-            $this->getProductBundleClient($container)
-        );
     }
 
     /**
@@ -321,20 +309,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     }
 
     /**
-     * @param  \Spryker\Yves\Kernel\Container  $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
-    protected function addBillingAddressPageWidgetPlugins(Container $container): Container
-    {
-        $container[self::PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS] = function () {
-            return $this->getBillingAddressPageWidgetPlugins();
-        };
-
-        return $container;
-    }
-
-    /**
      * @return array
      */
     protected function getBillingAddressPageWidgetPlugins(): array
@@ -346,19 +320,19 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
 
     /**
      * @param  \Spryker\Yves\Kernel\Container  $container
-     * @return \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToShipmentClientBridge
+     *
+     * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge
      */
-    protected function getShipmentClient(Container $container)
+    protected function getCustomerClient(Container $container): CheckoutPageToCustomerClientInterface
     {
-        return new CheckoutPageToShipmentClientBridge($container->getLocator()->shipment()->client());
+        return new CheckoutPageToCustomerClientBridge($container->getLocator()->customer()->client());
     }
 
     /**
-     * @param  \Spryker\Yves\Kernel\Container  $container
-     * @return \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductBundleClientBridge
+     * @return \Spryker\Shared\Kernel\Store
      */
-    protected function getProductBundleClient(Container $container)
+    protected function getStore(): Store
     {
-        return new CheckoutPageToProductBundleClientBridge($container->getLocator()->productBundle()->client());
+        return Store::getInstance();
     }
 }
