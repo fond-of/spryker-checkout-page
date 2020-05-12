@@ -61,16 +61,7 @@ class PaymentForm extends SprykerShopPaymentForm
         foreach ($paymentMethodSubForms as $paymentMethodSubForm) {
             $subFormName = ucfirst($paymentMethodSubForm->getName());
 
-            if (!$paymentMethodSubForm instanceof SubFormProviderNameInterface) {
-                $choices[$subFormName] = $paymentMethodSubForm->getPropertyPath();
-                continue;
-            }
-
-            if (!isset($choices[$paymentMethodSubForm->getProviderName()])) {
-                $choices[$paymentMethodSubForm->getProviderName()] = [];
-            }
-
-            $choices[$paymentMethodSubForm->getProviderName()][$subFormName] = $paymentMethodSubForm->getPropertyPath();
+            $choices[$subFormName] = $paymentMethodSubForm->getPropertyPath();
         }
 
         return $choices;
