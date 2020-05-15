@@ -4,6 +4,8 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process;
 
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
 use FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\ShippingAddressStepExecutor;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\BillingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\CustomerStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
@@ -14,6 +16,7 @@ use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 use SprykerShop\Yves\HomePage\Plugin\Provider\HomePageControllerProvider;
 
 class StepFactory extends SprykerShopStepFactory
@@ -58,8 +61,6 @@ class StepFactory extends SprykerShopStepFactory
 
     /**
      * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep
-     *
-     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     protected function createBillingAddressStep(): AbstractBaseStep
     {
@@ -69,7 +70,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_BILLING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME,
-            $this->createAddressStepExecutor(),
+            $this->createBillingAddressStepExecutor(),
             $this->createAddressStepPostConditionChecker(),
             $this->getConfig(),
             $this->getCheckoutAddressStepEnterPreCheckPlugins()
@@ -87,7 +88,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_SHIPPING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME,
-            $this->createAddressStepExecutor(),
+            $this->createShippingAddressStepExecutor(),
             $this->createShipmentStepPostConditionChecker(),
             $this->getConfig(),
             $this->getCheckoutAddressStepEnterPreCheckPlugins()
@@ -109,7 +110,6 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCheckoutShipmentStepEnterPreCheckPlugins(),
             $this->createShipmentConfig()
         );
-
     }
 
     /**
@@ -165,7 +165,6 @@ class StepFactory extends SprykerShopStepFactory
 
     /**
      * @return mixed
-     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     public function getCountryClient()
     {
@@ -178,5 +177,29 @@ class StepFactory extends SprykerShopStepFactory
     protected function createShipmentConfig(): ShipmentConfig
     {
         return new ShipmentConfig();
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface
+     */
+    public function createBillingAddressStepExecutor(): StepExecutorInterface
+    {
+        return new BillingAddressStepExecutor(
+            $this->getCustomerService(),
+            $this->getCustomerClient(),
+            $this->getShoppingListItemExpanderPlugins()
+        );
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface
+     */
+    public function createShippingAddressStepExecutor(): StepExecutorInterface
+    {
+        return new ShippingAddressStepExecutor(
+            $this->getCustomerService(),
+            $this->getCustomerClient(),
+            $this->getShoppingListItemExpanderPlugins()
+        );
     }
 }

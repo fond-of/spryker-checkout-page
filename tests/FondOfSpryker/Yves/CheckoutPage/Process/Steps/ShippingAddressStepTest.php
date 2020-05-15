@@ -1,0 +1,239 @@
+<?php
+
+namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
+
+use Codeception\Test\Unit;
+use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
+use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\ItemTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
+use Generated\Shared\Transfer\ShipmentTransfer;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
+
+/**
+ * Auto-generated group annotations
+ *
+ * @group FondOfSpryker
+ * @group Yves
+ * @group CheckoutPage
+ * @group Process
+ * @group Steps
+ * @group ShippingAddressStepTest
+ * Add your own group annotations below this line
+ */
+class ShippingAddressStepTest extends Unit
+{
+    /**
+     * @return void
+     */
+    public function testRequireInputWillReturnFalse(): void
+    {
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $dataTransferMock->method('getBillingSameAsShipping')->willReturn(true);
+
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+        $this->assertFalse($step->requireInput($dataTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRequireInputWillReturnTrue(): void
+    {
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $dataTransferMock->method('getBillingSameAsShipping')->willReturn(false);
+
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+        $this->assertTrue($step->requireInput($dataTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testPostConditionQuoteWithNoItemWillReturnTrue(): void
+    {
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $dataTransferMock->method('getItems')->willReturn([]);
+
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+        $this->assertTrue($step->postCondition($dataTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testPostConditionShippingAddressOnOneItemWillReturnTrue(): void
+    {
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $addressTransferMock = $this->createMock(AddressTransfer::class);
+        $addressTransferMock->method('getFirstName')->willReturn('Hans');
+        $addressTransferMock->method('getLastName')->willReturn('Wurst');
+        $shipmentTransferMock = $this->createMock(ShipmentTransfer::class);
+        $shipmentTransferMock->method('getShippingAddress')->willReturn($addressTransferMock);
+        $itemTransferMock = $this->createMock(ItemTransfer::class);
+        $itemTransferMock->method('getShipment')->willReturn($shipmentTransferMock);
+
+        $dataTransferMock->method('getItems')->willReturn([$itemTransferMock]);
+
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+        $this->assertTrue($step->postCondition($dataTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testPostConditionShippingAddressOnTwoItemWillReturnFalse(): void
+    {
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $addressTransferMock = $this->createMock(AddressTransfer::class);
+        $addressTransferMock->method('getFirstName')->willReturn('Hans');
+        $addressTransferMock->method('getLastName')->willReturn('Wurst');
+        $shipmentTransferMock = $this->createMock(ShipmentTransfer::class);
+        $shipmentTransferMock2 = $this->createMock(ShipmentTransfer::class);
+        $shipmentTransferMock->method('getShippingAddress')->willReturn($addressTransferMock);
+        $shipmentTransferMock2->method('getShippingAddress')->willReturn(null);
+        $itemTransferMock = $this->createMock(ItemTransfer::class);
+        $itemTransferMock2 = $this->createMock(ItemTransfer::class);
+        $itemTransferMock->method('getShipment')->willReturn($shipmentTransferMock);
+        $itemTransferMock2->method('getShipment')->willReturn($shipmentTransferMock2);
+
+        $dataTransferMock->method('getItems')->willReturn([$itemTransferMock, $itemTransferMock2]);
+
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+        $this->assertFalse($step->postCondition($dataTransferMock));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBreadcrumbItemTitle(): void
+    {
+        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
+        $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
+        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
+        $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
+        $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
+        $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+
+        $stepRoute = '';
+        $escapeRoute = '';
+
+        $step = new ShippingAddressStep(
+            $customerClientMock,
+            $calculationClientMock,
+            $countryClientMock,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutorMock,
+            $postConditionCheckerMock,
+            $checkoutPageConfigMock,
+            []
+        );
+
+        $this->assertSame($step->getBreadcrumbItemTitle(), ShippingAddressStep::BREADCRUMB_ITEM_TITLE);
+    }
+}

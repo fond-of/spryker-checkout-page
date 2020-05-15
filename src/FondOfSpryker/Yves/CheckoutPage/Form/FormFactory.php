@@ -13,12 +13,10 @@ use SprykerShop\Yves\CheckoutPage\Form\FormFactory as SprykerShopFormFactory;
 class FormFactory extends SprykerShopFormFactory
 {
     /**
-     * @param  array  $formTypes
-     * @param  \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null  $dataProvider
-     * 
+     * @param array $formTypes
+     * @param \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null $dataProvider
+     *
      * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandler
-     * 
-     * @throws \Spryker\Yves\Kernel\Exception\Container\ContainerKeyNotFoundException
      */
     public function createFormCollection(array $formTypes, ?StepEngineFormDataProviderInterface $dataProvider = null): FormCollectionHandler
     {

@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CheckoutController extends SprykerShopCheckoutController
 {
+    protected const CHECKOUT_BILLING_ADDRESS = 'checkout/billing-address';
+
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
@@ -70,6 +72,9 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function billingAddressAction(Request $request)
     {
+        $quoteClient = $this->getFactory()->getQuoteClient();
+        $quoteTransfer = $quoteClient->getQuote();
+
         $response = $this->createStepProcess()->process(
             $request,
             $this->getFactory()
@@ -82,6 +87,11 @@ class CheckoutController extends SprykerShopCheckoutController
         }
 
         $response['countriesInEU'] = CustomerConstants::COUNTRIES_IN_EU;
+        $response['billingSameAsShipping'] = true;
+
+        if ($quoteTransfer->getBillingAddress() !== null && $quoteTransfer->getBillingAddress()->getEmail() !== null) {
+            $response['billingSameAsShipping'] = $quoteTransfer->getBillingSameAsShipping();
+        }
 
         return $this->view(
             $response,
@@ -97,6 +107,13 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
+        if (substr(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), - strlen(static::CHECKOUT_BILLING_ADDRESS)) !== static::CHECKOUT_BILLING_ADDRESS) {
+            $quoteClient = $this->getFactory()->getQuoteClient();
+            $quoteTransfer = $quoteClient->getQuote();
+            $quoteTransfer->setBillingSameAsShipping(false);
+            $quoteClient->setQuote($quoteTransfer);
+        }
+
         $response = $this->createStepProcess()->process(
             $request,
             $this->getFactory()
@@ -161,7 +178,7 @@ class CheckoutController extends SprykerShopCheckoutController
 
         /** @var \Generated\Shared\Transfer\ItemTransfer $item */
         foreach ($viewData['cartItems'] as $item) {
-            if (\in_array($item->getTaxRate(), $taxInPercent)) {
+            if (in_array($item->getTaxRate(), $taxInPercent)) {
                 continue;
             }
 
@@ -169,7 +186,7 @@ class CheckoutController extends SprykerShopCheckoutController
         }
 
         return $this->view(
-            \array_merge($viewData, ['taxInPercent' => $taxInPercent]),
+            array_merge($viewData, ['taxInPercent' => $taxInPercent]),
             $this->getFactory()->getSummaryPageWidgetPlugins(),
             '@CheckoutPage/views/summary/summary.twig'
         );

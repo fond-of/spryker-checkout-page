@@ -2,19 +2,13 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
-use Generated\Shared\Transfer\AddressTransfer;
-use Generated\Shared\Transfer\ShipmentTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
-use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
-use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
-use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
-use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
 {
+    public const BREADCRUMB_ITEM_TITLE = 'checkout.step.shipping-address.title';
+
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
      *
@@ -24,43 +18,6 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
     {
         /** @var \Generated\Shared\Transfer\QuoteTransfer $dataTransfer */
         return $dataTransfer->getBillingSameAsShipping() ? false : true;
-    }
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuoteTransfer|\Spryker\Shared\Kernel\Transfer\AbstractTransfer|void
-     */
-    public function execute(Request $request, AbstractTransfer $quoteTransfer)
-    {
-        $customerTransfer = $this->customerClient->getCustomer() ?? $quoteTransfer->getCustomer();
-
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
-        foreach ($quoteTransfer->getItems() as $item){
-            $shipment = $item->getShipment();
-
-            if ($shipment === null){
-                $shipment = new ShipmentTransfer();
-            }
-
-            $shippingAddressTransfer = $shipment->getShippingAddress();
-
-            if ($shippingAddressTransfer === null){
-                $shippingAddressTransfer = new AddressTransfer();
-            }
-
-            $shippingAddressTransfer = $this->hydrateCustomerAddress(
-                $shippingAddressTransfer,
-                $customerTransfer
-            );
-
-            $shipment->setShippingAddress($shippingAddressTransfer);
-            $item->setShipment($shipment);
-        }
-        $quoteTransfer->getBillingAddress()->setIsDefaultBilling(true);
-
-        return $this->calculationClient->recalculate($quoteTransfer);
     }
 
     /**
@@ -74,11 +31,11 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
 
         foreach ($quoteTransfer->getItems() as $item) {
             $shipment = $item->getShipment();
-            if ($shipment === null || $shipment->getShippingAddress() === null){
+            if ($shipment === null || $shipment->getShippingAddress() === null) {
                 return false;
             }
 
-            if ($quoteTransfer->getBillingSameAsShipping() === false && $this->isAddressEmpty($shipment->getShippingAddress()) === true){
+            if ($quoteTransfer->getBillingSameAsShipping() === false && $this->isAddressEmpty($shipment->getShippingAddress()) === true) {
                 return false;
             }
         }
@@ -91,6 +48,6 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
      */
     public function getBreadcrumbItemTitle()
     {
-        return 'checkout.step.shipping-address.title';
+        return static::BREADCRUMB_ITEM_TITLE;
     }
 }

@@ -27,14 +27,14 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $countryClient;
 
     /**
-     * @var CheckoutStoreCountryDataProviderInterface
+     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface
      */
     protected $countryDataProvider;
 
     /**
-     * @param CheckoutPageToCustomerClientBridge $customerClient
-     * @param CheckoutPageToCountryInterface $countryClient
-     * @param CheckoutStoreCountryDataProviderInterface $countryDataProvider
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge $customerClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface $countryDataProvider
      */
     public function __construct(
         CheckoutPageToCustomerClientBridge $customerClient,
@@ -47,13 +47,13 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     }
 
     /**
-     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
+     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer|\Spryker\Shared\Kernel\Transfer\AbstractTransfer
      */
     public function getData(AbstractTransfer $quoteTransfer)
     {
-        if (get_class($quoteTransfer) === QuoteTransfer::class){
+        if (get_class($quoteTransfer) === QuoteTransfer::class) {
             $quoteTransfer->setBillingAddress($this->getBillingAddress($quoteTransfer));
         }
 

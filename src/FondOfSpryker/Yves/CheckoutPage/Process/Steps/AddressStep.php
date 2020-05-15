@@ -4,7 +4,6 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use Generated\Shared\Transfer\AddressTransfer;
-use Generated\Shared\Transfer\CustomerTransfer;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
@@ -25,16 +24,15 @@ class AddressStep extends SprykerShopAddressStep
     protected $customerClient;
 
     /**
-     * AddressStep constructor.
-     * @param  \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface  $customerClient
-     * @param  \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface  $calculationClient
-     * @param  \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface  $countryClient
-     * @param $stepRoute
-     * @param $escapeRoute
-     * @param  \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface  $stepExecutor
-     * @param  \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface  $postConditionChecker
-     * @param  \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig  $checkoutPageConfig
-     * @param  array  $checkoutAddressStepEnterPreCheckPlugins
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface $customerClient
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
+     * @param string $stepRoute
+     * @param string|null $escapeRoute
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
+     * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
+     * @param array $checkoutAddressStepEnterPreCheckPlugins
      */
     public function __construct(
         CheckoutPageToCustomerClientInterface $customerClient,
@@ -47,13 +45,21 @@ class AddressStep extends SprykerShopAddressStep
         CheckoutPageConfig $checkoutPageConfig,
         array $checkoutAddressStepEnterPreCheckPlugins
     ) {
-        parent::__construct($calculationClient, $stepExecutor, $postConditionChecker, $checkoutPageConfig, $stepRoute,
-            $escapeRoute, $checkoutAddressStepEnterPreCheckPlugins);
+        parent::__construct(
+            $calculationClient,
+            $stepExecutor,
+            $postConditionChecker,
+            $checkoutPageConfig,
+            $stepRoute,
+            $escapeRoute,
+            $checkoutAddressStepEnterPreCheckPlugins
+        );
 
         $this->calculationClient = $calculationClient;
         $this->customerClient = $customerClient;
         $this->countryClient = $countryClient;
     }
+
     /**
      * @param \Generated\Shared\Transfer\AddressTransfer|null $addressTransfer
      *
@@ -66,32 +72,10 @@ class AddressStep extends SprykerShopAddressStep
         }
 
         $hasName = (!empty($addressTransfer->getFirstName()) && !empty($addressTransfer->getLastName()));
-        if (!$addressTransfer->getIdCustomerAddress() && !$hasName) {
+        if ($addressTransfer->getIdCustomerAddress() === null && $hasName === false) {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\AddressTransfer $addressTransfer
-     * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer
-     *
-     * @return \Generated\Shared\Transfer\AddressTransfer
-     */
-    protected function hydrateCustomerAddress(AddressTransfer $addressTransfer, CustomerTransfer $customerTransfer)
-    {
-        if ($customerTransfer->getAddresses() === null) {
-            return $addressTransfer;
-        }
-
-        foreach ($customerTransfer->getAddresses()->getAddresses() as $customerAddressTransfer) {
-            if ($addressTransfer->getIdCustomerAddress() === $customerAddressTransfer->getIdCustomerAddress()) {
-                $addressTransfer->fromArray($customerAddressTransfer->toArray());
-                break;
-            }
-        }
-
-        return $addressTransfer;
     }
 }

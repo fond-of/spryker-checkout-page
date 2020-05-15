@@ -7,7 +7,6 @@ use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\ShipmentMethodTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use Spryker\Shared\Shipment\ShipmentConstants;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
@@ -32,14 +31,21 @@ class ShipmentStep extends SprykerShopShipmentStep
         array $checkoutShipmentStepEnterPreCheckPlugins,
         ShipmentConfig $shipmentConfig
     ) {
-        parent::__construct($calculationClient, $shipmentPlugins, $postConditionChecker, $giftCardItemsChecker,
-            $stepRoute, $escapeRoute, $checkoutShipmentStepEnterPreCheckPlugins);
+        parent::__construct(
+            $calculationClient,
+            $shipmentPlugins,
+            $postConditionChecker,
+            $giftCardItemsChecker,
+            $stepRoute,
+            $escapeRoute,
+            $checkoutShipmentStepEnterPreCheckPlugins
+        );
 
         $this->shipmentConfig = $shipmentConfig;
     }
 
     /**
-     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
+     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
      *
      * @return bool
      */
@@ -49,8 +55,8 @@ class ShipmentStep extends SprykerShopShipmentStep
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  \Spryker\Shared\Kernel\Transfer\AbstractTransfer  $quoteTransfer
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
@@ -70,7 +76,7 @@ class ShipmentStep extends SprykerShopShipmentStep
     }
 
     /**
-     * @param  \Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
      * @return bool
      */
@@ -80,7 +86,7 @@ class ShipmentStep extends SprykerShopShipmentStep
     }
 
     /**
-     * @param  \Generated\Shared\Transfer\QuoteTransfer  $quoteTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */

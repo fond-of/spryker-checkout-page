@@ -2,7 +2,6 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\Steps;
 
-use Spryker\Yves\StepEngine\Dependency\Form\SubFormProviderNameInterface;
 use SprykerShop\Yves\CheckoutPage\Form\Steps\PaymentForm as SprykerShopPaymentForm;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
