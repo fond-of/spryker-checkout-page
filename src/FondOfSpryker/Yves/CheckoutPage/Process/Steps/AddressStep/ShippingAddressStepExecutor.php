@@ -37,6 +37,9 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
         if ($quoteTransfer->getBillingSameAsShipping() === true) {
             $billingAddressTransfer = $quoteTransfer->getBillingAddress();
             $shipmentTransfer = $quoteTransfer->getShipment();
+            if ($shipmentTransfer === null) {
+                $shipmentTransfer = new ShipmentTransfer();
+            }
             $shipmentTransfer->setShippingAddress($billingAddressTransfer);
             $quoteTransfer->setShippingAddress($billingAddressTransfer);
             $quoteTransfer->setShipment($shipmentTransfer);
