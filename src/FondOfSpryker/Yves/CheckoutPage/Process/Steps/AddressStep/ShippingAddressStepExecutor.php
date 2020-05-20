@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep;
 
+use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
@@ -80,10 +81,23 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
         }
         $shippingAddressTransfer = $quoteTransfer->getShippingAddress();
         $shipmentTransfer = $quoteTransfer->getShipment();
+
+        if ($shipmentTransfer === null) {
+            $shipmentTransfer = new ShipmentTransfer();
+        }
+
         $shipmentTransfer->setShippingAddress($shippingAddressTransfer);
 
         foreach ($quoteTransfer->getItems() as $itemTransfer) {
             $itemTransfer->requireShipment();
+            if ($itemTransfer->getShipment() === null) {
+                $itemTransfer->setShipment(new ShipmentTransfer());
+            }
+
+            if ($itemTransfer->getShipment()->getShippingAddress() === null) {
+                $itemTransfer->getShipment()->setShippingAddress(new AddressTransfer());
+            }
+
             $itemTransfer->getShipment()->requireShippingAddress();
 
             $shipmentTransfer = $this->getShipmentWithUniqueShippingAddress(
