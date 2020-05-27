@@ -107,7 +107,12 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
-        if (array_key_exists('HTTP_REFERER', $_SERVER) && substr(parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH), - strlen(static::CHECKOUT_BILLING_ADDRESS)) !== static::CHECKOUT_BILLING_ADDRESS) {
+        if (
+            array_key_exists('HTTP_REFERER', $_SERVER) && substr(
+                parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH),
+                -strlen(static::CHECKOUT_BILLING_ADDRESS)
+            ) !== static::CHECKOUT_BILLING_ADDRESS
+        ) {
             $quoteClient = $this->getFactory()->getQuoteClient();
             $quoteTransfer = $quoteClient->getQuote();
             $quoteTransfer->setBillingSameAsShipping(false);
@@ -140,7 +145,7 @@ class CheckoutController extends SprykerShopCheckoutController
     public function paymentAction(Request $request)
     {
         $response = $this->createStepProcess()->process(
-            $request,
+            $this->getFactory()->createEmptyPaymentMethodValidator()->validate($request),
             $this->getFactory()
                 ->createCheckoutFormFactory()
                 ->getPaymentFormCollection()

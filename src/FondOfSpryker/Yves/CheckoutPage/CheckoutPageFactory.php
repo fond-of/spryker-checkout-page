@@ -5,6 +5,8 @@ namespace FondOfSpryker\Yves\CheckoutPage;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\FormFactory;
 use FondOfSpryker\Yves\CheckoutPage\Process\StepFactory;
+use FondOfSpryker\Yves\CheckoutPage\Validator\EmptyPaymentMethodValidator;
+use FondOfSpryker\Yves\CheckoutPage\Validator\RequestValidatorInterface;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageFactory as SprykerShopCheckoutPageFactory;
 
 /**
@@ -76,5 +78,13 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     public function getCountryClient(): CheckoutPageToCountryInterface
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_COUNTRY);
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Validator\RequestValidatorInterface
+     */
+    public function createEmptyPaymentMethodValidator(): RequestValidatorInterface
+    {
+        return new EmptyPaymentMethodValidator();
     }
 }
