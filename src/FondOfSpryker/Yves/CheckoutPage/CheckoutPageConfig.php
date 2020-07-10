@@ -7,6 +7,8 @@ use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig as SprykerCheckoutPageConfi
 
 class CheckoutPageConfig extends SprykerCheckoutPageConfig
 {
+    public const PAYMENT_METHOD_NAME_NO_PAYMENT = 'paid';
+
     /**
      * @return bool
      */

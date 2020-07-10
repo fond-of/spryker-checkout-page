@@ -13,7 +13,9 @@ use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFor
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutStoreCountryDataProvider;
 use Generated\Shared\Transfer\PaymentTransfer;
 use Spryker\Shared\Kernel\Store;
+use Spryker\Shared\Nopayment\NopaymentConfig;
 use Spryker\Yves\Kernel\Container;
+use Spryker\Yves\Nopayment\Plugin\NopaymentHandlerPlugin;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
@@ -299,6 +301,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             function (StepHandlerPluginCollection $handlerPluginCollection) {
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
+                $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_METHOD_NAME);
 
                 return $handlerPluginCollection;
             }
