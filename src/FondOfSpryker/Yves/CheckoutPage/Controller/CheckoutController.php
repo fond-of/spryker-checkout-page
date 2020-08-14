@@ -169,6 +169,14 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function summaryAction(Request $request)
     {
+        $quoteValidationResponseTransfer = $this->canProceedCheckout();
+
+        if (!$quoteValidationResponseTransfer->getIsSuccessful()) {
+            $this->processErrorMessages($quoteValidationResponseTransfer->getMessages());
+
+            return $this->redirectResponseInternal(static::ROUTE_CART);
+        }
+
         $taxInPercent = [];
         $viewData = $this->createStepProcess()->process(
             $request,
