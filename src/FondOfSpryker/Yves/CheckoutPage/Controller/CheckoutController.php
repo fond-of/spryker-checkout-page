@@ -107,8 +107,8 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
-        if (
-            array_key_exists('HTTP_REFERER', $_SERVER) && substr(
+        if (array_key_exists('HTTP_REFERER', $_SERVER) &&
+            substr(
                 parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH),
                 -strlen(static::CHECKOUT_BILLING_ADDRESS)
             ) !== static::CHECKOUT_BILLING_ADDRESS
