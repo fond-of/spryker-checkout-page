@@ -10,7 +10,7 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorag
 class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProviderInterface
 {
     /**
-     * @var GlossaryStorageClientInterface
+     * @var \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge
      */
     protected $glossaryStorageClient;
 

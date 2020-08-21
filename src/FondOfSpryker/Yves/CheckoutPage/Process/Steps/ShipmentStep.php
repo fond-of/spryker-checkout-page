@@ -21,6 +21,16 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     protected $shipmentConfig;
 
+    /**
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $shipmentPlugins
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
+     * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
+     * @param string $stepRoute
+     * @param string $escapeRoute
+     * @param array $checkoutShipmentStepEnterPreCheckPlugins
+     * @param \FondOfSpryker\Yves\Shipment\ShipmentConfig $shipmentConfig
+     */
     public function __construct(
         CheckoutPageToCalculationClientInterface $calculationClient,
         StepHandlerPluginCollection $shipmentPlugins,

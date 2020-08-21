@@ -4,10 +4,27 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use Generated\Shared\Transfer\QuoteTransfer;
+use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
+use Symfony\Component\HttpFoundation\Request;
 
 class PaymentStep extends SprykerPaymentStep
 {
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuoteTransfer|\Spryker\Shared\Kernel\Transfer\AbstractTransfer
+     */
+    public function execute(Request $request, AbstractTransfer $quoteTransfer)
+    {
+        if ($quoteTransfer->getCheckoutConfirmed() === true) {
+            $this->resetOrderReference($quoteTransfer);
+        }
+
+        return parent::execute($request, $quoteTransfer);
+    }
+
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
@@ -26,5 +43,19 @@ class PaymentStep extends SprykerPaymentStep
         }
 
         return null;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuoteTransfer
+     */
+    protected function resetOrderReference(QuoteTransfer $quoteTransfer): QuoteTransfer
+    {
+        $quoteTransfer->setCheckoutConfirmed(false);
+        $quoteTransfer->setOrderReference(null);
+        $quoteTransfer->setIdSalesOrder(null);
+
+        return $quoteTransfer;
     }
 }

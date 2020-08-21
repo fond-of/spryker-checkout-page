@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 interface RequestValidatorInterface
 {
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */

@@ -33,7 +33,7 @@ class ShippingAddressStepExecutorTest extends Unit
     public function testUpdateQuoteShipmentTransferFromQuoteWithBillingSameAsShippingFalse()
     {
         $customerServiceMock = $this->createCustomerServiceMock(['getUniqueAddressKey']);
-        $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn(null);
+        $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn('');
 
         $customerClientMock = $this->createCustomerClientMock(['getCustomer']);
         $customerClientMock->method('getCustomer')->willReturn(null);
@@ -59,7 +59,7 @@ class ShippingAddressStepExecutorTest extends Unit
     public function testUpdateQuoteShipmentTransferFromClientWithBillingSameAsShippingFalse()
     {
         $customerServiceMock = $this->createCustomerServiceMock(['getUniqueAddressKey']);
-        $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn(null);
+        $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn('');
 
         $customerTransfer = new CustomerTransfer();
         $customerClientMock = $this->createCustomerClientMock(['getCustomer']);

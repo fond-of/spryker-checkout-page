@@ -107,8 +107,8 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
-        if (
-            array_key_exists('HTTP_REFERER', $_SERVER) && substr(
+        if (array_key_exists('HTTP_REFERER', $_SERVER) &&
+            substr(
                 parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH),
                 -strlen(static::CHECKOUT_BILLING_ADDRESS)
             ) !== static::CHECKOUT_BILLING_ADDRESS
@@ -169,6 +169,14 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function summaryAction(Request $request)
     {
+        $quoteValidationResponseTransfer = $this->canProceedCheckout();
+
+        if (!$quoteValidationResponseTransfer->getIsSuccessful()) {
+            $this->processErrorMessages($quoteValidationResponseTransfer->getMessages());
+
+            return $this->redirectResponseInternal(static::ROUTE_CART);
+        }
+
         $taxInPercent = [];
         $viewData = $this->createStepProcess()->process(
             $request,
