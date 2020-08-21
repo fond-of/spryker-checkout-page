@@ -8,6 +8,11 @@
       "email": "pascal.fischer@fondof.de"
     }
   ],
+  "scripts": {
+    "test": "make codeception",
+    "phpcs": "make phpcs",
+    "phpstan": "make phpstan"
+  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
