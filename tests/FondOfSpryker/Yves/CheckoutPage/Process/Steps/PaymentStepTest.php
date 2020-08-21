@@ -29,7 +29,9 @@ class PaymentStepTest extends Unit
 
     protected function _before(): void
     {
-        $this->quoteTransferMock = $this->getMockBuilder(QuoteTransfer::class)->disableOriginalConstructor()->getMock();
+        $this->quoteTransferMock = $this->getMockBuilder(QuoteTransfer::class)
+                                    ->onlyMethods(['setCheckoutConfirmed', 'setOrderReference', 'setIdSalesOrder', 'getCheckoutConfirmed'])
+                                    ->getMock();
         $this->requestMock = $this->getMockBuilder(Request::class)->getMock();
         $paymentClientMock = $this->getMockBuilder(CheckoutPageToPaymentClientBridge::class)
                                     ->disableOriginalConstructor()

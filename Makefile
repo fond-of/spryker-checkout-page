@@ -12,7 +12,7 @@ install-dev:
 
 .PHONY: phpcs
 phpcs:
-	./vendor/bin/phpcs --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml ./src/
+	./vendor/bin/phpcs --ignore=src/Generated --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml src/
 
 .PHONY: phpcbf
 phpcbf:
@@ -20,7 +20,7 @@ phpcbf:
 
 .PHONY: phpstan
 phpstan:
-	./vendor/bin/phpstan analyse -l 4 ./src
+	php -d memory_limit=-1 ./vendor/bin/phpstan analyse -l 4 ./src
 
 .PHONY: codeception
 codeception:

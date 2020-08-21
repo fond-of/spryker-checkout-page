@@ -18,12 +18,11 @@
   "require": {
     "php": ">=7.2",
     "spryker/glossary": "^3.8.0",
-    "spryker/kernel": "^3.42.4",
-    "spryker/zed-request": "^3.12.0",
     "spryker/customer": "^7.26.5",
     "spryker-shop/checkout-page": "^3.7.0",
     "spryker-shop/customer-page": "^2.7.1",
-    "spryker/shipment": "^8.0.2"
+    "spryker/shipment": "^8.0.2",
+    "spryker/quote": "^1.0.0 || ^2.0.0 || ^3.0.0"
   },
   "require-dev": {
     "spryker/code-sniffer": "^0.14.7",
@@ -42,7 +41,7 @@
   "autoload-dev": {
     "psr-4": {
       "FondOfSpryker\\": "tests/FondOfSpryker/",
-      "Generated\\": "tests/Generated/"
+      "Generated\\": "src/Generated/"
     }
   }
 }

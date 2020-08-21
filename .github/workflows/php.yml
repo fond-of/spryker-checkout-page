@@ -35,6 +35,3 @@ jobs:
 
       - name: Run phpcs
         run: composer run-script phpcs
-
-      - name: Run phpstan
-        run: composer run-script phpstan
