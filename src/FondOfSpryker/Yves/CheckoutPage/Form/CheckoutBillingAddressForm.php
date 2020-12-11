@@ -32,6 +32,7 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_FIRST_NAME = 'first_name';
     public const FIELD_LAST_NAME = 'last_name';
     public const FIELD_ADDRESS_1 = 'address1';
+    public const FIELD_ADDRESS_2 = 'address2';
     public const FIELD_ADDRESS_3 = 'address3';
     public const FIELD_REGION = 'region';
     public const FIELD_PHONE = 'phone';
@@ -85,6 +86,7 @@ class CheckoutBillingAddressForm extends AbstractType
             ->addFirstNameField($builder, $options)
             ->addLastNameField($builder, $options)
             ->addAddress1Field($builder, $options)
+            ->addAddress2Field($builder)
             ->addAddress3Field($builder)
             ->addZipCodeField($builder, $options)
             ->addCityField($builder, $options)
@@ -168,6 +170,21 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
             ],
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     *
+     * @return $this
+     */
+    protected function addAddress2Field(FormBuilderInterface $builder)
+    {
+        $builder->add(self::FIELD_ADDRESS_2, TextType::class, [
+            'label' => 'customer.address.address2',
+            'required' => false,
         ]);
 
         return $this;
