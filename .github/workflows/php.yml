@@ -32,6 +32,3 @@ jobs:
 
       - name: Run test suite
         run: composer run-script test
-
-      - name: Run phpcs
-        run: composer run-script phpcs
