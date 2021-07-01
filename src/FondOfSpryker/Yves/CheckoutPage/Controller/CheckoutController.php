@@ -206,6 +206,20 @@ class CheckoutController extends SprykerShopCheckoutController
     }
 
     /**
+     * @return mixed
+     */
+    public function errorAction()
+    {
+        $quoteClient = $this->getFactory()->getQuoteClient();
+        $quoteTransfer = $quoteClient->getQuote();
+        return $this->view(
+            ['quoteTransfer' => $quoteTransfer],
+            [],
+            '@CheckoutPage/views/order-fail/order-fail.twig'
+        );
+    }
+
+    /**
      * @return \Spryker\Yves\StepEngine\Process\StepEngineInterface
      */
     protected function createStepProcess()
