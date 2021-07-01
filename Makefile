@@ -24,7 +24,7 @@ phpstan:
 
 .PHONY: codeception
 codeception:
-	./vendor/bin/codecept run --coverage --coverage-xml --coverage-html
+	./vendor/bin/codecept run
 
 .PHONY: phpmd
 phpmd:
