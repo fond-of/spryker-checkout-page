@@ -63,7 +63,7 @@ class PaymentStepTest extends Unit
             '',
             '',
             $flashMessagenerMock,
-            $calculationClientMock
+            $calculationClientMock,
             [],
             $this->loggerMock) extends PaymentStep {
 
