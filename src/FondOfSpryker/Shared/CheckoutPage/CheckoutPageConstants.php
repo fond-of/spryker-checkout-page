@@ -14,6 +14,6 @@ interface CheckoutPageConstants
     public const ROUTE_CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
     public const ROUTE_CHECKOUT_REGION_BY_COUNTRY = 'checkout-region-by-country';
 
-    public const DEFAULT_SHIPMENT_METHOD_NAME = 'FOND_OF_SPRYKER:CHECKOUT_PAGE:DEFAULT_SHIPMENT_METHOD_NAME';
-    public const DEFAULT_SHIPMENT_METHOD_NAME_VALUE = 'Standard Shipment';
+    public const DEFAULT_SHIPMENT_METHOD_ID = 'FOND_OF_SPRYKER:CHECKOUT_PAGE:DEFAULT_SHIPMENT_METHOD_ID';
+    public const DEFAULT_SHIPMENT_METHOD_ID_VALUE = 1;
 }

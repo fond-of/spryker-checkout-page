@@ -44,6 +44,7 @@ class CheckoutShippingAddressCollectionForm extends AbstractType
         $resolver->setDefined(self::OPTION_SALUTATION);
         $resolver->setRequired(self::OPTION_COUNTRY_CHOICES);
         $resolver->setRequired(self::COUNTRY_CLIENT);
+        $resolver->setRequired(CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD);
     }
 
     /**

@@ -3,9 +3,8 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
 
-class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
+class BillingAddressStep extends AddressStep
 {
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.billing-address.title';
 

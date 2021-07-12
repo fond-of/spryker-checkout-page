@@ -100,7 +100,7 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     protected function setDefaultShipmentMethod(QuoteTransfer $quoteTransfer): QuoteTransfer
     {
-        $defaultShipmentMethodName = $this->config->getDefaultShipmentMethodName();
+        $defaultShipmentMethodName = (string)$this->config->getDefaultShipmentMethodId();
         $itemTransfers = $quoteTransfer->getItems();
 
         if ($this->giftCardItemsChecker->hasOnlyGiftCardItems($itemTransfers)) {
@@ -108,19 +108,18 @@ class ShipmentStep extends SprykerShopShipmentStep
         }
 
         foreach ($itemTransfers as $itemTransfer) {
-            $itemShipmentTransfer = $itemTransfer->getShipment();
-
-            if ($itemShipmentTransfer !== null && $itemShipmentTransfer->getShipmentSelection() === null) {
-                $itemShipmentTransfer->setShipmentSelection($defaultShipmentMethodName);
+            if ($itemTransfer->getShipment() === null) {
+                $itemTransfer->setShipment(new ShipmentTransfer());
             }
-        }
 
-        $shipmentTransfer = (new ShipmentTransfer())
-            ->setShipmentSelection($defaultShipmentMethodName);
+            $itemTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodName);
+        }
 
         if ($quoteTransfer->getShipment() === null) {
-            $quoteTransfer->setShipment($shipmentTransfer);
+            $quoteTransfer->setShipment(new ShipmentTransfer());
         }
+
+        $quoteTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodName);
 
         return $quoteTransfer;
     }

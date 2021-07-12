@@ -91,7 +91,8 @@ class StepFactory extends SprykerShopStepFactory
             $this->createShippingAddressStepExecutor(),
             $this->createShipmentStepPostConditionChecker(),
             $this->getConfig(),
-            $this->getCheckoutAddressStepEnterPreCheckPlugins()
+            $this->getCheckoutAddressStepEnterPreCheckPlugins(),
+            $this->createGiftCardItemsChecker()
         );
     }
 
