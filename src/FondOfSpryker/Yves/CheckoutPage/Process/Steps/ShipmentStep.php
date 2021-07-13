@@ -90,7 +90,19 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     public function postCondition(AbstractTransfer $quoteTransfer)
     {
-        return $this->postConditionChecker->check($quoteTransfer);
+        if (!$this->giftCardItemsChecker->hasOnlyGiftCardItems($quoteTransfer->getItems())) {
+            return parent::postCondition($quoteTransfer);
+        }
+
+        foreach ($quoteTransfer->getItems() as $item) {
+            $shipment = $item->getShipment();
+
+            if ($shipment !== null && $shipment->getShipmentSelection() !== CheckoutPageConfig::SHIPMENT_METHOD_NAME_NO_SHIPMENT) {
+                return false;
+            }
+        }
+
+        return parent::postCondition($quoteTransfer);
     }
 
     /**
@@ -100,11 +112,11 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     protected function setDefaultShipmentMethod(QuoteTransfer $quoteTransfer): QuoteTransfer
     {
-        $defaultShipmentMethodName = (string)$this->config->getDefaultShipmentMethodId();
+        $defaultShipmentMethodId = (string)$this->config->getDefaultShipmentMethodId();
         $itemTransfers = $quoteTransfer->getItems();
 
         if ($this->giftCardItemsChecker->hasOnlyGiftCardItems($itemTransfers)) {
-            $defaultShipmentMethodName = CheckoutPageConfig::SHIPMENT_METHOD_NAME_NO_SHIPMENT;
+            $defaultShipmentMethodId = CheckoutPageConfig::SHIPMENT_METHOD_NAME_NO_SHIPMENT;
         }
 
         foreach ($itemTransfers as $itemTransfer) {
@@ -112,14 +124,14 @@ class ShipmentStep extends SprykerShopShipmentStep
                 $itemTransfer->setShipment(new ShipmentTransfer());
             }
 
-            $itemTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodName);
+            $itemTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodId);
         }
 
         if ($quoteTransfer->getShipment() === null) {
             $quoteTransfer->setShipment(new ShipmentTransfer());
         }
 
-        $quoteTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodName);
+        $quoteTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodId);
 
         return $quoteTransfer;
     }

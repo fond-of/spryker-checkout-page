@@ -14,11 +14,24 @@ use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 class ShippingAddressStep extends AddressStep
 {
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.shipping-address.title';
+
     /**
      * @var \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface
      */
     protected $giftCardItemsChecker;
 
+    /**
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface $customerClient
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
+     * @param $stepRoute
+     * @param $escapeRoute
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
+     * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
+     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface[] $checkoutAddressStepEnterPreCheckPlugins
+     * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
+     */
     public function __construct(
         CheckoutPageToCustomerClientInterface $customerClient,
         CheckoutPageToCalculationClientInterface $calculationClient,
@@ -46,7 +59,6 @@ class ShippingAddressStep extends AddressStep
         $this->giftCardItemsChecker = $giftCardItemsChecker;
     }
 
-
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
      *
@@ -54,9 +66,11 @@ class ShippingAddressStep extends AddressStep
      */
     public function requireInput(AbstractTransfer $dataTransfer): bool
     {
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $dataTransfer */
-        return !$this->giftCardItemsChecker->hasOnlyGiftCardItems($dataTransfer->getItems())
-            || !$dataTransfer->getBillingSameAsShipping();
+        if ($dataTransfer->getBillingSameAsShipping()) {
+            return false;
+        }
+
+        return !$this->giftCardItemsChecker->hasOnlyGiftCardItems($dataTransfer->getItems());
     }
 
     /**
@@ -66,10 +80,9 @@ class ShippingAddressStep extends AddressStep
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
-
         foreach ($quoteTransfer->getItems() as $item) {
             $shipment = $item->getShipment();
+
             if ($shipment === null || $shipment->getShippingAddress() === null) {
                 return false;
             }

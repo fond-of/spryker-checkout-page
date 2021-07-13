@@ -3,6 +3,7 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
 use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressForm;
 use Symfony\Component\Form\CallbackTransformer;
