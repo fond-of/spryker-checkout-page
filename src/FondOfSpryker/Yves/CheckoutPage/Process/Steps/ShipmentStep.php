@@ -2,10 +2,10 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
-use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Generated\Shared\Transfer\ShipmentMethodTransfer;
+use Generated\Shared\Transfer\ShipmentTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
@@ -17,9 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ShipmentStep extends SprykerShopShipmentStep
 {
     /**
-     * @var \FondOfSpryker\Yves\Shipment\ShipmentConfig
+     * @var \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig
      */
-    protected $shipmentConfig;
+    protected $config;
 
     /**
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
@@ -29,7 +29,7 @@ class ShipmentStep extends SprykerShopShipmentStep
      * @param string $stepRoute
      * @param string $escapeRoute
      * @param array $checkoutShipmentStepEnterPreCheckPlugins
-     * @param \FondOfSpryker\Yves\Shipment\ShipmentConfig $shipmentConfig
+     * @param \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig $config
      */
     public function __construct(
         CheckoutPageToCalculationClientInterface $calculationClient,
@@ -39,7 +39,7 @@ class ShipmentStep extends SprykerShopShipmentStep
         $stepRoute,
         $escapeRoute,
         array $checkoutShipmentStepEnterPreCheckPlugins,
-        ShipmentConfig $shipmentConfig
+        CheckoutPageConfig $config
     ) {
         parent::__construct(
             $calculationClient,
@@ -51,7 +51,7 @@ class ShipmentStep extends SprykerShopShipmentStep
             $checkoutShipmentStepEnterPreCheckPlugins
         );
 
-        $this->shipmentConfig = $shipmentConfig;
+        $this->config = $config;
     }
 
     /**
@@ -76,9 +76,7 @@ class ShipmentStep extends SprykerShopShipmentStep
             return $quoteTransfer;
         }
 
-        if (!$this->requireInput($quoteTransfer)) {
-            $quoteTransfer = $this->setDefaultShipmentMethod($quoteTransfer);
-        }
+        $quoteTransfer = $this->setDefaultShipmentMethod($quoteTransfer);
 
         $shipmentHandler = $this->shipmentPlugins->get(CheckoutPageDependencyProvider::PLUGIN_SHIPMENT_STEP_HANDLER);
 
@@ -92,7 +90,19 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     public function postCondition(AbstractTransfer $quoteTransfer)
     {
-        return $this->postConditionChecker->check($quoteTransfer);
+        if (!$this->giftCardItemsChecker->hasOnlyGiftCardItems($quoteTransfer->getItems())) {
+            return parent::postCondition($quoteTransfer);
+        }
+
+        foreach ($quoteTransfer->getItems() as $item) {
+            $shipment = $item->getShipment();
+
+            if ($shipment !== null && $shipment->getShipmentSelection() !== CheckoutPageConfig::SHIPMENT_METHOD_NAME_NO_SHIPMENT) {
+                return false;
+            }
+        }
+
+        return parent::postCondition($quoteTransfer);
     }
 
     /**
@@ -102,16 +112,26 @@ class ShipmentStep extends SprykerShopShipmentStep
      */
     protected function setDefaultShipmentMethod(QuoteTransfer $quoteTransfer): QuoteTransfer
     {
-        $defaultShipmentMehtodId = $this->shipmentConfig->getDefaultShipmentMethodId();
+        $defaultShipmentMethodId = (string)$this->config->getDefaultShipmentMethodId();
+        $itemTransfers = $quoteTransfer->getItems();
 
-        $shipmentMethodTransfer = new ShipmentMethodTransfer();
-        $shipmentMethodTransfer->setIdShipmentMethod($defaultShipmentMehtodId);
-        foreach ($quoteTransfer->getItems() as $item) {
-            $shipment = $item->getShipment();
-            $shipment->setMethod($shipmentMethodTransfer);
-            $shipment->setShipmentSelection((string)$defaultShipmentMehtodId);
-            $item->setShipment($shipment);
+        if ($this->giftCardItemsChecker->hasOnlyGiftCardItems($itemTransfers)) {
+            $defaultShipmentMethodId = CheckoutPageConfig::SHIPMENT_METHOD_NAME_NO_SHIPMENT;
         }
+
+        foreach ($itemTransfers as $itemTransfer) {
+            if ($itemTransfer->getShipment() === null) {
+                $itemTransfer->setShipment(new ShipmentTransfer());
+            }
+
+            $itemTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodId);
+        }
+
+        if ($quoteTransfer->getShipment() === null) {
+            $quoteTransfer->setShipment(new ShipmentTransfer());
+        }
+
+        $quoteTransfer->getShipment()->setShipmentSelection($defaultShipmentMethodId);
 
         return $quoteTransfer;
     }

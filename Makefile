@@ -12,27 +12,27 @@ install-dev:
 
 .PHONY: phpcs
 phpcs:
-	./vendor/bin/phpcs --ignore=src/Generated --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml src/
+	./vendor/bin/phpcs --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml ./src/FondOfSpryker/
 
 .PHONY: phpcbf
 phpcbf:
-	./vendor/bin/phpcbf --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml ./src/
+	./vendor/bin/phpcbf --standard=./vendor/spryker/code-sniffer/Spryker/ruleset.xml ./src/FondOfSpryker/
 
 .PHONY: phpstan
 phpstan:
-	php -d memory_limit=-1 ./vendor/bin/phpstan analyse -l 4 ./src
+	php -d memory_limit=-1 ./vendor/bin/phpstan analyse -l 4 ./src/FondOfSpryker
 
 .PHONY: codeception
 codeception:
-	./vendor/bin/codecept run
+	./vendor/bin/codecept run --env standalone --coverage --coverage-xml --coverage-html
 
 .PHONY: phpmd
 phpmd:
-	./vendor/bin/phpmd ./src xml cleancode,codesize,controversial,design --exclude Git
+	./vendor/bin/phpmd ./src/FondOfSpryker xml cleancode,codesize,controversial,design --exclude Git
 
 .PHONY: phpcpd
 phpcpd:
-	./vendor/bin/phpcpd ./src --exclude vendor tests src/Generated
+	./vendor/bin/phpcpd ./src/FondOfSpryker
 
 .PHONY: grumphp
 grumphp: phpcs phpstan codeception phpmd phpcpd
