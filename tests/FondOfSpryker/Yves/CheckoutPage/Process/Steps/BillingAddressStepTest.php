@@ -7,12 +7,14 @@ use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
+use Zend\Stdlib\ArrayObject;
 
 /**
  * Auto-generated group annotations
@@ -33,6 +35,9 @@ class BillingAddressStepTest extends Unit
     public function testPreCondition(): void
     {
         $dataTransferMock = $this->createMock(AbstractTransfer::class);
+        $dataTransferMock->method('getItems')->willReturn(
+            new ArrayObject([$this->createMock(ItemTransfer::class)])
+        );
 
         $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);

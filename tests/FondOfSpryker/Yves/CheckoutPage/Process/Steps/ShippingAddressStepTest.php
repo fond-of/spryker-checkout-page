@@ -14,6 +14,7 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationCli
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
+use Zend\Stdlib\ArrayObject;
 
 /**
  * Auto-generated group annotations
@@ -69,6 +70,9 @@ class ShippingAddressStepTest extends Unit
     {
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getBillingSameAsShipping')->willReturn(false);
+        $dataTransferMock->method('getItems')->willReturn(
+            new ArrayObject([$this->createMock(ItemTransfer::class)])
+        );
 
         $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
@@ -77,6 +81,7 @@ class ShippingAddressStepTest extends Unit
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
         $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
+        $giftCardItemCheckerMock->method('hasOnlyGiftCardItems')->willReturn(false);
 
         $stepRoute = '';
         $escapeRoute = '';
