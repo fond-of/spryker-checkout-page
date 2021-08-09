@@ -10,6 +10,7 @@ use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
@@ -32,6 +33,11 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     protected $countryDataProvider;
 
     /**
+     * @var \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface
+     */
+    protected $giftCardItemsChecker;
+
+    /**
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge $customerClient
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface $countryDataProvider
@@ -39,11 +45,13 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     public function __construct(
         CheckoutPageToCustomerClientBridge $customerClient,
         CheckoutPageToCountryInterface $countryClient,
-        CheckoutStoreCountryDataProviderInterface $countryDataProvider
+        CheckoutStoreCountryDataProviderInterface $countryDataProvider,
+        GiftCardItemsCheckerInterface $giftCardItemsChecker
     ) {
         $this->customerClient = $customerClient;
         $this->countryClient = $countryClient;
         $this->countryDataProvider = $countryDataProvider;
+        $this->giftCardItemsChecker = $giftCardItemsChecker;
     }
 
     /**
@@ -72,6 +80,9 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
             CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
             CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
+            CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD => $this->giftCardItemsChecker->hasOnlyGiftCardItems(
+                $quoteTransfer->getItems()
+            )
         ];
     }
 

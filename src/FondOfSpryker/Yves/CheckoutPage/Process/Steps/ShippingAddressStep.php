@@ -2,12 +2,62 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
+use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 
-class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
+class ShippingAddressStep extends AddressStep
 {
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.shipping-address.title';
+
+    /**
+     * @var \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface
+     */
+    protected $giftCardItemsChecker;
+
+    /**
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface $customerClient
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
+     * @param $stepRoute
+     * @param $escapeRoute
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
+     * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
+     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface[] $checkoutAddressStepEnterPreCheckPlugins
+     * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
+     */
+    public function __construct(
+        CheckoutPageToCustomerClientInterface $customerClient,
+        CheckoutPageToCalculationClientInterface $calculationClient,
+        CheckoutPageToCountryInterface $countryClient,
+        $stepRoute,
+        $escapeRoute,
+        StepExecutorInterface $stepExecutor,
+        PostConditionCheckerInterface $postConditionChecker,
+        CheckoutPageConfig $checkoutPageConfig,
+        array $checkoutAddressStepEnterPreCheckPlugins,
+        GiftCardItemsCheckerInterface $giftCardItemsChecker
+    ) {
+        parent::__construct(
+            $customerClient,
+            $calculationClient,
+            $countryClient,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutor,
+            $postConditionChecker,
+            $checkoutPageConfig,
+            $checkoutAddressStepEnterPreCheckPlugins
+        );
+
+        $this->giftCardItemsChecker = $giftCardItemsChecker;
+    }
 
     /**
      * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
@@ -16,8 +66,11 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
      */
     public function requireInput(AbstractTransfer $dataTransfer): bool
     {
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $dataTransfer */
-        return $dataTransfer->getBillingSameAsShipping() ? false : true;
+        if ($dataTransfer->getBillingSameAsShipping()) {
+            return false;
+        }
+
+        return !$this->giftCardItemsChecker->hasOnlyGiftCardItems($dataTransfer->getItems());
     }
 
     /**
@@ -27,10 +80,9 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
-
         foreach ($quoteTransfer->getItems() as $item) {
             $shipment = $item->getShipment();
+
             if ($shipment === null || $shipment->getShippingAddress() === null) {
                 return false;
             }

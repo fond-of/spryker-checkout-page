@@ -21,7 +21,7 @@ class SuccessStep extends SprykerShopSuccessStep
      * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface
      */
     protected $customerClient;
-    
+
     /**
      * @var \Generated\Shared\Transfer\QuoteTransfer
      */

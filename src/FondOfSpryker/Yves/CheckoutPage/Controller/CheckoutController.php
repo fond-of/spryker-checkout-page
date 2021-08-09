@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CheckoutController extends SprykerShopCheckoutController
 {
-    protected const CHECKOUT_BILLING_ADDRESS = 'checkout/billing-address';
+    protected const PATTERN_CHECKOUT_BILLING_ADDRESS = '/^(\/[a-z]{2})?\/checkout\/billing-address(\/)?/';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -107,15 +107,12 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
-        if (array_key_exists('HTTP_REFERER', $_SERVER) &&
-            substr(
-                parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH),
-                -strlen(static::CHECKOUT_BILLING_ADDRESS)
-            ) !== static::CHECKOUT_BILLING_ADDRESS
-        ) {
+        $referer = $request->server->get('HTTP_REFERER');
+
+        if ($referer !== null && preg_match(static::PATTERN_CHECKOUT_BILLING_ADDRESS, Request::create($referer)->getPathInfo()) === false) {
             $quoteClient = $this->getFactory()->getQuoteClient();
             $quoteTransfer = $quoteClient->getQuote();
-            $quoteTransfer->setBillingSameAsShipping(false);
+            $quoteTransfer->setBillingSameAsShipping($quoteTransfer->getBillingSameAsShipping() ?? false);
             $quoteClient->setQuote($quoteTransfer);
         }
 
@@ -212,6 +209,7 @@ class CheckoutController extends SprykerShopCheckoutController
     {
         $quoteClient = $this->getFactory()->getQuoteClient();
         $quoteTransfer = $quoteClient->getQuote();
+
         return $this->view(
             ['quoteTransfer' => $quoteTransfer],
             [],

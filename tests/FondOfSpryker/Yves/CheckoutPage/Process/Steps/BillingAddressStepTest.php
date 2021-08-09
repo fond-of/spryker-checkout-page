@@ -7,11 +7,14 @@ use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
+use ArrayObject;
 
 /**
  * Auto-generated group annotations
@@ -31,7 +34,10 @@ class BillingAddressStepTest extends Unit
      */
     public function testPreCondition(): void
     {
-        $dataTransferMock = $this->createMock(AbstractTransfer::class);
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
+        $dataTransferMock->method('getItems')->willReturn(
+            new ArrayObject([$this->createMock(ItemTransfer::class)])
+        );
 
         $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
@@ -39,6 +45,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -52,7 +59,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
         $this->assertTrue($step->preCondition($dataTransferMock));
     }
@@ -71,6 +79,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -84,7 +93,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
         $this->assertFalse($step->postCondition($dataTransferMock));
     }
@@ -106,6 +116,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -119,7 +130,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
         $this->assertFalse($step->postCondition($dataTransferMock));
     }
@@ -142,6 +154,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -155,7 +168,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -178,6 +192,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -191,7 +206,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -207,6 +223,7 @@ class BillingAddressStepTest extends Unit
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
+        $giftCardItemCheckerMock = $this->createMock(GiftCardItemsCheckerInterface::class);
 
         $stepRoute = '';
         $escapeRoute = '';
@@ -220,7 +237,8 @@ class BillingAddressStepTest extends Unit
             $stepExecutorMock,
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
-            []
+            [],
+            $giftCardItemCheckerMock
         );
 
         $this->assertSame($step->getBreadcrumbItemTitle(), BillingAddressStep::BREADCRUMB_ITEM_TITLE);

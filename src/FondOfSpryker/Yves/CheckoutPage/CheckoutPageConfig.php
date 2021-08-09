@@ -56,4 +56,15 @@ class CheckoutPageConfig extends SprykerCheckoutPageConfig
     {
         return $this->get(CheckoutPageConstants::CHECKOUT_PAGE_PRIORITY_COUNTRIES_COM_STORE, ['DE', 'AT', 'CH', 'FR', 'IT']);
     }
+
+    /**
+     * @return int
+     */
+    public function getDefaultShipmentMethodId(): int
+    {
+        return $this->get(
+            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID,
+            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID_VALUE
+        );
+    }
 }
