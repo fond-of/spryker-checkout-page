@@ -22,8 +22,13 @@ use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneEWalletSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneHandlerPlugin;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsChecker;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressCollectionForm;
 
+/**
+ * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
+ */
 class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyProvider
 {
     public const BILLING_ADDRESS_STEP_SUB_FORM = 'BILLING_ADDRESS_STEP_SUB_FORM';
@@ -202,7 +207,8 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutBillingAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
-            $this->getCheckoutStoreCountryProvider($container)
+            $this->getCheckoutStoreCountryProvider($container),
+            $this->getGiftCardItemsChecker()
         );
     }
 
@@ -268,7 +274,8 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutShippingAddressFormDataProvider(
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
-            $this->getCheckoutStoreCountryProvider($container)
+            $this->getCheckoutStoreCountryProvider($container),
+            $this->getGiftCardItemsChecker()
         );
     }
 
@@ -302,6 +309,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
                 $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_METHOD_NAME);
+                $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_PROVIDER_NAME);
 
                 return $handlerPluginCollection;
             }
@@ -326,5 +334,13 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     protected function getStore(): Store
     {
         return Store::getInstance();
+    }
+
+    /**
+     * @return \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface
+     */
+    protected function getGiftCardItemsChecker(): GiftCardItemsCheckerInterface
+    {
+        return new GiftCardItemsChecker();
     }
 }

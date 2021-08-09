@@ -41,15 +41,14 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_CITY = 'city';
     public const FIELD_ISO_2_CODE = 'iso2_code';
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
-    public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
     public const FIELD_SHOW_REGION = 'show_region';
 
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
-    public const OPTION_REGION_CHOICES = 'region_choices';
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
     public const OPTION_SALUTATIONS = 'salutations';
+    public const OPTION_GIFT_CARD_ONLY_CARD = 'gift_card_only_card';
 
     protected const VALIDATION_NOT_BLANK_MESSAGE = 'validation.not_blank';
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';

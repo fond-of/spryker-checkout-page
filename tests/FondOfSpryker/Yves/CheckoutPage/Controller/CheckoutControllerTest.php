@@ -17,6 +17,7 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCheckoutClient
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToQuoteClientBridge;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ServerBag;
 
 class CheckoutControllerTest extends Unit
 {
@@ -86,6 +87,11 @@ class CheckoutControllerTest extends Unit
     protected $itemTransferMock;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\ServerBag
+     */
+    protected $serverBagMock;
+
+    /**
      * @var \FondOfSpryker\Yves\CheckoutPage\Controller\CheckoutController
      */
     protected $controller;
@@ -95,7 +101,9 @@ class CheckoutControllerTest extends Unit
      */
     protected function _before(): void
     {
-        parent::_before();
+        $this->serverBagMock = $this->getMockBuilder(ServerBag::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
@@ -299,7 +307,7 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testBillingAddressActionRedirect(): void
+    public function testBillingAddressActionReturnRedirect(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('getQuoteClient')
@@ -335,8 +343,14 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testShippingAddressActionResponse(): void
+    public function testShippingAddressActionReturnResponse(): void
     {
+        $this->requestMock->server = $this->serverBagMock;
+
+        $this->serverBagMock->expects(static::atLeastOnce())
+            ->method('get')
+            ->willReturn('/referer-path');
+
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
             ->willReturn($this->stepEngineMock);
@@ -363,8 +377,10 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testShippingAddressActionView(): void
+    public function testShippingAddressActionReturnView(): void
     {
+        $this->requestMock->server = $this->serverBagMock;
+
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
             ->willReturn($this->stepEngineMock);
@@ -376,7 +392,7 @@ class CheckoutControllerTest extends Unit
         $this->formFactoryMock->expects(static::atLeastOnce())
             ->method('createShippingAddressFormCollection')
             ->willReturn($this->formCollectionHandlereMock);
-
+@
         $this->stepEngineMock->expects(static::atLeastOnce())
             ->method('process')
             ->with($this->requestMock, $this->formCollectionHandlereMock)
@@ -391,7 +407,7 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testPaymentActionResponse(): void
+    public function testPaymentActionReturnResponse(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
@@ -428,7 +444,7 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testPaymentActionView(): void
+    public function testPaymentActionReturnView(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
@@ -465,7 +481,7 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testSummaryActionRedirect(): void
+    public function testSummaryActionReturnRedirect(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('getQuoteClient')
@@ -514,7 +530,7 @@ class CheckoutControllerTest extends Unit
     /**
      * @return void
      */
-    public function testSummaryActionView(): void
+    public function testSummaryActionReturnView(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('getQuoteClient')

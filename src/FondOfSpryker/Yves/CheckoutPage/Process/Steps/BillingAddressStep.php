@@ -3,21 +3,54 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
+use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
+use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
+use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 
-class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterface
+class BillingAddressStep extends AddressStep
 {
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.billing-address.title';
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
-     *
-     * @return bool
+     * @var \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface
      */
-    public function preCondition(AbstractTransfer $dataTransfer): bool
-    {
-        return true;
+    protected $giftCardItemsChecker;
+
+    /**
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param $stepRoute
+     * @param $escapeRoute
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
+     * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
+     * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
+     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface[] $checkoutAddressStepEnterPreCheckPlugins
+     * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
+     */
+    public function __construct(
+        CheckoutPageToCalculationClientInterface $calculationClient,
+        $stepRoute,
+        $escapeRoute,
+        StepExecutorInterface $stepExecutor,
+        PostConditionCheckerInterface $postConditionChecker,
+        CheckoutPageConfig $checkoutPageConfig,
+        array $checkoutAddressStepEnterPreCheckPlugins,
+        GiftCardItemsCheckerInterface $giftCardItemsChecker
+    ) {
+        parent::__construct(
+            $calculationClient,
+            $stepRoute,
+            $escapeRoute,
+            $stepExecutor,
+            $postConditionChecker,
+            $checkoutPageConfig,
+            $checkoutAddressStepEnterPreCheckPlugins
+        );
+
+        $this->giftCardItemsChecker = $giftCardItemsChecker;
     }
+
 
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
@@ -26,11 +59,19 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
-        if ($quoteTransfer->getBillingAddress() === null) {
+        $billingAddress = $quoteTransfer->getBillingAddress();
+        $isBillingSamesAsShipping = $quoteTransfer->getBillingSameAsShipping();
+        $items = $quoteTransfer->getItems();
+
+        if ($billingAddress === null || $this->isAddressEmpty($billingAddress)) {
             return false;
         }
 
-        return $this->isAddressEmpty($quoteTransfer->getBillingAddress()) === false;
+        if ($isBillingSamesAsShipping === false && $this->giftCardItemsChecker->hasOnlyGiftCardItems($items)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

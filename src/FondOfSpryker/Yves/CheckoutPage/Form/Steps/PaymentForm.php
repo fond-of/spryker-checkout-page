@@ -37,21 +37,6 @@ class PaymentForm extends SprykerShopPaymentForm
     }
 
     /**
-     * @return \Spryker\Yves\StepEngine\Dependency\Form\SubFormInterface[]
-     */
-    protected function getPaymentMethodSubForms(): array
-    {
-        $paymentMethodSubForms = [];
-
-        foreach ($this->getFactory()->getPaymentMethodSubForms() as $paymentMethodSubFormPlugin) {
-            $paymentMethodSubForms[] = $this->createSubForm($paymentMethodSubFormPlugin);
-        }
-
-        return $paymentMethodSubForms;
-    }
-
-
-    /**
      * @param \Spryker\Yves\StepEngine\Dependency\Form\SubFormInterface[] $paymentMethodSubForms
      *
      * @return array

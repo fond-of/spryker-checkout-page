@@ -44,20 +44,20 @@ class PaymentStepTest extends Unit
     protected function _before(): void
     {
         $this->quoteTransferMock = $this->getMockBuilder(QuoteTransfer::class)
-                                    ->onlyMethods(['setCheckoutConfirmed', 'setOrderReference', 'setIdSalesOrder', 'getCheckoutConfirmed'])
-                                    ->getMock();
+            ->onlyMethods(['setCheckoutConfirmed', 'setOrderReference', 'setIdSalesOrder', 'getCheckoutConfirmed'])
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(Request::class)->getMock();
         $this->loggerMock = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
         $paymentClientMock = $this->getMockBuilder(CheckoutPageToPaymentClientBridge::class)
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $paymentMethodHandlerMocker = $this->getMockBuilder(StepHandlerPluginCollection::class)->getMock();
         $flashMessagenerMock = $this->getMockBuilder(FlashMessenger::class)
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $calculationClientMock = $this->getMockBuilder(CheckoutPageToCalculationClientBridge::class)
-                                    ->disableOriginalConstructor()
-                                    ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentStep = new class (
             $paymentClientMock,
@@ -97,7 +97,15 @@ class PaymentStepTest extends Unit
                 array $checkoutPaymentStepEnterPreCheckPlugins,
                 LoggerInterface $loggerMock
             ) {
-                parent::__construct($paymentClient, $paymentPlugins, $stepRoute, $escapeRoute, $flashMessenger, $calculationClient, $checkoutPaymentStepEnterPreCheckPlugins);
+                parent::__construct(
+                    $paymentClient,
+                    $paymentPlugins,
+                    $stepRoute,
+                    $escapeRoute,
+                    $flashMessenger,
+                    $calculationClient,
+                    $checkoutPaymentStepEnterPreCheckPlugins
+                );
                 $this->loggerMock = $loggerMock;
             }
 

@@ -13,7 +13,6 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
-use FondOfSpryker\Yves\Shipment\ShipmentConfig;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
@@ -72,7 +71,8 @@ class StepFactory extends SprykerShopStepFactory
             $this->createBillingAddressStepExecutor(),
             $this->createAddressStepPostConditionChecker(),
             $this->getConfig(),
-            $this->getCheckoutAddressStepEnterPreCheckPlugins()
+            $this->getCheckoutAddressStepEnterPreCheckPlugins(),
+            $this->createGiftCardItemsChecker()
         );
     }
 
@@ -88,7 +88,8 @@ class StepFactory extends SprykerShopStepFactory
             $this->createShippingAddressStepExecutor(),
             $this->createShipmentStepPostConditionChecker(),
             $this->getConfig(),
-            $this->getCheckoutAddressStepEnterPreCheckPlugins()
+            $this->getCheckoutAddressStepEnterPreCheckPlugins(),
+            $this->createGiftCardItemsChecker()
         );
     }
 
@@ -105,7 +106,7 @@ class StepFactory extends SprykerShopStepFactory
             CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
             HomePageControllerProvider::ROUTE_HOME,
             $this->getCheckoutShipmentStepEnterPreCheckPlugins(),
-            $this->createShipmentConfig()
+            $this->getConfig()
         );
     }
 
@@ -177,11 +178,11 @@ class StepFactory extends SprykerShopStepFactory
     }
 
     /**
-     * @return \FondOfSpryker\Yves\Shipment\ShipmentConfig
+     * @return mixed
      */
-    protected function createShipmentConfig(): ShipmentConfig
+    public function getCountryClient()
     {
-        return new ShipmentConfig();
+        return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_COUNTRY);
     }
 
     /**

@@ -7,7 +7,7 @@
         <property name="idSalesOrder" type="int"/>
         <property name="signupNewsletter" type="bool"/>
         <property name="acceptTerms" type="bool"/>
-        <property name="locale" type="string"/>
+        <property name="locale" type="Locale"/>
         <property name="billingAddress" type="Address"/>
         <property name="shippingAddress" type="Address"/>
         <property name="items" singular="item" type="Item[]"/>
