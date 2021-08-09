@@ -34,7 +34,7 @@ class BillingAddressStepTest extends Unit
      */
     public function testPreCondition(): void
     {
-        $dataTransferMock = $this->createMock(AbstractTransfer::class);
+        $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getItems')->willReturn(
             new ArrayObject([$this->createMock(ItemTransfer::class)])
         );
