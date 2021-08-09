@@ -4,6 +4,8 @@ namespace FondOfSpryker\Yves\CheckoutPage;
 
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\FormFactory;
+use FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapper;
+use FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapperInterface;
 use FondOfSpryker\Yves\CheckoutPage\Process\StepFactory;
 use FondOfSpryker\Yves\CheckoutPage\Validator\EmptyPaymentMethodValidator;
 use FondOfSpryker\Yves\CheckoutPage\Validator\RequestValidatorInterface;
@@ -57,14 +59,6 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
-     * @return array
-     */
-    public function getCheckoutPageBillingAddress(): array
-    {
-        return $this->getProvidedDependency(CheckoutPageDependencyProvider::PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS);
-    }
-
-    /**
      * @return \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig
      */
     public function getCheckoutPageConfig(): CheckoutPageConfig
@@ -86,5 +80,13 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     public function createEmptyPaymentMethodValidator(): RequestValidatorInterface
     {
         return new EmptyPaymentMethodValidator();
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapperInterface
+     */
+    public function createFormFieldNameMapper(): FormFieldNameMapperInterface
+    {
+        return new FormFieldNameMapper();
     }
 }

@@ -1,10 +1,7 @@
 .idea
-
 .DS_Store
-
-build
-vendor
-
 composer.lock
 
-src/Generated
+/src/Generated
+/src/Orm
+/vendor

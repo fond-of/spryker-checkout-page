@@ -23,7 +23,6 @@ use SprykerEco\Yves\Payone\Plugin\PayoneEWalletSubFormPlugin;
 use SprykerEco\Yves\Payone\Plugin\PayoneHandlerPlugin;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
 use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressCollectionForm;
-use SprykerShop\Yves\MultiCartWidget\Plugin\ShopUi\MiniCartWidgetPlugin;
 
 class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyProvider
 {
@@ -37,8 +36,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     public const CLIENT_SALES = 'CLIENT_SALES';
     public const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
     public const CLIENT_CUSTOMER = 'CLIENT_CUSTOMER';
-
-    public const PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS = 'PLUGIN_BILLING_ADDRESS_PAGE_WIDGETS';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
@@ -112,9 +109,10 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
      */
     protected function addCustomerClient(Container $container): Container
     {
-        $customerClient = $this->getCustomerClient($container);
-        $container[self::CLIENT_CUSTOMER] = function () use ($customerClient) {
-            return $customerClient;
+        $self = $this;
+
+        $container[self::CLIENT_CUSTOMER] = static function (Container $container) use ($self) {
+            return $self->getCustomerClient($container);
         };
 
         return $container;
@@ -127,8 +125,10 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
      */
     protected function addCountryClient(Container $container): Container
     {
-        $container[self::CLIENT_COUNTRY] = function (Container $container) {
-            return new CheckoutPageToCountryBridge($container->getLocator()->country()->client());
+        $self = $this;
+
+        $container[self::CLIENT_COUNTRY] = static function (Container $container) use ($self) {
+            return $self->getCountryClient($container);
         };
 
         return $container;
@@ -308,16 +308,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         );
 
         return $container;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getBillingAddressPageWidgetPlugins(): array
-    {
-        return [
-            MiniCartWidgetPlugin::class,
-        ];
     }
 
     /**

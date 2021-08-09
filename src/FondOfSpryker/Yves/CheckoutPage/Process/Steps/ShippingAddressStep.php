@@ -21,14 +21,12 @@ class ShippingAddressStep extends AddressStep implements StepWithBreadcrumbInter
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
-     * @return bool|void
+     * @return bool
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
-        /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
-
         foreach ($quoteTransfer->getItems() as $item) {
             $shipment = $item->getShipment();
             if ($shipment === null || $shipment->getShippingAddress() === null) {

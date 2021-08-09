@@ -21,7 +21,7 @@ class SuccessStep extends SprykerShopSuccessStep
      * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface
      */
     protected $customerClient;
-    
+
     /**
      * @var \Generated\Shared\Transfer\QuoteTransfer
      */
@@ -80,11 +80,9 @@ class SuccessStep extends SprykerShopSuccessStep
             $this->cartClient->clearQuote();
         }
 
-        if (method_exists($quoteTransfer->getPayment(), 'getPayone')) {
+        if ($quoteTransfer instanceof QuoteTransfer) {
             $this->quoteTransfer = $quoteTransfer;
         }
-
-        $this->quoteTransfer = $quoteTransfer;
 
         return new QuoteTransfer();
     }

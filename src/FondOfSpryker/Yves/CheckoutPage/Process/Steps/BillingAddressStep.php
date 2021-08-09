@@ -20,11 +20,11 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
      * @return bool
      */
-    public function postCondition(AbstractTransfer $quoteTransfer)
+    public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
         if ($quoteTransfer->getBillingAddress() === null) {
             return false;
@@ -36,7 +36,7 @@ class BillingAddressStep extends AddressStep implements StepWithBreadcrumbInterf
     /**
      * @return string
      */
-    public function getBreadcrumbItemTitle()
+    public function getBreadcrumbItemTitle(): string
     {
         return static::BREADCRUMB_ITEM_TITLE;
     }

@@ -16,7 +16,7 @@ class CheckoutController extends SprykerShopCheckoutController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return mixed
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function indexAction(Request $request)
     {
@@ -107,7 +107,8 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function shippingAddressAction(Request $request)
     {
-        if (array_key_exists('HTTP_REFERER', $_SERVER) &&
+        if (
+            array_key_exists('HTTP_REFERER', $_SERVER) &&
             substr(
                 parse_url($_SERVER['HTTP_REFERER'], PHP_URL_PATH),
                 -strlen(static::CHECKOUT_BILLING_ADDRESS)
@@ -206,12 +207,15 @@ class CheckoutController extends SprykerShopCheckoutController
     }
 
     /**
-     * @return mixed
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Spryker\Yves\Kernel\View\View
      */
-    public function errorAction()
+    public function errorAction(?Request $request = null)
     {
         $quoteClient = $this->getFactory()->getQuoteClient();
         $quoteTransfer = $quoteClient->getQuote();
+
         return $this->view(
             ['quoteTransfer' => $quoteTransfer],
             [],
