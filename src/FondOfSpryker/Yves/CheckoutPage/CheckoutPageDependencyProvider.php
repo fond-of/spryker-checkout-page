@@ -308,6 +308,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
                 $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
                 $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_METHOD_NAME);
+                $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_PROVIDER_NAME);
 
                 return $handlerPluginCollection;
             }

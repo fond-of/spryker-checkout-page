@@ -110,8 +110,8 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
             $builder->get(static::FIELD_BILLING_SAME_AS_SHIPPING)->addModelTransformer(
                 new CallbackTransformer(function (bool $asBool) {
                     return (string) $asBool;
-                }, function (string $asString) {
-                    return (bool) $asString;
+                }, function (?string $asString) {
+                    return $asString === null ? true : (bool) $asString;
                 }
             ));
         }

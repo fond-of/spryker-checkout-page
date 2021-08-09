@@ -2,7 +2,6 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
-use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Shared\Log\LoggerTrait;
@@ -26,26 +25,6 @@ class PaymentStep extends SprykerPaymentStep
         }
 
         return parent::execute($request, $quoteTransfer);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     *
-     * @return string|null
-     */
-    protected function getPaymentSelectionWithFallback(QuoteTransfer $quoteTransfer): ?string
-    {
-        if ($quoteTransfer->getTotals() && $quoteTransfer->getTotals()->getPriceToPay() === 0) {
-            return CheckoutPageConfig::PAYMENT_METHOD_NAME_NO_PAYMENT;
-        }
-
-        $paymentTransfer = $quoteTransfer->getPayment();
-
-        if ($paymentTransfer) {
-            return $paymentTransfer->getPaymentSelection();
-        }
-
-        return null;
     }
 
     /**

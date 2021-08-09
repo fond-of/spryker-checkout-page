@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use Generated\Shared\Transfer\LocaleTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PlaceOrderStep as SprykerShopPlaceOrderStep;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ class PlaceOrderStep extends SprykerShopPlaceOrderStep
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
     {
-        $quoteTransfer->setLocale($this->currentLocale);
+        $quoteTransfer->setLocale((new LocaleTransfer())->setLocaleName($this->currentLocale));
         $checkoutResponseTransfer = $this->checkoutClient->placeOrder($quoteTransfer);
 
         if ($checkoutResponseTransfer->getIsExternalRedirect()) {
