@@ -1,16 +1,7 @@
 .idea
 .DS_Store
-<<<<<<< HEAD
 composer.lock
-
-/src/Generated
-/src/Orm
-/vendor
-=======
 
 src/Generated
 src/Orm
 vendor
-
-composer.lock
->>>>>>> spryker_upgrade
