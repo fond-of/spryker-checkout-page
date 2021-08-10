@@ -13,16 +13,19 @@
         <property name="items" singular="item" type="Item[]"/>
         <property name="billingSameAsShipping" type="bool"/>
     </transfer>
-
     <transfer name="Item">
         <property name="shipment" type="Shipment"/>
     </transfer>
-
     <transfer name="Shipment">
         <property name="shippingAddress" type="Address"/>
     </transfer>
+    <transfer name="Country">
+        <property name="regions" singular="region" type="Region[]"/>
+    </transfer>
+    <transfer name="Region">
+        <property name="iso2Code" type="string"/>
+    </transfer>
 
     <transfer name="Address"/>
-    <transfer name="Country"/>
     <transfer name="QuoteValidationResponse"/>
 </transfers>

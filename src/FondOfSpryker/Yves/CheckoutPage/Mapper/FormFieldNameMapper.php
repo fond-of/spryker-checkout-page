@@ -18,6 +18,12 @@ class FormFieldNameMapper implements FormFieldNameMapperInterface
     public const AUTOCOMPLETE_ATTR_ISO_2_CODE = 'country-name';
     public const AUTOCOMPLETE_ATTR_PHONE = 'tel';
 
+
+    /**
+     * @var string
+     */
+    protected $prefix;
+
     public const ATTR = [
         CheckoutBillingAddressForm::FIELD_EMAIL => self::AUTOCOMPLETE_ATTR_EMAIL,
         CheckoutBillingAddressForm::FIELD_SALUTATION => self::AUTOCOMPLETE_ATTR_SALUTATION,
@@ -33,6 +39,14 @@ class FormFieldNameMapper implements FormFieldNameMapperInterface
     ];
 
     /**
+     * @param string|null $prefix
+     */
+    public function __construct(?string $prefix)
+    {
+        $this->prefix = $prefix;
+    }
+
+    /**
      * @param string $formFieldName
      *
      * @return string
@@ -40,7 +54,7 @@ class FormFieldNameMapper implements FormFieldNameMapperInterface
     public function mapFormFieldNameToAutocompletAttr(string $formFieldName): string
     {
         if (in_array(static::ATTR[$formFieldName], static::ATTR)) {
-            return static::ATTR[$formFieldName];
+            return $this->prefix . ' ' . static::ATTR[$formFieldName];
         }
 
         return $formFieldName;

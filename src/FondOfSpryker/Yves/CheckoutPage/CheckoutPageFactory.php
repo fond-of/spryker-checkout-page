@@ -83,10 +83,12 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
+     * @param string|null $prefix
+     *
      * @return \FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapperInterface
      */
-    public function createFormFieldNameMapper(): FormFieldNameMapperInterface
+    public function createFormFieldNameMapper(?string $prefix): FormFieldNameMapperInterface
     {
-        return new FormFieldNameMapper();
+        return new FormFieldNameMapper($prefix);
     }
 }
