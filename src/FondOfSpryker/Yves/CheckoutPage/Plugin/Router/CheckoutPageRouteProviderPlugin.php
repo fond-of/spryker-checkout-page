@@ -40,7 +40,7 @@ class CheckoutPageRouteProviderPlugin extends SprykerCheckoutPageRouteProviderPl
     /**
      * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
      *
-     * @return $this|\Spryker\Yves\Router\Route\RouteCollection
+     * @return \Spryker\Yves\Router\Route\RouteCollection
      */
     protected function addShippingAddressStepRoute(RouteCollection $routeCollection): RouteCollection
     {
@@ -54,7 +54,7 @@ class CheckoutPageRouteProviderPlugin extends SprykerCheckoutPageRouteProviderPl
     /**
      * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
      *
-     * @return $this|\Spryker\Yves\Router\Route\RouteCollection
+     * @return \Spryker\Yves\Router\Route\RouteCollection
      */
     protected function addRegionByCountry(RouteCollection $routeCollection): RouteCollection
     {

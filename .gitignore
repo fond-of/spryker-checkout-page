@@ -1,8 +1,7 @@
 .idea
 .DS_Store
+composer.lock
 
 src/Generated
 src/Orm
 vendor
-
-composer.lock

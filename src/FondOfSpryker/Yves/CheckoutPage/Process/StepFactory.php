@@ -65,9 +65,7 @@ class StepFactory extends SprykerShopStepFactory
     protected function createBillingAddressStep(): AbstractBaseStep
     {
         return new BillingAddressStep(
-            $this->getCustomerClient(),
             $this->getCalculationClient(),
-            $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_BILLING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME,
             $this->createBillingAddressStepExecutor(),
@@ -84,9 +82,7 @@ class StepFactory extends SprykerShopStepFactory
     public function createShippingAddresStep(): AbstractBaseStep
     {
         return new ShippingAddressStep(
-            $this->getCustomerClient(),
             $this->getCalculationClient(),
-            $this->getCountryClient(),
             CheckoutPageControllerProvider::CHECKOUT_SHIPPING_ADDRESS,
             HomePageControllerProvider::ROUTE_HOME,
             $this->createShippingAddressStepExecutor(),

@@ -3,7 +3,6 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use Generated\Shared\Transfer\AddressTransfer;
-use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
 use SprykerShop\Yves\CustomerPage\Form\CheckoutAddressForm;
 use Symfony\Component\Form\CallbackTransformer;
@@ -86,6 +85,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
      * @param array $options
+     *
      * @return $this
      */
     protected function addSameAsShipmentCheckbox(FormBuilderInterface $builder, array $options)
@@ -109,11 +109,11 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
         if ($options[CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD] === true) {
             $builder->get(static::FIELD_BILLING_SAME_AS_SHIPPING)->addModelTransformer(
                 new CallbackTransformer(function (bool $asBool) {
-                    return (string) $asBool;
+                    return (string)$asBool;
                 }, function (?string $asString) {
-                    return $asString === null ? true : (bool) $asString;
-                }
-            ));
+                    return $asString === null ? true : (bool)$asString;
+                })
+            );
         }
 
         return $this;

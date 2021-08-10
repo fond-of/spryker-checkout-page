@@ -2,19 +2,17 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use ArrayObject;
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
-use ArrayObject;
 
 /**
  * Auto-generated group annotations
@@ -41,7 +39,6 @@ class BillingAddressStepTest extends Unit
 
         $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -51,9 +48,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -73,9 +68,7 @@ class BillingAddressStepTest extends Unit
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getBillingAddress')->willReturn(null);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -85,9 +78,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -110,9 +101,7 @@ class BillingAddressStepTest extends Unit
         $addressTransferMock->method('getLastName')->willReturn(null);
         $dataTransferMock->method('getBillingAddress')->willReturn($addressTransferMock);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -122,9 +111,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -148,9 +135,7 @@ class BillingAddressStepTest extends Unit
         $addressTransferMock->method('getIdCustomerAddress')->willReturn(null);
         $dataTransferMock->method('getBillingAddress')->willReturn($addressTransferMock);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -160,9 +145,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -186,9 +169,7 @@ class BillingAddressStepTest extends Unit
         $addressTransferMock->method('getIdCustomerAddress')->willReturn(0);
         $dataTransferMock->method('getBillingAddress')->willReturn($addressTransferMock);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -198,9 +179,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -217,9 +196,7 @@ class BillingAddressStepTest extends Unit
      */
     public function testGetBreadcrumbItemTitle(): void
     {
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -229,9 +206,7 @@ class BillingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new BillingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,

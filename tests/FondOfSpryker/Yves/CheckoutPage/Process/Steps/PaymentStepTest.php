@@ -7,7 +7,6 @@ use Generated\Shared\Transfer\QuoteTransfer;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Spryker\Shared\Log\Config\LoggerConfigInterface;
-use Spryker\Shared\Log\LoggerFactory;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessenger;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -39,6 +38,9 @@ class PaymentStepTest extends Unit
      */
     private $paymentStep;
 
+    /**
+     * @return void
+     */
     protected function _before(): void
     {
         $this->quoteTransferMock = $this->getMockBuilder(QuoteTransfer::class)
@@ -57,7 +59,7 @@ class PaymentStepTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentStep = new class(
+        $this->paymentStep = new class (
             $paymentClientMock,
             $paymentMethodHandlerMocker,
             '',
@@ -65,7 +67,8 @@ class PaymentStepTest extends Unit
             $flashMessagenerMock,
             $calculationClientMock,
             [],
-            $this->loggerMock) extends PaymentStep {
+            $this->loggerMock
+) extends PaymentStep {
 
             /**
              * @var \Psr\Log\LoggerInterface

@@ -43,6 +43,8 @@ class PaymentForm extends SprykerShopPaymentForm
      */
     protected function getPaymentMethodChoices(array $paymentMethodSubForms): array
     {
+        $choices = [];
+
         foreach ($paymentMethodSubForms as $paymentMethodSubForm) {
             $subFormName = ucfirst($paymentMethodSubForm->getName());
 

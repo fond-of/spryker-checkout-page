@@ -80,11 +80,9 @@ class SuccessStep extends SprykerShopSuccessStep
             $this->cartClient->clearQuote();
         }
 
-        if (method_exists($quoteTransfer->getPayment(), 'getPayone')) {
+        if ($quoteTransfer instanceof QuoteTransfer) {
             $this->quoteTransfer = $quoteTransfer;
         }
-
-        $this->quoteTransfer = $quoteTransfer;
 
         return new QuoteTransfer();
     }

@@ -44,30 +44,11 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return \Spryker\Yves\StepEngine\Form\FormCollectionHandlerInterface
-     */
-    public function createAddressFormCollection()
-    {
-        return $this->createFormCollection(
-            $this->getAddressFormTypes(),
-            $this->getAddressFormDataProvider()
-        );
-    }
-
-    /**
      * @return \Symfony\Component\Form\FormTypeInterface[]
      */
     public function getAddressFormTypes()
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::ADDRESS_STEP_SUB_FORMS);
-    }
-
-    /**
-     * @return \Spryker\Yves\StepEngine\Dependency\Form\StepEngineFormDataProviderInterface|null
-     */
-    public function getAddressFormDataProvider()
-    {
-        return $this->getProvidedDependency(CheckoutPageDependencyProvider::ADDRESS_STEP_FORM_DATA_PROVIDER);
     }
 
     /**

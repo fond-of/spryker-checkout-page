@@ -29,14 +29,4 @@ class CheckoutPageToCountryBridge implements CheckoutPageToCountryInterface
     {
         return $this->countryClient->getRegionsByCountryTransfer($countryTransfer);
     }
-
-    /**
-     * @param string $iso2code
-     *
-     * @return \Generated\Shared\Transfer\CountryTransfer
-     */
-    public function getRegionByIso2Code(string $iso2code): CountryTransfer
-    {
-        return $this->countryClient->getRegionsByCountryTransfer((new CountryTransfer())->setIso2Code($iso2code));
-    }
 }

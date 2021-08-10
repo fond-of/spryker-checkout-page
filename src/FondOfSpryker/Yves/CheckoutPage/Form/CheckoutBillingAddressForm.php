@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
 use FondOfSpryker\Shared\Customer\CustomerConstants;
 use Generated\Shared\Transfer\AddressTransfer;
+use Generated\Shared\Transfer\CountryTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -54,6 +55,16 @@ class CheckoutBillingAddressForm extends AbstractType
     protected const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
     public const COUNTRY_CLIENT = 'country_client';
+
+    /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapperInterface
+     */
+    protected $formFieldNameMapper;
+
+    public function __construct()
+    {
+        $this->formFieldNameMapper = $this->getFactory()->createFormFieldNameMapper();
+    }
 
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
@@ -109,6 +120,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'choices' => array_flip($options[self::OPTION_SALUTATIONS]),
             'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_SALUTATIONS]) > 1) ? 'global.please_select' : false,
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_SALUTATION)],
         ]);
 
         return $this;
@@ -129,6 +141,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintFirstName($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)],
         ]);
 
         return $this;
@@ -149,6 +162,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintLastName($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_LAST_NAME)],
         ]);
 
         return $this;
@@ -169,6 +183,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_1)],
         ]);
 
         return $this;
@@ -184,6 +199,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(self::FIELD_ADDRESS_2, TextType::class, [
             'label' => 'customer.address.address2',
             'required' => false,
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_2)],
         ]);
 
         return $this;
@@ -199,6 +215,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(self::FIELD_ADDRESS_3, TextType::class, [
             'label' => 'customer.address.address3',
             'required' => false,
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_3)],
         ]);
 
         return $this;
@@ -218,6 +235,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ZIP_CODE)],
         ]);
 
         return $this;
@@ -238,6 +256,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_CITY)],
         ]);
 
         return $this;
@@ -263,6 +282,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
         ]);
 
         return $this;
@@ -286,6 +306,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 'required' => true,
                 'label' => 'customer.address.region',
                 'choices' => array_flip($this->getRegions($iso2code)),
+                'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_REGION)],
             ]);
 
             return $this;
@@ -318,7 +339,7 @@ class CheckoutBillingAddressForm extends AbstractType
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($formModifier) {
-            /** @var \Generated\Shared\Transfer\AddressTransfer $data */
+            /** @var \Generated\Shared\Transfer\AddressTransfer|string|null $data */
             $data = $event->getData();
 
             $iso2code = $data instanceof AddressTransfer ? $data->getIso2Code() : $data;
@@ -350,6 +371,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createMinLengthConstraintDefault($options),
                 $this->createRegexEmailConstraint($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_EMAIL)],
         ]);
 
         return $this;
@@ -369,6 +391,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createPhoneNumberValidConstraint($options),
             ],
+            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_PHONE)],
         ]);
 
         return $this;
@@ -522,7 +545,7 @@ class CheckoutBillingAddressForm extends AbstractType
     {
         $regions = [];
         $countryClient = $this->getFactory()->getCountryClient();
-        $countryTransfer = $countryClient->getRegionByIso2Code($iso2code);
+        $countryTransfer = $countryClient->getRegionsByCountryTransfer((new CountryTransfer())->setIso2Code($iso2code));
 
         foreach ($countryTransfer->getRegions() as $region) {
             $regions[$region->getIso2Code()] = 'region.iso.' . $region->getIso2Code();

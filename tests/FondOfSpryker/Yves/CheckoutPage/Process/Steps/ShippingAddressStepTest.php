@@ -2,19 +2,17 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use ArrayObject;
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Generated\Shared\Transfer\ShipmentTransfer;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
-use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
-use ArrayObject;
 
 /**
  * Auto-generated group annotations
@@ -37,9 +35,7 @@ class ShippingAddressStepTest extends Unit
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getBillingSameAsShipping')->willReturn(true);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -49,9 +45,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -74,9 +68,7 @@ class ShippingAddressStepTest extends Unit
             new ArrayObject([$this->createMock(ItemTransfer::class)])
         );
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -87,9 +79,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -109,9 +99,7 @@ class ShippingAddressStepTest extends Unit
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getItems')->willReturn([]);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -121,9 +109,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -151,9 +137,7 @@ class ShippingAddressStepTest extends Unit
 
         $dataTransferMock->method('getItems')->willReturn([$itemTransferMock]);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -163,9 +147,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -197,9 +179,7 @@ class ShippingAddressStepTest extends Unit
 
         $dataTransferMock->method('getItems')->willReturn([$itemTransferMock, $itemTransferMock2]);
 
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -209,9 +189,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
@@ -228,9 +206,7 @@ class ShippingAddressStepTest extends Unit
      */
     public function testGetBreadcrumbItemTitle(): void
     {
-        $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
-        $countryClientMock = $this->createMock(CheckoutPageToCountryBridge::class);
         $stepExecutorMock = $this->createMock(BillingAddressStepExecutor::class);
         $postConditionCheckerMock = $this->createMock(PostConditionChecker::class);
         $checkoutPageConfigMock = $this->createMock(CheckoutPageConfig::class);
@@ -240,9 +216,7 @@ class ShippingAddressStepTest extends Unit
         $escapeRoute = '';
 
         $step = new ShippingAddressStep(
-            $customerClientMock,
             $calculationClientMock,
-            $countryClientMock,
             $stepRoute,
             $escapeRoute,
             $stepExecutorMock,
