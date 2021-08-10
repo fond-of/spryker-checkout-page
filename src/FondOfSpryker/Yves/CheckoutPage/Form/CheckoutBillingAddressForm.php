@@ -55,6 +55,7 @@ class CheckoutBillingAddressForm extends AbstractType
     protected const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
     public const COUNTRY_CLIENT = 'country_client';
+    public const AUTOCOMPLETE_PREFIX = 'billing';
 
     /**
      * @var \FondOfSpryker\Yves\CheckoutPage\Mapper\FormFieldNameMapperInterface
@@ -63,7 +64,8 @@ class CheckoutBillingAddressForm extends AbstractType
 
     public function __construct()
     {
-        $this->formFieldNameMapper = $this->getFactory()->createFormFieldNameMapper();
+        $this->formFieldNameMapper = $this->getFactory()
+            ->createFormFieldNameMapper(static::AUTOCOMPLETE_PREFIX);
     }
 
     /**
@@ -120,7 +122,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'choices' => array_flip($options[self::OPTION_SALUTATIONS]),
             'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_SALUTATIONS]) > 1) ? 'global.please_select' : false,
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_SALUTATION)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_SALUTATION)],
         ]);
 
         return $this;
@@ -141,7 +143,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintFirstName($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)],
         ]);
 
         return $this;
@@ -162,7 +164,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintLastName($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_LAST_NAME)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_LAST_NAME)],
         ]);
 
         return $this;
@@ -183,7 +185,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_1)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_1)],
         ]);
 
         return $this;
@@ -199,7 +201,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(self::FIELD_ADDRESS_2, TextType::class, [
             'label' => 'customer.address.address2',
             'required' => false,
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_2)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_2)],
         ]);
 
         return $this;
@@ -215,7 +217,7 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(self::FIELD_ADDRESS_3, TextType::class, [
             'label' => 'customer.address.address3',
             'required' => false,
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_3)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_3)],
         ]);
 
         return $this;
@@ -235,7 +237,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ZIP_CODE)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ZIP_CODE)],
         ]);
 
         return $this;
@@ -256,7 +258,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_CITY)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_CITY)],
         ]);
 
         return $this;
@@ -282,7 +284,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
         ]);
 
         return $this;
@@ -306,7 +308,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 'required' => true,
                 'label' => 'customer.address.region',
                 'choices' => array_flip($this->getRegions($iso2code)),
-                'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_REGION)],
+                'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_REGION)],
             ]);
 
             return $this;
@@ -371,7 +373,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createMinLengthConstraintDefault($options),
                 $this->createRegexEmailConstraint($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_EMAIL)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_EMAIL)],
         ]);
 
         return $this;
@@ -391,7 +393,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createPhoneNumberValidConstraint($options),
             ],
-            'attr' => ['autocomplete' => 'billing ' . $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_PHONE)],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_PHONE)],
         ]);
 
         return $this;
