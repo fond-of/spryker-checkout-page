@@ -2,11 +2,9 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
-use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
@@ -22,8 +20,8 @@ class ShippingAddressStep extends AddressStep
 
     /**
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
-     * @param $stepRoute
-     * @param $escapeRoute
+     * @param string $stepRoute
+     * @param string|null $escapeRoute
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
      * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
@@ -32,8 +30,8 @@ class ShippingAddressStep extends AddressStep
      */
     public function __construct(
         CheckoutPageToCalculationClientInterface $calculationClient,
-        $stepRoute,
-        $escapeRoute,
+        string $stepRoute,
+        ?string $escapeRoute,
         StepExecutorInterface $stepExecutor,
         PostConditionCheckerInterface $postConditionChecker,
         CheckoutPageConfig $checkoutPageConfig,
@@ -54,7 +52,7 @@ class ShippingAddressStep extends AddressStep
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer $dataTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $dataTransfer
      *
      * @return bool
      */

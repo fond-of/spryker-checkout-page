@@ -69,11 +69,11 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     }
 
     /**
-     * @param \Spryker\Shared\Kernel\Transfer\AbstractTransfer|\Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
      *
      * @return array
      */
-    public function getOptions(AbstractTransfer $quoteTransfer)
+    public function getOptions(AbstractTransfer $quoteTransfer): array
     {
         return [
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
@@ -82,7 +82,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
             CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
             CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD => $this->giftCardItemsChecker->hasOnlyGiftCardItems(
                 $quoteTransfer->getItems()
-            )
+            ),
         ];
     }
 

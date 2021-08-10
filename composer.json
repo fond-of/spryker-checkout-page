@@ -21,13 +21,9 @@
     "spryker/customer": "^7.26.5",
     "spryker-shop/checkout-page": "^3.7.0",
     "spryker-shop/customer-page": "^2.7.1",
-<<<<<<< HEAD
-    "fond-of-spryker/country": "dev-feature/paypal-refund"
-=======
     "spryker-shop/home-page": "^1.0.0",
     "spryker/shipment": "^8.0.2",
     "spryker/quote": "^1.0.0 || ^2.0.0 || ^3.0.0"
->>>>>>> spryker_upgrade
   },
   "require-dev": {
     "fond-of-codeception/spryker": "^1.0",

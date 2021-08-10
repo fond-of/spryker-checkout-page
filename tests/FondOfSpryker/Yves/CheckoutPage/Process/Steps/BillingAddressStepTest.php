@@ -2,18 +2,17 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
+use ArrayObject;
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\ItemTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AddressStep\PostConditionChecker;
-use ArrayObject;
 
 /**
  * Auto-generated group annotations

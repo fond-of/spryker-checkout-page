@@ -392,8 +392,7 @@ class CheckoutControllerTest extends Unit
         $this->formFactoryMock->expects(static::atLeastOnce())
             ->method('createShippingAddressFormCollection')
             ->willReturn($this->formCollectionHandlereMock);
-@
-        $this->stepEngineMock->expects(static::atLeastOnce())
+        @$this->stepEngineMock->expects(static::atLeastOnce())
             ->method('process')
             ->with($this->requestMock, $this->formCollectionHandlereMock)
             ->willReturn([]);

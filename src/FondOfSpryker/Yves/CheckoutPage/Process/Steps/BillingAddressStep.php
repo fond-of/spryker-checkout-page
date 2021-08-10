@@ -20,8 +20,8 @@ class BillingAddressStep extends AddressStep
 
     /**
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
-     * @param $stepRoute
-     * @param $escapeRoute
+     * @param string $stepRoute
+     * @param string|null $escapeRoute
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
      * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
@@ -30,8 +30,8 @@ class BillingAddressStep extends AddressStep
      */
     public function __construct(
         CheckoutPageToCalculationClientInterface $calculationClient,
-        $stepRoute,
-        $escapeRoute,
+        string $stepRoute,
+        ?string $escapeRoute,
         StepExecutorInterface $stepExecutor,
         PostConditionCheckerInterface $postConditionChecker,
         CheckoutPageConfig $checkoutPageConfig,
@@ -50,7 +50,6 @@ class BillingAddressStep extends AddressStep
 
         $this->giftCardItemsChecker = $giftCardItemsChecker;
     }
-
 
     /**
      * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
