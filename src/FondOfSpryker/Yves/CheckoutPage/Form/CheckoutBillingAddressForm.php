@@ -5,9 +5,11 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form;
 use FondOfSpryker\Shared\Customer\CustomerConstants;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CountryTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -17,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -42,6 +45,7 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_ISO_2_CODE = 'iso2_code';
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
     public const FIELD_SHOW_REGION = 'show_region';
+    public const FIELD_HOUSE_NUMBER_VALIDATION = 'houseNumberValidation';
 
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
@@ -104,8 +108,29 @@ class CheckoutBillingAddressForm extends AbstractType
             ->addCityField($builder, $options)
             ->addIso2CodeField($builder, $options)
             ->addRegionField($builder, $options)
+            ->addHouseNumberValidation($builder, $options)
             ->prepareEmailField($builder, $options)
             ->preparePhoneField($builder, $options);
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return $this
+     */
+    protected function addHouseNumberValidation(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(static::FIELD_HOUSE_NUMBER_VALIDATION, HiddenType::class, [
+            'label' => false,
+            'data' => '0',
+            'constraints' => [
+                new NotBlank(),
+                new EqualTo('1')
+            ],
+        ]);
+
+        return $this;
     }
 
     /**

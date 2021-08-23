@@ -26,6 +26,8 @@
         <property name="iso2Code" type="string"/>
     </transfer>
 
-    <transfer name="Address"/>
+    <transfer name="Address">
+        <property name="houseNumberValidation" type="bool"/>
+    </transfer>
     <transfer name="QuoteValidationResponse"/>
 </transfers>
