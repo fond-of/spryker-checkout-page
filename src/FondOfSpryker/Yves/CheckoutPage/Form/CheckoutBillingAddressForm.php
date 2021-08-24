@@ -125,10 +125,6 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->add(static::FIELD_HOUSE_NUMBER_VALIDATION, HiddenType::class, [
             'label' => false,
             'data' => '0',
-            'constraints' => [
-                new NotBlank(),
-                new EqualTo('1')
-            ],
         ]);
 
         return $this;
