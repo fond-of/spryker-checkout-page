@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -203,6 +204,26 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addAddress1Field(FormBuilderInterface $builder, array $options)
     {
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            if ($form->has(static::FIELD_ADDRESS_1)) {
+                if (isset($data[static::FIELD_HOUSE_NUMBER_VALIDATION]) && $data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '0') {
+                    $address1 = $data[static::FIELD_ADDRESS_1];
+                    $pattern = '~[\d]+~';
+
+                    if (preg_match($pattern, $address1) === 0) {
+                        $errorMsg = $this->getFactory()
+                            ->getGlossaryStorageClient()
+                            ->translate('checkout.warning.field.housenumber', $this->getFactory()->getStore()->getCurrentLocale());
+
+                        $form->get(static::FIELD_ADDRESS_1)->addError(new FormError($errorMsg));
+                    }
+                }
+            }
+        });
+
         $builder->add(self::FIELD_ADDRESS_1, TextType::class, [
             'label' => 'customer.address.address1',
             'required' => true,
