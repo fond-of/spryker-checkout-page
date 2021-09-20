@@ -2,10 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form;
 
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageFactory getFactory()
