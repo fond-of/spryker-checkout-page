@@ -204,20 +204,26 @@ class CheckoutBillingAddressForm extends AbstractType
             $form = $event->getForm();
             $data = $event->getData();
 
-            if ($form->has(static::FIELD_ADDRESS_1)) {
-                if (isset($data[static::FIELD_HOUSE_NUMBER_VALIDATION]) && $data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '0') {
-                    $address1 = $data[static::FIELD_ADDRESS_1];
-                    $pattern = '~[\d]+~';
-
-                    if (preg_match($pattern, $address1) === 0) {
-                        $errorMsg = $this->getFactory()
-                            ->getGlossaryStorageClient()
-                            ->translate('checkout.warning.field.housenumber', $this->getFactory()->getStore()->getCurrentLocale());
-
-                        $form->get(static::FIELD_ADDRESS_1)->addError(new FormError($errorMsg));
-                    }
-                }
+            if (!$form->has(static::FIELD_ADDRESS_1)) {
+                return;
             }
+
+            if (!isset($data[static::FIELD_HOUSE_NUMBER_VALIDATION]) && $data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '0') {
+                return;
+            }
+
+            $address1 = $data[static::FIELD_ADDRESS_1];
+            $pattern = '~[\d]+~';
+
+            if (preg_match($pattern, $address1) !== 0) {
+                return;
+            }
+
+            $errorMsg = $this->getFactory()
+                ->getGlossaryStorageClient()
+                ->translate('checkout.warning.field.housenumber', $this->getFactory()->getStore()->getCurrentLocale());
+
+            $form->get(static::FIELD_ADDRESS_1)->addError(new FormError($errorMsg));
         });
 
         $builder->add(self::FIELD_ADDRESS_1, TextType::class, [
