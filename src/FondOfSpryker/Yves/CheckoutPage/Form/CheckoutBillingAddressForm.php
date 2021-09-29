@@ -201,19 +201,21 @@ class CheckoutBillingAddressForm extends AbstractType
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $data = $event->getData();
+            $pattern = '~[\d]+~';
 
             if (!$form->has(static::FIELD_ADDRESS_1)) {
                 return;
             }
 
-            if (!isset($data[static::FIELD_HOUSE_NUMBER_VALIDATION]) && $data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '0') {
+            if (!$form->has(static::FIELD_HOUSE_NUMBER_VALIDATION)) {
                 return;
             }
 
-            $address1 = $data[static::FIELD_ADDRESS_1];
-            $pattern = '~[\d]+~';
+            if ($data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '1') {
+                return;
+            }
 
-            if (preg_match($pattern, $address1) !== 0) {
+            if (preg_match($pattern, $data[static::FIELD_ADDRESS_1]) !== 0) {
                 return;
             }
 
