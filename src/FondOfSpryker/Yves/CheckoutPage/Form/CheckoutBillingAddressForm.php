@@ -118,22 +118,6 @@ class CheckoutBillingAddressForm extends AbstractType
      *
      * @return $this
      */
-    protected function addHouseNumberValidation(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add(static::FIELD_HOUSE_NUMBER_VALIDATION, HiddenType::class, [
-            'label' => false,
-            'data' => '0',
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $options
-     *
-     * @return $this
-     */
     protected function addSalutationField(FormBuilderInterface $builder, array $options)
     {
         $builder->add(self::FIELD_SALUTATION, ChoiceType::class, [
@@ -163,7 +147,9 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintFirstName($options),
             ],
-            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)],
+            'attr' => [
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)
+            ],
         ]);
 
         return $this;
@@ -196,42 +182,32 @@ class CheckoutBillingAddressForm extends AbstractType
      *
      * @return $this
      */
+    protected function addHouseNumberValidation(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(static::FIELD_HOUSE_NUMBER_VALIDATION, HiddenType::class, [
+            'required' => true,
+            'label' => false,
+            'data' => '0',
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return $this
+     */
     protected function addAddress1Field(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-            $data = $event->getData();
-            $pattern = '~[\d]+~';
-
-            if (!$form->has(static::FIELD_ADDRESS_1)) {
-                return;
-            }
-
-            if (!$form->has(static::FIELD_HOUSE_NUMBER_VALIDATION)) {
-                return;
-            }
-
-            if ($data[static::FIELD_HOUSE_NUMBER_VALIDATION] === '1') {
-                return;
-            }
-
-            if (preg_match($pattern, $data[static::FIELD_ADDRESS_1]) !== 0) {
-                return;
-            }
-
-            $errorMsg = $this->getFactory()
-                ->getGlossaryStorageClient()
-                ->translate('checkout.warning.field.housenumber', $this->getFactory()->getStore()->getCurrentLocale());
-
-            $form->get(static::FIELD_ADDRESS_1)->addError(new FormError($errorMsg));
-        });
-
         $builder->add(self::FIELD_ADDRESS_1, TextType::class, [
             'label' => 'customer.address.address1',
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
+                $this->createRegexHouseNumberConstraint($options),
             ],
             'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_1)],
         ]);
@@ -445,6 +421,31 @@ class CheckoutBillingAddressForm extends AbstractType
         ]);
 
         return $this;
+    }
+
+    protected function createRegexHouseNumberConstraint(array $options): Callback
+    {
+        return new Callback([
+            'callback' => function ($object, ExecutionContextInterface $context) {
+                /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
+                $quoteTransfer = $context->getRoot()->getData();
+                $addressTransfer = $quoteTransfer->getBillingAddress();
+                $pattern = '~[\d]+~';
+
+                if ($addressTransfer->getHouseNumberValidation() === "1") {
+                    return;
+                }
+
+                if (preg_match($pattern, $addressTransfer->getAddress1()) === 1) {
+                    return;
+                }
+
+                $context->buildViolation('checkout.warning.field.housenumber')
+                    ->addViolation();
+            },
+            'payload' => $this,
+            'groups' => $options[self::OPTION_VALIDATION_GROUP],
+        ]);
     }
 
     /**
