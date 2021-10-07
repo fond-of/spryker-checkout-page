@@ -8,8 +8,10 @@ use Generated\Shared\Transfer\CountryTransfer;
 use Spryker\Yves\Kernel\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -42,6 +44,7 @@ class CheckoutBillingAddressForm extends AbstractType
     public const FIELD_ISO_2_CODE = 'iso2_code';
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
     public const FIELD_SHOW_REGION = 'show_region';
+    public const FIELD_HOUSE_NUMBER_VALIDATION = 'houseNumberValidation';
 
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
@@ -104,6 +107,7 @@ class CheckoutBillingAddressForm extends AbstractType
             ->addCityField($builder, $options)
             ->addIso2CodeField($builder, $options)
             ->addRegionField($builder, $options)
+            ->addHouseNumberValidation($builder, $options)
             ->prepareEmailField($builder, $options)
             ->preparePhoneField($builder, $options);
     }
@@ -143,7 +147,9 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintFirstName($options),
             ],
-            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)],
+            'attr' => [
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)
+            ],
         ]);
 
         return $this;
@@ -176,6 +182,23 @@ class CheckoutBillingAddressForm extends AbstractType
      *
      * @return $this
      */
+    protected function addHouseNumberValidation(FormBuilderInterface $builder, array $options)
+    {
+        $builder->add(static::FIELD_HOUSE_NUMBER_VALIDATION, HiddenType::class, [
+            'required' => true,
+            'label' => false,
+            'data' => '0',
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * @param \Symfony\Component\Form\FormBuilderInterface $builder
+     * @param array $options
+     *
+     * @return $this
+     */
     protected function addAddress1Field(FormBuilderInterface $builder, array $options)
     {
         $builder->add(self::FIELD_ADDRESS_1, TextType::class, [
@@ -184,6 +207,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
                 $this->createMinLengthConstraintDefault($options),
+                $this->createRegexHouseNumberConstraint($options),
             ],
             'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ADDRESS_1)],
         ]);
@@ -397,6 +421,31 @@ class CheckoutBillingAddressForm extends AbstractType
         ]);
 
         return $this;
+    }
+
+    protected function createRegexHouseNumberConstraint(array $options): Callback
+    {
+        return new Callback([
+            'callback' => function ($object, ExecutionContextInterface $context) {
+                /** @var \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer */
+                $quoteTransfer = $context->getRoot()->getData();
+                $addressTransfer = $quoteTransfer->getBillingAddress();
+                $pattern = '~[\d]+~';
+
+                if ($addressTransfer->getHouseNumberValidation() === "1") {
+                    return;
+                }
+
+                if (preg_match($pattern, $addressTransfer->getAddress1()) === 1) {
+                    return;
+                }
+
+                $context->buildViolation('checkout.warning.field.housenumber')
+                    ->addViolation();
+            },
+            'payload' => $this,
+            'groups' => $options[self::OPTION_VALIDATION_GROUP],
+        ]);
     }
 
     /**
