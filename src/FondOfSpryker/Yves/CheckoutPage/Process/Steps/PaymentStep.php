@@ -5,6 +5,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Shared\Log\LoggerTrait;
+use SprykerEco\Yves\Payone\Form\AbstractPayoneSubForm;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
 use Symfony\Component\HttpFoundation\Request;
 

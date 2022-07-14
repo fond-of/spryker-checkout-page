@@ -20,6 +20,14 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function indexAction(Request $request)
     {
+        $quoteValidationResponseTransfer = $this->canProceedCheckout();
+
+        if (!$quoteValidationResponseTransfer->getIsSuccessful()) {
+            $this->processErrorMessages($quoteValidationResponseTransfer->getMessages());
+
+            return $this->redirectResponseInternal(static::ROUTE_CART);
+        }
+
         return $this->createStepProcess()->process($request);
     }
 
