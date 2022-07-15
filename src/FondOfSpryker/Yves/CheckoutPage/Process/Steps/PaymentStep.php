@@ -5,7 +5,6 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Shared\Log\LoggerTrait;
-use SprykerEco\Yves\Payone\Form\AbstractPayoneSubForm;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,5 +45,28 @@ class PaymentStep extends SprykerPaymentStep
         $quoteTransfer->setIdSalesOrder(null);
 
         return $quoteTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
+     * @return string|null
+     */
+    protected function getPaymentSelectionWithFallback(QuoteTransfer $quoteTransfer): ?string
+    {
+        //ToDo 2022 Spryker Upgrade - since the payment selection is an object and a string is expected I had to override it.
+        if (method_exists($quoteTransfer, 'getPayment')){
+            $paymentTransfer = $quoteTransfer->getPayment();
+
+            if ($paymentTransfer) {
+                $selection = $paymentTransfer->getPaymentSelection();
+                if (is_object($selection) && method_exists($selection, 'getName')){
+                    $paymentTransfer->setPaymentSelection($selection->getName());
+                    $quoteTransfer->setPayment($paymentTransfer);
+                }
+            }
+        }
+
+        return parent::getPaymentSelectionWithFallback($quoteTransfer);
     }
 }

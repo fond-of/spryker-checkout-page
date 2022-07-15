@@ -121,7 +121,7 @@ class FormFactory extends SprykerShopFormFactory
      */
     public function createSummaryFormCollection()
     {
-        return $this->createFormCollection($this->getSummaryFormTypes());
+        return $this->createFormCollection($this->getSummaryFormTypes(), $this->createSummaryFormDataProvider());
     }
 
     /**

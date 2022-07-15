@@ -2,6 +2,7 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Form\Steps;
 
+use SprykerShop\Yves\CheckoutPage\Form\StepEngine\StandaloneSubFormInterface;
 use SprykerShop\Yves\CheckoutPage\Form\Steps\PaymentForm as SprykerShopPaymentForm;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,17 +12,36 @@ class PaymentForm extends SprykerShopPaymentForm
 {
     /**
      * @param \Symfony\Component\Form\FormBuilderInterface $builder
-     * @param array $paymentMethodChoices
+     * @param array $paymentMethodSubForms
      *
      * @return $this
      */
-    protected function addPaymentMethodChoices(FormBuilderInterface $builder, array $paymentMethodChoices)
+    protected function addPaymentMethodChoices(FormBuilderInterface $builder, array $paymentMethodSubForms)
     {
+        $choices = [];
+        foreach ($paymentMethodSubForms as $choice){
+            $choices[] = $choice->getName();
+        }
+
         $builder->add(
             self::PAYMENT_SELECTION,
             ChoiceType::class,
             [
-                'choices' => $paymentMethodChoices,
+                'choices' => $paymentMethodSubForms,
+                'choice_name' => function ($choice, $key) use ($paymentMethodSubForms) {
+                    $paymentMethodSubForm = $paymentMethodSubForms[$key];
+
+                    return $paymentMethodSubForm->getName();
+                },
+                'choice_label' => function ($choice, $key) use ($paymentMethodSubForms) {
+                    $paymentMethodSubForm = $paymentMethodSubForms[$key];
+
+                    if ($paymentMethodSubForm instanceof StandaloneSubFormInterface) {
+                        return $paymentMethodSubForm->getLabelName();
+                    }
+
+                    return $paymentMethodSubForm->getName();
+                },
                 'label' => false,
                 'required' => true,
                 'property_path' => self::PAYMENT_SELECTION_PROPERTY_PATH,

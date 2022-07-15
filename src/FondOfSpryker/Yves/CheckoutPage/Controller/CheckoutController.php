@@ -149,6 +149,14 @@ class CheckoutController extends SprykerShopCheckoutController
      */
     public function paymentAction(Request $request)
     {
+        $quoteValidationResponseTransfer = $this->canProceedCheckout();
+
+        if (!$quoteValidationResponseTransfer->getIsSuccessful()) {
+            $this->processErrorMessages($quoteValidationResponseTransfer->getMessages());
+
+            return $this->redirectResponseInternal(static::ROUTE_CART);
+        }
+
         $response = $this->createStepProcess()->process(
             $this->getFactory()->createEmptyPaymentMethodValidator()->validate($request),
             $this->getFactory()
