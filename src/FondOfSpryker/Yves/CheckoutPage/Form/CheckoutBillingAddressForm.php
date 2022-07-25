@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -147,7 +148,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createMinLengthConstraintFirstName($options),
             ],
             'attr' => [
-                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME),
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)
             ],
         ]);
 
@@ -307,10 +308,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => [
-                'disabled' => count($options[self::OPTION_COUNTRY_CHOICES]) === 1,
-                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE),
-            ],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
         ]);
 
         return $this;
@@ -326,7 +324,7 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        /*if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
+        if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
             $iso2code = ($builder->get(self::FIELD_ISO_2_CODE)->getData()
                 ?: current(array_flip($options[self::OPTION_COUNTRY_CHOICES])));
 
@@ -338,7 +336,7 @@ class CheckoutBillingAddressForm extends AbstractType
             ]);
 
             return $this;
-        }*/
+        }
 
         $formModifier = function (FormInterface $form, ?string $iso2code = null) {
             $showRegions = $this->getFactory()
@@ -425,11 +423,6 @@ class CheckoutBillingAddressForm extends AbstractType
         return $this;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return \Symfony\Component\Validator\Constraints\Callback
-     */
     protected function createRegexHouseNumberConstraint(array $options): Callback
     {
         return new Callback([
@@ -439,7 +432,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $addressTransfer = $quoteTransfer->getBillingAddress();
                 $pattern = '~[\d]+~';
 
-                if ($addressTransfer->getHouseNumberValidation() === '1') {
+                if ($addressTransfer->getHouseNumberValidation() === "1") {
                     return;
                 }
 

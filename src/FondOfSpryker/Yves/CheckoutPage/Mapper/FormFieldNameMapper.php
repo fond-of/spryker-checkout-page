@@ -52,7 +52,7 @@ class FormFieldNameMapper implements FormFieldNameMapperInterface
      */
     public function mapFormFieldNameToAutocompletAttr(string $formFieldName): string
     {
-        if (isset(static::ATTR[$formFieldName]) && in_array(static::ATTR[$formFieldName], static::ATTR)) {
+        if (in_array(static::ATTR[$formFieldName], static::ATTR)) {
             return $this->prefix . ' ' . static::ATTR[$formFieldName];
         }
 
