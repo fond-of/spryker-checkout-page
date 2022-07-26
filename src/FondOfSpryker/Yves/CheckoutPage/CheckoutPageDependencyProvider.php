@@ -6,8 +6,6 @@ use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderI
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorBridge;
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutBillingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
@@ -43,7 +41,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     public const CLIENT_SALES = 'CLIENT_SALES';
     public const CLIENT_COUNTRY = 'CLIENT_COUNTRY';
     public const CLIENT_CUSTOMER = 'CLIENT_CUSTOMER';
-    public const CLIENT_PRODUCT_COUNTRY_RESTRICTION = '';
 
     /**
      * @param \Spryker\Yves\Kernel\Container $container
@@ -61,7 +58,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
         $container = $this->addCountryClient($container);
-        $container = $this->addProductCountryRestrictionCheckoutConnectorClient($container);
+
         $container = $this->extendPaymentMethodHandler($container);
         $container = $this->extendPaymentSubForms($container);
 
@@ -224,7 +221,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     {
         return new CheckoutStoreCountryDataProvider(
             $container[static::CLIENT_GLOSSARY_STORAGE],
-            $container[static::CLIENT_PRODUCT_COUNTRY_RESTRICTION],
             $this->getStore(),
             $this->getConfig()
         );
@@ -330,35 +326,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     protected function getCustomerClient(Container $container): CheckoutPageToCustomerClientInterface
     {
         return new CheckoutPageToCustomerClientBridge($container->getLocator()->customer()->client());
-    }
-
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
-    protected function addProductCountryRestrictionCheckoutConnectorClient(Container $container): Container
-    {
-        $self = $this;
-
-        $container[self::CLIENT_PRODUCT_COUNTRY_RESTRICTION] = static function (Container $container) use ($self) {
-            return $self->getProductCountryRestrictionCheckoutConnectorClient($container);
-        };
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface
-     */
-    protected function getProductCountryRestrictionCheckoutConnectorClient(
-        Container $container
-    ): CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface {
-        return new CheckoutPageToProductCountryRestrictionCheckoutConnectorBridge(
-            $container->getLocator()->productCountryRestrictionCheckoutConnector()->client()
-        );
     }
 
     /**
