@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -148,7 +147,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createMinLengthConstraintFirstName($options),
             ],
             'attr' => [
-                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME),
             ],
         ]);
 
@@ -437,7 +436,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $addressTransfer = $quoteTransfer->getBillingAddress();
                 $pattern = '~[\d]+~';
 
-                if ($addressTransfer->getHouseNumberValidation() === "1") {
+                if ($addressTransfer->getHouseNumberValidation() === '1') {
                     return;
                 }
 
