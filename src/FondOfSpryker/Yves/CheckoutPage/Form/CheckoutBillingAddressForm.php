@@ -423,6 +423,11 @@ class CheckoutBillingAddressForm extends AbstractType
         return $this;
     }
 
+    /**
+     * @param array $options
+     *
+     * @return \Symfony\Component\Validator\Constraints\Callback
+     */
     protected function createRegexHouseNumberConstraint(array $options): Callback
     {
         return new Callback([

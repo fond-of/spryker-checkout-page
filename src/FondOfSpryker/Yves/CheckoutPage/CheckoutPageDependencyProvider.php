@@ -58,7 +58,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
         $container = $this->addCountryClient($container);
-
         $container = $this->extendPaymentMethodHandler($container);
         $container = $this->extendPaymentSubForms($container);
 
