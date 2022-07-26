@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class CheckoutShippingAddressForm extends CheckoutBillingAddressForm
 {
+    public const FIELD_ADDITIONAL_ADDRESS = 'additional_address';
     public const AUTOCOMPLETE_PREFIX = 'shipping';
 
     /**

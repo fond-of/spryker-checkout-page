@@ -4,8 +4,6 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
-use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface;
-use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge;
 
@@ -26,68 +24,33 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
      */
     private $config;
 
-    /**
-     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface
-     */
-    protected $countryRestrictionCheckoutConnectorClient;
-
     public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
 
     /**
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient
-     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface $countryRestrictionCheckoutConnectorClient
      * @param \Spryker\Shared\Kernel\Store $store
      * @param \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig $config
      */
     public function __construct(
         CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient,
-        CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface $countryRestrictionCheckoutConnectorClient,
         Store $store,
         CheckoutPageConfig $config
     ) {
         $this->glossaryStorageClient = $glossaryStorageClient;
-        $this->countryRestrictionCheckoutConnectorClient = $countryRestrictionCheckoutConnectorClient;
         $this->store = $store;
         $this->config = $config;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     *
      * @return array
      */
-    public function getCountries(QuoteTransfer $quoteTransfer): array
+    public function getCountries(): array
     {
         if (strpos(strtoupper($this->store->getStoreName()), '_COM') !== false) {
             return $this->getComStoreCountries();
         }
 
         return $this->getDefault();
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
-     *
-     * @return array
-     */
-    public function getBlacklistedCountries(QuoteTransfer $quoteTransfer): array
-    {
-        $blacklistedCountryTransfer = $this->countryRestrictionCheckoutConnectorClient->getBlacklistedCountries($quoteTransfer);
-
-        if (count($blacklistedCountryTransfer->getIso2codes()) > 0) {
-            $iso2codes = $this->getComStoreCountries();
-            $validIso2Codes = [];
-
-            foreach ($iso2codes as $iso2code => $country) {
-                if (in_array($iso2code, $blacklistedCountryTransfer->getIso2codes())) {
-                    continue;
-                }
-
-                $validIso2Codes[$iso2code] = $country;
-            }
-
-            return $validIso2Codes;
-        }
     }
 
     /**

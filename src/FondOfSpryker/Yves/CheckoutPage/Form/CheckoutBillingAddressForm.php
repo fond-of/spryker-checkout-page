@@ -307,10 +307,7 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => [
-                'disabled' => count($options[self::OPTION_COUNTRY_CHOICES]) === 1,
-                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE),
-            ],
+            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
         ]);
 
         return $this;
@@ -326,7 +323,7 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        /*if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
+        if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
             $iso2code = ($builder->get(self::FIELD_ISO_2_CODE)->getData()
                 ?: current(array_flip($options[self::OPTION_COUNTRY_CHOICES])));
 
@@ -338,7 +335,7 @@ class CheckoutBillingAddressForm extends AbstractType
             ]);
 
             return $this;
-        }*/
+        }
 
         $formModifier = function (FormInterface $form, ?string $iso2code = null) {
             $showRegions = $this->getFactory()
