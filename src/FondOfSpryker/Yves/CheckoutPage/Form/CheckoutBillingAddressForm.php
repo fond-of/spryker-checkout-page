@@ -124,7 +124,6 @@ class CheckoutBillingAddressForm extends AbstractType
             'label' => 'customer.address.salutation',
             'required' => false,
             'choices' => array_flip($options[self::OPTION_SALUTATIONS]),
-            'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_SALUTATIONS]) > 1) ? 'global.please_select' : false,
             'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_SALUTATION)],
         ]);
@@ -302,7 +301,6 @@ class CheckoutBillingAddressForm extends AbstractType
             'label' => 'customer.address.country',
             'required' => true,
             'choices' => array_flip($options[self::OPTION_COUNTRY_CHOICES]),
-            'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_COUNTRY_CHOICES]) > 1) ? 'global.please_select' : false,
             'empty_data' => (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) ? $selected : false,
             'constraints' => [
