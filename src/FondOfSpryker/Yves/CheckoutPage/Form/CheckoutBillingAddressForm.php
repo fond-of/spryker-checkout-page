@@ -304,7 +304,6 @@ class CheckoutBillingAddressForm extends AbstractType
             'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_COUNTRY_CHOICES]) > 1) ? 'global.please_select' : false,
             'empty_data' => (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) ? $selected : false,
-            'disabled' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
