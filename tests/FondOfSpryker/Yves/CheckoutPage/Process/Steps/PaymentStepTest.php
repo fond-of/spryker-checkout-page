@@ -82,9 +82,6 @@ class PaymentStepTest extends Unit
             $this->paymentMethodKeyExtractorMock,
             $this->loggerMock
 ) extends PaymentStep {
-
-            use LoggerTrait;
-
             /**
              * @var \Psr\Log\LoggerInterface
              */
@@ -124,16 +121,6 @@ class PaymentStepTest extends Unit
                     $extractor
                 );
                 $this->loggerMock = $loggerMock;
-            }
-
-            /**
-             * @param \Spryker\Shared\Log\Config\LoggerConfigInterface|null $loggerConfig
-             *
-             * @return \Psr\Log\LoggerInterface|null
-             */
-            protected function getLogger(?LoggerConfigInterface $loggerConfig = null)
-            {
-                return $this->loggerMock;
             }
         };
     }
