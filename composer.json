@@ -43,5 +43,10 @@
       "Generated\\": "src/Generated/",
       "Orm\\": "src/Orm/"
     }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }
