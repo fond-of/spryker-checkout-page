@@ -17,6 +17,7 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientI
 use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor;
 use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Spryker\Shared\Log\LoggerTrait;
 
 class PaymentStepTest extends Unit
 {
@@ -81,6 +82,8 @@ class PaymentStepTest extends Unit
             $this->paymentMethodKeyExtractorMock,
             $this->loggerMock
 ) extends PaymentStep {
+
+            use LoggerTrait;
 
             /**
              * @var \Psr\Log\LoggerInterface

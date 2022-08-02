@@ -22,7 +22,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     public function createCheckoutProcess()
     {
         return $this->createStepFactory()->createStepEngine(
-            $this->createStepFactory()->createStepCollection()
+            $this->createStepFactory()->createStepCollection(),
         );
     }
 
@@ -51,7 +51,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCustomerPageWidgetPlugins(): array
     {

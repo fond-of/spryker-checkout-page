@@ -29,34 +29,129 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class CheckoutBillingAddressForm extends AbstractType
 {
+    /**
+     * @var string
+     */
     public const FIELD_EMAIL = 'email';
+
+    /**
+     * @var string
+     */
     public const FIELD_SALUTATION = 'salutation';
+
+    /**
+     * @var string
+     */
     public const FIELD_FIRST_NAME = 'first_name';
+
+    /**
+     * @var string
+     */
     public const FIELD_LAST_NAME = 'last_name';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_1 = 'address1';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_2 = 'address2';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_3 = 'address3';
+
+    /**
+     * @var string
+     */
     public const FIELD_REGION = 'region';
+
+    /**
+     * @var string
+     */
     public const FIELD_PHONE = 'phone';
+
+    /**
+     * @var string
+     */
     public const FIELD_ZIP_CODE = 'zip_code';
+
+    /**
+     * @var string
+     */
     public const FIELD_CITY = 'city';
+
+    /**
+     * @var string
+     */
     public const FIELD_ISO_2_CODE = 'iso2_code';
+
+    /**
+     * @var string
+     */
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
+
+    /**
+     * @var string
+     */
     public const FIELD_SHOW_REGION = 'show_region';
+
+    /**
+     * @var string
+     */
     public const FIELD_HOUSE_NUMBER_VALIDATION = 'houseNumberValidation';
 
+    /**
+     * @var string
+     */
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
+    /**
+     * @var string
+     */
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_SALUTATIONS = 'salutations';
+
+    /**
+     * @var string
+     */
     public const OPTION_GIFT_CARD_ONLY_CARD = 'gift_card_only_card';
 
+    /**
+     * @var string
+     */
     protected const VALIDATION_NOT_BLANK_MESSAGE = 'validation.not_blank';
+
+    /**
+     * @var string
+     */
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';
+
+    /**
+     * @var string
+     */
     protected const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
+    /**
+     * @var string
+     */
     public const COUNTRY_CLIENT = 'country_client';
+
+    /**
+     * @var string
+     */
     public const AUTOCOMPLETE_PREFIX = 'billing';
 
     /**

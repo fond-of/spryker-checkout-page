@@ -11,6 +11,9 @@ use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 
 class BillingAddressStep extends AddressStep
 {
+    /**
+     * @var string
+     */
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.billing-address.title';
 
     /**
@@ -25,7 +28,7 @@ class BillingAddressStep extends AddressStep
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
      * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
-     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface[] $checkoutAddressStepEnterPreCheckPlugins
+     * @param array<\SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface> $checkoutAddressStepEnterPreCheckPlugins
      * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
      */
     public function __construct(
@@ -45,7 +48,7 @@ class BillingAddressStep extends AddressStep
             $stepExecutor,
             $postConditionChecker,
             $checkoutPageConfig,
-            $checkoutAddressStepEnterPreCheckPlugins
+            $checkoutAddressStepEnterPreCheckPlugins,
         );
 
         $this->giftCardItemsChecker = $giftCardItemsChecker;
