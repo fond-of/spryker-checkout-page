@@ -304,10 +304,14 @@ class CheckoutBillingAddressForm extends AbstractType
             'choices_as_values' => true,
             'placeholder' => (count($options[self::OPTION_COUNTRY_CHOICES]) > 1) ? 'global.please_select' : false,
             'empty_data' => (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) ? $selected : false,
+            'disabled' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
+            'attr' => [
+                'disabled' => count($options[self::OPTION_COUNTRY_CHOICES]) === 1,
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE),
+            ],
         ]);
 
         return $this;
@@ -323,20 +327,6 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
-            $iso2code = ($builder->get(self::FIELD_ISO_2_CODE)->getData()
-                ?: current(array_flip($options[self::OPTION_COUNTRY_CHOICES])));
-
-            $builder->add(self::FIELD_REGION, ChoiceType::class, [
-                'required' => true,
-                'label' => 'customer.address.region',
-                'choices' => array_flip($this->getRegions($iso2code)),
-                'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_REGION)],
-            ]);
-
-            return $this;
-        }
-
         $formModifier = function (FormInterface $form, ?string $iso2code = null) {
             $showRegions = $this->getFactory()
                 ->getCheckoutPageConfig()

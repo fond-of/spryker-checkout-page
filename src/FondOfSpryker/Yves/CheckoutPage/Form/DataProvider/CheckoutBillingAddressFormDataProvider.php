@@ -77,7 +77,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     {
         return [
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
-            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
+            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries($quoteTransfer),
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
             CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
             CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD => $this->giftCardItemsChecker->hasOnlyGiftCardItems(
@@ -146,11 +146,13 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
      * @return array
      */
-    protected function getAvailableCountries(): array
+    protected function getAvailableCountries(QuoteTransfer $quoteTransfer): array
     {
-        return $this->countryDataProvider->getCountries();
+        return $this->countryDataProvider->getCountries($quoteTransfer);
     }
 
     /**
