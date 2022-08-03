@@ -90,7 +90,7 @@ class CheckoutPageToCustomerClientBridgeTest extends Unit
     /**
      * @return void
      */
-    public function TestFindCustomerById(): void
+    public function testFindCustomerById(): void
     {
         $this->customerClientMock->expects(static::atLeastOnce())
             ->method('getCustomerByEmail')

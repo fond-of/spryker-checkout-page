@@ -374,7 +374,6 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraintDefault($options),
             ],
             'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_CITY)],
         ]);

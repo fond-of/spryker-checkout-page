@@ -132,7 +132,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
         $builder->add(
             static::FIELD_BILLING_SAME_AS_SHIPPING,
             $fieldType,
-            $fieldOptions,
+            $fieldOptions
         );
 
         if ($options[CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD] === true) {

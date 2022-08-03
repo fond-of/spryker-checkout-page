@@ -67,7 +67,7 @@ class CheckoutPageConfig extends SprykerCheckoutPageConfig
     {
         return $this->get(
             CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID,
-            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID_VALUE,
+            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID_VALUE
         );
     }
 }

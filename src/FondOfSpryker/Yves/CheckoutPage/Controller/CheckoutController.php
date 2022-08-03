@@ -37,7 +37,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $request,
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->createCustomerFormCollection(),
+                ->createCustomerFormCollection()
         );
 
         return $response;
@@ -54,7 +54,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $request,
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->createAddressFormCollection(),
+                ->createAddressFormCollection()
         );
 
         if (!is_array($response)) {
@@ -64,7 +64,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             $response,
             $this->getFactory()->getCustomerPageWidgetPlugins(),
-            '@CheckoutPage/views/address/address.twig',
+            '@CheckoutPage/views/address/address.twig'
         );
     }
 
@@ -82,7 +82,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $request,
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->createBillingAddressFormCollection(),
+                ->createBillingAddressFormCollection()
         );
 
         if (!is_array($response)) {
@@ -99,7 +99,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             $response,
             $this->getFactory()->getCustomerPageWidgetPlugins(),
-            '@CheckoutPage/views/billing-address/billing-address.twig',
+            '@CheckoutPage/views/billing-address/billing-address.twig'
         );
     }
 
@@ -123,7 +123,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $request,
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->createShippingAddressFormCollection(),
+                ->createShippingAddressFormCollection()
         );
 
         if (!is_array($response)) {
@@ -133,7 +133,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             $response,
             [],
-            '@CheckoutPage/views/shipping-address/shipping-address.twig',
+            '@CheckoutPage/views/shipping-address/shipping-address.twig'
         );
     }
 
@@ -148,7 +148,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $this->getFactory()->createEmptyPaymentMethodValidator()->validate($request),
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->getPaymentFormCollection(),
+                ->getPaymentFormCollection()
         );
 
         if (!is_array($response)) {
@@ -158,7 +158,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             $response,
             $this->getFactory()->getCustomerPageWidgetPlugins(),
-            '@CheckoutPage/views/payment/payment.twig',
+            '@CheckoutPage/views/payment/payment.twig'
         );
     }
 
@@ -182,7 +182,7 @@ class CheckoutController extends SprykerShopCheckoutController
             $request,
             $this->getFactory()
                 ->createCheckoutFormFactory()
-                ->createSummaryFormCollection(),
+                ->createSummaryFormCollection()
         );
 
         if (!is_array($viewData)) {
@@ -201,7 +201,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             array_merge($viewData, ['taxInPercent' => $taxInPercent]),
             $this->getFactory()->getSummaryPageWidgetPlugins(),
-            '@CheckoutPage/views/summary/summary.twig',
+            '@CheckoutPage/views/summary/summary.twig'
         );
     }
 
@@ -218,7 +218,7 @@ class CheckoutController extends SprykerShopCheckoutController
         return $this->view(
             ['quoteTransfer' => $quoteTransfer],
             [],
-            '@CheckoutPage/views/order-fail/order-fail.twig',
+            '@CheckoutPage/views/order-fail/order-fail.twig'
         );
     }
 

@@ -78,7 +78,7 @@ class PaymentStep extends SprykerPaymentStep
             sprintf(
                 '[ORDER RESET] Order with reference %s has been reseted.',
                 $quoteTransfer->getOrderReference(),
-            ),
+            )
         );
         $quoteTransfer->setCheckoutConfirmed(false);
         $quoteTransfer->setOrderReference(null);

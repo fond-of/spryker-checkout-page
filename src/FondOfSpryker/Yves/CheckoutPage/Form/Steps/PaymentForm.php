@@ -30,7 +30,7 @@ class PaymentForm extends SprykerShopPaymentForm
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ],
+            ]
         );
 
         return $this;
