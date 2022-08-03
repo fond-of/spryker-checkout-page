@@ -6,7 +6,6 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Spryker\Shared\Log\Config\LoggerConfigInterface;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessenger;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -19,12 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentStepTest extends Unit
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\QuoteTransfer
      */
     private $quoteTransferMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\Request
      */
     private $requestMock;
 
@@ -69,7 +68,6 @@ class PaymentStepTest extends Unit
             [],
             $this->loggerMock
 ) extends PaymentStep {
-
             /**
              * @var \Psr\Log\LoggerInterface
              */
@@ -104,19 +102,9 @@ class PaymentStepTest extends Unit
                     $escapeRoute,
                     $flashMessenger,
                     $calculationClient,
-                    $checkoutPaymentStepEnterPreCheckPlugins
+                    $checkoutPaymentStepEnterPreCheckPlugins,
+                    $loggerMock
                 );
-                $this->loggerMock = $loggerMock;
-            }
-
-            /**
-             * @param \Spryker\Shared\Log\Config\LoggerConfigInterface|null $loggerConfig
-             *
-             * @return \Psr\Log\LoggerInterface|null
-             */
-            protected function getLogger(?LoggerConfigInterface $loggerConfig = null)
-            {
-                return $this->loggerMock;
             }
         };
     }

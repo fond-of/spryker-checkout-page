@@ -23,7 +23,7 @@ class FormFactory extends SprykerShopFormFactory
         return new FormCollectionHandler(
             $formTypes,
             $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY),
-            $dataProvider
+            $dataProvider,
         );
     }
 
@@ -36,7 +36,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCustomerFormTypes()
     {
@@ -44,7 +44,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return \Symfony\Component\Form\FormTypeInterface[]
+     * @return array<\Symfony\Component\Form\FormTypeInterface>
      */
     public function getAddressFormTypes()
     {
@@ -58,7 +58,7 @@ class FormFactory extends SprykerShopFormFactory
     {
         return $this->createFormCollection(
             $this->getShippingAddressFormTypes(),
-            $this->getShippingAddressFormDataProvider()
+            $this->getShippingAddressFormDataProvider(),
         );
     }
 
@@ -85,7 +85,7 @@ class FormFactory extends SprykerShopFormFactory
     {
         return $this->createFormCollection(
             $this->getBillingAddressFormTypes(),
-            $this->getBillingAddressFormDataProvider()
+            $this->getBillingAddressFormDataProvider(),
         );
     }
 
@@ -125,7 +125,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getSummaryFormTypes()
     {

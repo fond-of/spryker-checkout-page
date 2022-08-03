@@ -6,8 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class EmptyPaymentMethodValidator implements RequestValidatorInterface
 {
+    /**
+     * @var string
+     */
     protected const PAYMENT_FORM_NAME = 'paymentForm';
 
+    /**
+     * @var string
+     */
     protected const PAYMENT_FORM_SELECTION_NAME = 'paymentSelection';
 
     /**

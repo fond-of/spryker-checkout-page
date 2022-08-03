@@ -19,18 +19,48 @@ use Symfony\Component\Validator\Constraint;
  */
 class CheckoutBillingAddressCollectionForm extends AbstractType
 {
+    /**
+     * @var string
+     */
     public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
+
+    /**
+     * @var string
+     */
     public const FIELD_BILLING_ADDRESS = 'billingAddress';
+
+    /**
+     * @var string
+     */
     public const FIELD_BILLING_SAME_AS_SHIPPING = 'billingSameAsShipping';
 
+    /**
+     * @var string
+     */
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_SALUTATIONS = 'salutations';
+
+    /**
+     * @var string
+     */
     public const OPTION_GIFT_CARD_ONLY_CARD = 'gift_card_only_card';
 
     public const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
+
     public const GROUP_BILLING_ADDRESS = self::FIELD_BILLING_ADDRESS;
 
+    /**
+     * @var string
+     */
     public const COUNTRY_CLIENT = 'country_client';
 
     /**
@@ -48,7 +78,6 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        /** @var \Symfony\Component\OptionsResolver\OptionsResolver $resolver */
         $resolver->setDefaults([
             'validation_groups' => function (FormInterface $form) {
                 $validationGroups = [Constraint::DEFAULT_GROUP, static::GROUP_BILLING_ADDRESS];
@@ -103,7 +132,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
         $builder->add(
             static::FIELD_BILLING_SAME_AS_SHIPPING,
             $fieldType,
-            $fieldOptions
+            $fieldOptions,
         );
 
         if ($options[CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD] === true) {
@@ -112,7 +141,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
                     return (string)$asBool;
                 }, function (?string $asString) {
                     return $asString === null ? true : (bool)$asString;
-                })
+                }),
             );
         }
 

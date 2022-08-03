@@ -7,6 +7,9 @@ use SprykerShop\Yves\CheckoutPage\CheckoutPageConfig as SprykerCheckoutPageConfi
 
 class CheckoutPageConfig extends SprykerCheckoutPageConfig
 {
+    /**
+     * @var string
+     */
     public const PAYMENT_METHOD_NAME_NO_PAYMENT = 'paid';
 
     /**
@@ -64,7 +67,7 @@ class CheckoutPageConfig extends SprykerCheckoutPageConfig
     {
         return $this->get(
             CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID,
-            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID_VALUE
+            CheckoutPageConstants::DEFAULT_SHIPMENT_METHOD_ID_VALUE,
         );
     }
 }

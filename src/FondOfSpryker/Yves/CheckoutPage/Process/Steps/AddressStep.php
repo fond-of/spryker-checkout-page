@@ -36,7 +36,7 @@ class AddressStep extends SprykerShopAddressStep
             $checkoutPageConfig,
             $stepRoute,
             $escapeRoute,
-            $checkoutAddressStepEnterPreCheckPlugins
+            $checkoutAddressStepEnterPreCheckPlugins,
         );
     }
 

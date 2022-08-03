@@ -7,8 +7,19 @@ use SprykerShop\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider
 
 class CheckoutPageControllerProvider extends SprykerShopCheckoutPageControllerProvider
 {
+    /**
+     * @var string
+     */
     public const CHECKOUT_BILLING_ADDRESS = 'checkout-billing-address';
+
+    /**
+     * @var string
+     */
     public const CHECKOUT_SHIPPING_ADDRESS = 'checkout-shipping-address';
+
+    /**
+     * @var string
+     */
     public const CHECKOUT_REGION_BY_COUNTRY = 'checkout-region-by-country';
 
     /**

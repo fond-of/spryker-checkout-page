@@ -3,14 +3,54 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Generated\Shared\Transfer\QuoteTransfer;
+use Psr\Log\LoggerInterface;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
-use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
+use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentStep extends SprykerPaymentStep
 {
-    use LoggerTrait;
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
+     * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
+     * @param string $stepRoute
+     * @param string|null $escapeRoute
+     * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
+     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutPaymentStepEnterPreCheckPluginInterface[] $checkoutPaymentStepEnterPreCheckPlugins
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        CheckoutPageToPaymentClientInterface $paymentClient,
+        StepHandlerPluginCollection $paymentPlugins,
+        string $stepRoute,
+        ?string $escapeRoute,
+        FlashMessengerInterface $flashMessenger,
+        CheckoutPageToCalculationClientInterface $calculationClient,
+        array $checkoutPaymentStepEnterPreCheckPlugins,
+        LoggerInterface $logger
+    ) {
+        parent::__construct(
+            $paymentClient,
+            $paymentPlugins,
+            $stepRoute,
+            $escapeRoute,
+            $flashMessenger,
+            $calculationClient,
+            $checkoutPaymentStepEnterPreCheckPlugins
+        );
+
+        $this->logger = $logger;
+    }
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -34,11 +74,11 @@ class PaymentStep extends SprykerPaymentStep
      */
     protected function resetOrderReference(QuoteTransfer $quoteTransfer): QuoteTransfer
     {
-        $this->getLogger()->notice(
+        $this->logger->notice(
             sprintf(
                 '[ORDER RESET] Order with reference %s has been reseted.',
-                $quoteTransfer->getOrderReference()
-            )
+                $quoteTransfer->getOrderReference(),
+            ),
         );
         $quoteTransfer->setCheckoutConfirmed(false);
         $quoteTransfer->setOrderReference(null);

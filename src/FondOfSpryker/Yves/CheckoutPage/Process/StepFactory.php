@@ -13,6 +13,7 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
+use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
@@ -21,6 +22,8 @@ use SprykerShop\Yves\HomePage\Plugin\Provider\HomePageControllerProvider;
 
 class StepFactory extends SprykerShopStepFactory
 {
+    use LoggerTrait;
+
     /**
      * @return \Spryker\Yves\StepEngine\Process\StepCollectionInterface
      */
@@ -28,7 +31,7 @@ class StepFactory extends SprykerShopStepFactory
     {
         $stepCollection = new StepCollection(
             $this->getUrlGenerator(),
-            CheckoutPageControllerProvider::CHECKOUT_ERROR
+            CheckoutPageControllerProvider::CHECKOUT_ERROR,
         );
 
         $stepCollection
@@ -55,7 +58,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCustomerStepHandler(),
             CheckoutPageControllerProvider::CHECKOUT_CUSTOMER,
             HomePageControllerProvider::ROUTE_HOME,
-            $this->getApplication()->path(HomePageControllerProvider::ROUTE_HOME)
+            $this->getApplication()->path(HomePageControllerProvider::ROUTE_HOME),
         );
     }
 
@@ -72,7 +75,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->createAddressStepPostConditionChecker(),
             $this->getConfig(),
             $this->getCheckoutAddressStepEnterPreCheckPlugins(),
-            $this->createGiftCardItemsChecker()
+            $this->createGiftCardItemsChecker(),
         );
     }
 
@@ -89,7 +92,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->createShipmentStepPostConditionChecker(),
             $this->getConfig(),
             $this->getCheckoutAddressStepEnterPreCheckPlugins(),
-            $this->createGiftCardItemsChecker()
+            $this->createGiftCardItemsChecker(),
         );
     }
 
@@ -106,7 +109,7 @@ class StepFactory extends SprykerShopStepFactory
             CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
             HomePageControllerProvider::ROUTE_HOME,
             $this->getCheckoutShipmentStepEnterPreCheckPlugins(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -122,7 +125,8 @@ class StepFactory extends SprykerShopStepFactory
             $this->getConfig()->getEscapeRoute(),
             $this->getFlashMessenger(),
             $this->getCalculationClient(),
-            $this->getCheckoutPaymentStepEnterPreCheckPlugins()
+            $this->getCheckoutPaymentStepEnterPreCheckPlugins(),
+            $this->getLogger()
         );
     }
 
@@ -141,7 +145,7 @@ class StepFactory extends SprykerShopStepFactory
             [
                 'payment failed' => CheckoutPageControllerProvider::CHECKOUT_PAYMENT,
                 'shipment failed' => CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
-            ]
+            ],
         );
     }
 
@@ -157,7 +161,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getPayoneClient(),
             $this->getSalesClient(),
             CheckoutPageControllerProvider::CHECKOUT_SUCCESS,
-            HomePageControllerProvider::ROUTE_HOME
+            HomePageControllerProvider::ROUTE_HOME,
         );
     }
 
@@ -193,7 +197,7 @@ class StepFactory extends SprykerShopStepFactory
         return new BillingAddressStepExecutor(
             $this->getCustomerService(),
             $this->getCustomerClient(),
-            $this->getShoppingListItemExpanderPlugins()
+            $this->getShoppingListItemExpanderPlugins(),
         );
     }
 
@@ -205,7 +209,7 @@ class StepFactory extends SprykerShopStepFactory
         return new ShippingAddressStepExecutor(
             $this->getCustomerService(),
             $this->getCustomerClient(),
-            $this->getShoppingListItemExpanderPlugins()
+            $this->getShoppingListItemExpanderPlugins(),
         );
     }
 }

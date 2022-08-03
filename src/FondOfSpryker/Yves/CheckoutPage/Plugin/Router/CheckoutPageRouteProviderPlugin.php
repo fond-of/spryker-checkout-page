@@ -62,7 +62,7 @@ class CheckoutPageRouteProviderPlugin extends SprykerCheckoutPageRouteProviderPl
             '/checkout/region-by-country/{country}',
             'CheckoutPage',
             'Checkout',
-            'regionsByCountry'
+            'regionsByCountry',
         );
         $route
             ->setMethods(['GET'])

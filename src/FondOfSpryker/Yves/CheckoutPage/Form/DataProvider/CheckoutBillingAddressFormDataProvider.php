@@ -14,7 +14,14 @@ use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
 
 class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProviderInterface
 {
+    /**
+     * @var string
+     */
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
 
     /**
@@ -41,6 +48,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge $customerClient
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCountryInterface $countryClient
      * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface $countryDataProvider
+     * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
      */
     public function __construct(
         CheckoutPageToCustomerClientBridge $customerClient,
@@ -77,11 +85,11 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     {
         return [
             CheckoutBillingAddressForm::OPTION_ADDRESS_CHOICES => $this->getAddressChoices(),
-            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries(),
+            CheckoutBillingAddressForm::OPTION_COUNTRY_CHOICES => $this->getAvailableCountries($quoteTransfer),
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
             CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
             CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD => $this->giftCardItemsChecker->hasOnlyGiftCardItems(
-                $quoteTransfer->getItems()
+                $quoteTransfer->getItems(),
             ),
         ];
     }
@@ -138,7 +146,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
                 $address->getAddress1(),
                 $address->getAddress2(),
                 $address->getZipCode(),
-                $address->getCity()
+                $address->getCity(),
             );
         }
 
@@ -146,11 +154,13 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
      * @return array
      */
-    protected function getAvailableCountries(): array
+    protected function getAvailableCountries(QuoteTransfer $quoteTransfer): array
     {
-        return $this->countryDataProvider->getCountries();
+        return $this->countryDataProvider->getCountries($quoteTransfer);
     }
 
     /**
