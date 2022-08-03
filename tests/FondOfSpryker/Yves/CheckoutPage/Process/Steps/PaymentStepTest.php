@@ -6,7 +6,6 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Spryker\Shared\Log\Config\LoggerConfigInterface;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessenger;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -14,20 +13,17 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationCli
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
-use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor;
-use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Spryker\Shared\Log\LoggerTrait;
 
 class PaymentStepTest extends Unit
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\QuoteTransfer
      */
     private $quoteTransferMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\Request
      */
     private $requestMock;
 
@@ -40,11 +36,6 @@ class PaymentStepTest extends Unit
      * @var \FondOfSpryker\Yves\CheckoutPage\Process\Steps\PaymentStep
      */
     private $paymentStep;
-
-    /**
-     * @var \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $paymentMethodKeyExtractorMock;
 
     /**
      * @return void
@@ -67,10 +58,6 @@ class PaymentStepTest extends Unit
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->paymentMethodKeyExtractorMock = $this->getMockBuilder(PaymentMethodKeyExtractor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->paymentStep = new class (
             $paymentClientMock,
             $paymentMethodHandlerMocker,
@@ -79,7 +66,6 @@ class PaymentStepTest extends Unit
             $flashMessagenerMock,
             $calculationClientMock,
             [],
-            $this->paymentMethodKeyExtractorMock,
             $this->loggerMock
 ) extends PaymentStep {
             /**
@@ -107,7 +93,6 @@ class PaymentStepTest extends Unit
                 FlashMessengerInterface $flashMessenger,
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,
-                PaymentMethodKeyExtractorInterface $extractor,
                 LoggerInterface $loggerMock
             ) {
                 parent::__construct(
@@ -118,7 +103,7 @@ class PaymentStepTest extends Unit
                     $flashMessenger,
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
-                    $extractor
+                    $loggerMock
                 );
                 $this->loggerMock = $loggerMock;
             }

@@ -13,6 +13,7 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
+use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
@@ -21,6 +22,8 @@ use SprykerShop\Yves\HomePage\Plugin\Provider\HomePageControllerProvider;
 
 class StepFactory extends SprykerShopStepFactory
 {
+    use LoggerTrait;
+
     /**
      * @return \Spryker\Yves\StepEngine\Process\StepCollectionInterface
      */
@@ -123,6 +126,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getFlashMessenger(),
             $this->getCalculationClient(),
             $this->getCheckoutPaymentStepEnterPreCheckPlugins(),
+            $this->getLogger()
         );
     }
 
