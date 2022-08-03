@@ -90,7 +90,7 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
         foreach ($priorityCountriesIso2Codes as $iso2Code) {
             $priorityCountries[$iso2Code] = $this->glossaryStorageClient->translate(
                 self::COUNTRY_GLOSSARY_PREFIX . $iso2Code,
-                $this->store->getCurrentLocale()
+                $this->store->getCurrentLocale(),
             );
 
             if (array_key_exists($iso2Code, $allCountries)) {
@@ -111,7 +111,7 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
         foreach ($this->store->getCountries() as $iso2Code) {
             $countries[$iso2Code] = $this->glossaryStorageClient->translate(
                 self::COUNTRY_GLOSSARY_PREFIX . $iso2Code,
-                $this->store->getCurrentLocale()
+                $this->store->getCurrentLocale(),
             );
         }
 

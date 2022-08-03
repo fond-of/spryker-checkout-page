@@ -273,7 +273,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
             $this->getCheckoutStoreCountryProvider($container),
-            $this->getGiftCardItemsChecker()
+            $this->getGiftCardItemsChecker(),
         );
     }
 
@@ -288,7 +288,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $container[static::CLIENT_GLOSSARY_STORAGE],
             $container[static::CLIENT_PRODUCT_COUNTRY_RESTRICTION_CHECKOUT_CONNECTOR],
             $this->getStore(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -341,7 +341,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
             $this->getCheckoutStoreCountryProvider($container),
-            $this->getGiftCardItemsChecker()
+            $this->getGiftCardItemsChecker(),
         );
     }
 
@@ -378,7 +378,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
                 $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_PROVIDER_NAME);
 
                 return $handlerPluginCollection;
-            }
+            },
         );
 
         return $container;

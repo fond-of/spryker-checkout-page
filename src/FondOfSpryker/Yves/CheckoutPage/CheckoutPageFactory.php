@@ -22,7 +22,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     public function createCheckoutProcess()
     {
         return $this->createStepFactory()->createStepEngine(
-            $this->createStepFactory()->createStepCollection()
+            $this->createStepFactory()->createStepCollection(),
         );
     }
 

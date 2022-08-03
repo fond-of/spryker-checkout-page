@@ -23,7 +23,7 @@ class FormFactory extends SprykerShopFormFactory
         return new FormCollectionHandler(
             $formTypes,
             $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY),
-            $dataProvider
+            $dataProvider,
         );
     }
 
@@ -58,7 +58,7 @@ class FormFactory extends SprykerShopFormFactory
     {
         return $this->createFormCollection(
             $this->getShippingAddressFormTypes(),
-            $this->getShippingAddressFormDataProvider()
+            $this->getShippingAddressFormDataProvider(),
         );
     }
 
@@ -85,7 +85,7 @@ class FormFactory extends SprykerShopFormFactory
     {
         return $this->createFormCollection(
             $this->getBillingAddressFormTypes(),
-            $this->getBillingAddressFormDataProvider()
+            $this->getBillingAddressFormDataProvider(),
         );
     }
 
