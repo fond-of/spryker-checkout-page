@@ -16,14 +16,14 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=7.3",
-    "spryker/glossary": "^3.7.0",
+    "php": ">=7.2",
+    "spryker/glossary": "^3.8.0",
     "spryker/customer": "^7.27.0",
-    "spryker-shop/checkout-page": "^3.0.0",
+    "spryker-shop/checkout-page": "^3.7.0",
     "fond-of-spryker/country": "dev-feature/paypal-refund || dev-spryker_upgrade || ^1.0.0",
     "spryker-shop/customer-page": "^2.7.1",
     "spryker-shop/home-page": "^1.0.0",
-    "spryker/shipment": "^8.0.0",
+    "spryker/shipment": "^8.0.2",
     "spryker/quote": "^1.0.0 || ^2.0.0 || ^3.0.0",
     "fond-of-oryx/product-country-restriction-checkout-connector": "^1.1.0"
   },
