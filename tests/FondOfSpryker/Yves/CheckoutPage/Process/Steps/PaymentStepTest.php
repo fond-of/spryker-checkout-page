@@ -105,7 +105,6 @@ class PaymentStepTest extends Unit
                     $checkoutPaymentStepEnterPreCheckPlugins,
                     $loggerMock
                 );
-                $this->loggerMock = $loggerMock;
             }
         };
     }
