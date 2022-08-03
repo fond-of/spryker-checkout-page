@@ -20,14 +20,14 @@ class PaymentForm extends SprykerShopPaymentForm
     {
         $choices = [];
         foreach ($paymentMethodSubForms as $choice){
-            $choices[] = $choice->getName();
+            $choices[$choice->getName()] = $choice->getName();
         }
 
         $builder->add(
             self::PAYMENT_SELECTION,
             ChoiceType::class,
             [
-                'choices' => $paymentMethodSubForms,
+                'choices' => $choices,
                 'choice_name' => function ($choice, $key) use ($paymentMethodSubForms) {
                     $paymentMethodSubForm = $paymentMethodSubForms[$key];
 
