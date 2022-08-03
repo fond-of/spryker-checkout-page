@@ -126,7 +126,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         Container $container
     ): CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface {
         return new CheckoutPageToProductCountryRestrictionCheckoutConnectorBridge(
-            $container->getLocator()->productCountryRestrictionCheckoutConnector()->client(),
+            $container->getLocator()->productCountryRestrictionCheckoutConnector()->client()
         );
     }
 

@@ -78,8 +78,8 @@ class PaymentStepTest extends Unit
              *
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
-             * @param $stepRoute
-             * @param $escapeRoute
+             * @param string $stepRoute
+             * @param string|null $escapeRoute
              * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
              * @param array $checkoutPaymentStepEnterPreCheckPlugins
@@ -88,8 +88,8 @@ class PaymentStepTest extends Unit
             public function __construct(
                 CheckoutPageToPaymentClientInterface $paymentClient,
                 StepHandlerPluginCollection $paymentPlugins,
-                $stepRoute,
-                $escapeRoute,
+                string $stepRoute,
+                ?string $escapeRoute,
                 FlashMessengerInterface $flashMessenger,
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,
