@@ -89,7 +89,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
             CheckoutBillingAddressForm::COUNTRY_CLIENT => $this->countryClient,
             CheckoutBillingAddressForm::OPTION_SALUTATIONS => $this->getSalutationOptions(),
             CheckoutBillingAddressForm::OPTION_GIFT_CARD_ONLY_CARD => $this->giftCardItemsChecker->hasOnlyGiftCardItems(
-                $quoteTransfer->getItems(),
+                $quoteTransfer->getItems()
             ),
         ];
     }
@@ -146,7 +146,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
                 $address->getAddress1(),
                 $address->getAddress2(),
                 $address->getZipCode(),
-                $address->getCity(),
+                $address->getCity()
             );
         }
 

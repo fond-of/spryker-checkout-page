@@ -141,7 +141,7 @@ class CheckoutBillingAddressCollectionForm extends AbstractType
                     return (string)$asBool;
                 }, function (?string $asString) {
                     return $asString === null ? true : (bool)$asString;
-                }),
+                })
             );
         }
 
