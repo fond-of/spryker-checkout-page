@@ -9,7 +9,6 @@ use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
-use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,7 +37,6 @@ class PaymentStep extends SprykerPaymentStep
         FlashMessengerInterface $flashMessenger,
         CheckoutPageToCalculationClientInterface $calculationClient,
         array $checkoutPaymentStepEnterPreCheckPlugins,
-        PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor,
         LoggerInterface $logger
     ) {
         parent::__construct(
@@ -48,8 +46,7 @@ class PaymentStep extends SprykerPaymentStep
             $escapeRoute,
             $flashMessenger,
             $calculationClient,
-            $checkoutPaymentStepEnterPreCheckPlugins,
-            $paymentMethodKeyExtractor
+            $checkoutPaymentStepEnterPreCheckPlugins
         );
 
         $this->logger = $logger;

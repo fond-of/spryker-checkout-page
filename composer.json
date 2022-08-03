@@ -18,8 +18,8 @@
   "require": {
     "php": ">=7.2",
     "spryker/glossary": "^3.8.0",
-    "spryker/customer": "^7.27.0",
-    "spryker-shop/checkout-page": "^3.7.0",
+    "spryker/customer": "^7.26.5",
+    "spryker-shop/checkout-page": "<3.19.0",
     "fond-of-spryker/country": "dev-feature/paypal-refund || dev-spryker_upgrade || ^1.0.0",
     "spryker-shop/customer-page": "^2.7.1",
     "spryker-shop/home-page": "^1.0.0",
