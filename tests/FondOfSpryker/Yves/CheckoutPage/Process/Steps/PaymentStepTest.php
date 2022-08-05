@@ -14,6 +14,8 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationCli
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
+use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor;
+use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentStepTest extends Unit
@@ -32,6 +34,11 @@ class PaymentStepTest extends Unit
      * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
+
+    /**
+     * @var \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $paymentMethodKeyExtractorMock;
 
     /**
      * @var \FondOfSpryker\Yves\CheckoutPage\Process\Steps\PaymentStep
@@ -58,6 +65,9 @@ class PaymentStepTest extends Unit
         $calculationClientMock = $this->getMockBuilder(CheckoutPageToCalculationClientBridge::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->paymentMethodKeyExtractorMock = $this->getMockBuilder(PaymentMethodKeyExtractor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentStep = new class (
             $paymentClientMock,
@@ -80,21 +90,23 @@ class PaymentStepTest extends Unit
              *
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
-             * @param $stepRoute
-             * @param $escapeRoute
+             * @param string $stepRoute
+             * @param string|null $escapeRoute
              * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
              * @param array $checkoutPaymentStepEnterPreCheckPlugins
+             * @param \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor
              * @param \Psr\Log\LoggerInterface $loggerMock
              */
             public function __construct(
                 CheckoutPageToPaymentClientInterface $paymentClient,
                 StepHandlerPluginCollection $paymentPlugins,
-                                                     $stepRoute,
-                                                     $escapeRoute,
+                string $stepRoute,
+                ?string $escapeRoute,
                 FlashMessengerInterface $flashMessenger,
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,
+                PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor,
                 LoggerInterface $loggerMock
             ) {
                 parent::__construct(
@@ -104,8 +116,10 @@ class PaymentStepTest extends Unit
                     $escapeRoute,
                     $flashMessenger,
                     $calculationClient,
-                    $checkoutPaymentStepEnterPreCheckPlugins
+                    $checkoutPaymentStepEnterPreCheckPlugins,
+                    $paymentMethodKeyExtractor
                 );
+
                 $this->loggerMock = $loggerMock;
             }
 
