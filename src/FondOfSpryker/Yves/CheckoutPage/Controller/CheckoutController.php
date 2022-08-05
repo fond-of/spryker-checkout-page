@@ -11,12 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CheckoutController extends SprykerShopCheckoutController
 {
+    /**
+     * @var string
+     */
     protected const PATTERN_CHECKOUT_BILLING_ADDRESS = '/^(\/[a-z]{2})?\/checkout\/billing-address(\/)?/';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|array
      */
     public function indexAction(Request $request)
     {
@@ -111,7 +114,7 @@ class CheckoutController extends SprykerShopCheckoutController
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return array|\Spryker\Yves\Kernel\View\View|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Spryker\Yves\Kernel\View\View|\Symfony\Component\HttpFoundation\RedirectResponse|array
      */
     public function shippingAddressAction(Request $request)
     {

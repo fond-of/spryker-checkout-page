@@ -7,6 +7,7 @@ use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClie
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
+use PHPUnit\Framework\MockObject\MockObject;
 use SprykerShop\Yves\CheckoutPage\Dependency\Service\CheckoutPageToCustomerServiceBridge;
 use Symfony\Component\HttpFoundation\Request;
 

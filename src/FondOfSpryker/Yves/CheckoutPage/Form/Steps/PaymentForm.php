@@ -57,7 +57,7 @@ class PaymentForm extends SprykerShopPaymentForm
     }
 
     /**
-     * @param \Spryker\Yves\StepEngine\Dependency\Form\SubFormInterface[] $paymentMethodSubForms
+     * @param array<\Spryker\Yves\StepEngine\Dependency\Form\SubFormInterface> $paymentMethodSubForms
      *
      * @return array
      */

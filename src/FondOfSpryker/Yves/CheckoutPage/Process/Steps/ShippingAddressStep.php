@@ -11,6 +11,9 @@ use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
 
 class ShippingAddressStep extends AddressStep
 {
+    /**
+     * @var string
+     */
     public const BREADCRUMB_ITEM_TITLE = 'checkout.step.shipping-address.title';
 
     /**
@@ -25,7 +28,7 @@ class ShippingAddressStep extends AddressStep
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface $stepExecutor
      * @param \SprykerShop\Yves\CheckoutPage\Process\Steps\PostConditionCheckerInterface $postConditionChecker
      * @param \SprykerShop\Yves\CheckoutPage\CheckoutPageConfig $checkoutPageConfig
-     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface[] $checkoutAddressStepEnterPreCheckPlugins
+     * @param array<\SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutAddressStepEnterPreCheckPluginInterface> $checkoutAddressStepEnterPreCheckPlugins
      * @param \SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface $giftCardItemsChecker
      */
     public function __construct(
