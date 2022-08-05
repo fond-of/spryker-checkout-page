@@ -68,7 +68,7 @@ class PaymentStepTest extends Unit
             $calculationClientMock,
             [],
             $this->loggerMock
-) extends PaymentStep {
+        ) extends PaymentStep {
 
             /**
              * @var \Psr\Log\LoggerInterface
@@ -90,8 +90,8 @@ class PaymentStepTest extends Unit
             public function __construct(
                 CheckoutPageToPaymentClientInterface $paymentClient,
                 StepHandlerPluginCollection $paymentPlugins,
-                $stepRoute,
-                $escapeRoute,
+                                                     $stepRoute,
+                                                     $escapeRoute,
                 FlashMessengerInterface $flashMessenger,
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,

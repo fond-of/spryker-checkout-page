@@ -36,7 +36,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCustomerFormTypes()
     {
@@ -44,7 +44,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return \Symfony\Component\Form\FormTypeInterface[]
+     * @return array<\Symfony\Component\Form\FormTypeInterface>
      */
     public function getAddressFormTypes()
     {
@@ -125,7 +125,7 @@ class FormFactory extends SprykerShopFormFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getSummaryFormTypes()
     {

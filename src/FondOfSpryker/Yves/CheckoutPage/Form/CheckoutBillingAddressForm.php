@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -30,34 +29,129 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class CheckoutBillingAddressForm extends AbstractType
 {
+    /**
+     * @var string
+     */
     public const FIELD_EMAIL = 'email';
+
+    /**
+     * @var string
+     */
     public const FIELD_SALUTATION = 'salutation';
+
+    /**
+     * @var string
+     */
     public const FIELD_FIRST_NAME = 'first_name';
+
+    /**
+     * @var string
+     */
     public const FIELD_LAST_NAME = 'last_name';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_1 = 'address1';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_2 = 'address2';
+
+    /**
+     * @var string
+     */
     public const FIELD_ADDRESS_3 = 'address3';
+
+    /**
+     * @var string
+     */
     public const FIELD_REGION = 'region';
+
+    /**
+     * @var string
+     */
     public const FIELD_PHONE = 'phone';
+
+    /**
+     * @var string
+     */
     public const FIELD_ZIP_CODE = 'zip_code';
+
+    /**
+     * @var string
+     */
     public const FIELD_CITY = 'city';
+
+    /**
+     * @var string
+     */
     public const FIELD_ISO_2_CODE = 'iso2_code';
+
+    /**
+     * @var string
+     */
     public const FIELD_ID_CUSTOMER_ADDRESS = 'id_customer_address';
+
+    /**
+     * @var string
+     */
     public const FIELD_SHOW_REGION = 'show_region';
+
+    /**
+     * @var string
+     */
     public const FIELD_HOUSE_NUMBER_VALIDATION = 'houseNumberValidation';
 
+    /**
+     * @var string
+     */
     public const OPTION_VALIDATION_GROUP = 'validation_group';
 
+    /**
+     * @var string
+     */
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_SALUTATIONS = 'salutations';
+
+    /**
+     * @var string
+     */
     public const OPTION_GIFT_CARD_ONLY_CARD = 'gift_card_only_card';
 
+    /**
+     * @var string
+     */
     protected const VALIDATION_NOT_BLANK_MESSAGE = 'validation.not_blank';
+
+    /**
+     * @var string
+     */
     protected const VALIDATION_MIN_LENGTH_MESSAGE = 'validation.min_length';
+
+    /**
+     * @var string
+     */
     protected const VALIDATE_REGEX_EMAIL = "/^[A-ZÄÖÜa-zäöü0-9._%+\&\-ß!]+@[a-zäöüA-ZÄÖÜ0-9.\-ß]+\.[a-zäöüA-ZÄÖÜ]{2,}$/ix";
 
+    /**
+     * @var string
+     */
     public const COUNTRY_CLIENT = 'country_client';
+
+    /**
+     * @var string
+     */
     public const AUTOCOMPLETE_PREFIX = 'billing';
 
     /**
@@ -147,7 +241,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $this->createMinLengthConstraintFirstName($options),
             ],
             'attr' => [
-                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME)
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_FIRST_NAME),
             ],
         ]);
 
@@ -279,7 +373,6 @@ class CheckoutBillingAddressForm extends AbstractType
             'required' => true,
             'constraints' => [
                 $this->createNotBlankConstraint($options),
-                $this->createMinLengthConstraintDefault($options),
             ],
             'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_CITY)],
         ]);
@@ -306,7 +399,10 @@ class CheckoutBillingAddressForm extends AbstractType
             'constraints' => [
                 $this->createNotBlankConstraint($options),
             ],
-            'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE)],
+            'attr' => [
+                'disabled' => count($options[self::OPTION_COUNTRY_CHOICES]) === 1,
+                'autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_ISO_2_CODE),
+            ],
         ]);
 
         return $this;
@@ -322,20 +418,6 @@ class CheckoutBillingAddressForm extends AbstractType
      */
     protected function addRegionField(FormBuilderInterface $builder, array $options)
     {
-        if (count($options[self::OPTION_COUNTRY_CHOICES]) === 1) {
-            $iso2code = ($builder->get(self::FIELD_ISO_2_CODE)->getData()
-                ?: current(array_flip($options[self::OPTION_COUNTRY_CHOICES])));
-
-            $builder->add(self::FIELD_REGION, ChoiceType::class, [
-                'required' => true,
-                'label' => 'customer.address.region',
-                'choices' => array_flip($this->getRegions($iso2code)),
-                'attr' => ['autocomplete' => $this->formFieldNameMapper->mapFormFieldNameToAutocompletAttr(self::FIELD_REGION)],
-            ]);
-
-            return $this;
-        }
-
         $formModifier = function (FormInterface $form, ?string $iso2code = null) {
             $showRegions = $this->getFactory()
                 ->getCheckoutPageConfig()
@@ -421,6 +503,11 @@ class CheckoutBillingAddressForm extends AbstractType
         return $this;
     }
 
+    /**
+     * @param array $options
+     *
+     * @return \Symfony\Component\Validator\Constraints\Callback
+     */
     protected function createRegexHouseNumberConstraint(array $options): Callback
     {
         return new Callback([
@@ -430,7 +517,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $addressTransfer = $quoteTransfer->getBillingAddress();
                 $pattern = '~[\d]+~';
 
-                if ($addressTransfer->getHouseNumberValidation() === "1") {
+                if ($addressTransfer->getHouseNumberValidation() === '1') {
                     return;
                 }
 

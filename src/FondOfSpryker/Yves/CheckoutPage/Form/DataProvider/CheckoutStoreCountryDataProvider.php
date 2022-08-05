@@ -4,8 +4,10 @@ namespace FondOfSpryker\Yves\CheckoutPage\Form\DataProvider;
 
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\CheckoutStoreCountryDataProviderInterface;
+use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Store;
-use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge;
+use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientInterface;
 
 class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProviderInterface
 {
@@ -22,35 +24,57 @@ class CheckoutStoreCountryDataProvider implements CheckoutStoreCountryDataProvid
     /**
      * @var \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig
      */
-    private $config;
+    protected $config;
 
+    /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface
+     */
+    protected $productCountryRestrictionCheckoutConnectorClient;
+
+    /**
+     * @var string
+     */
     public const COUNTRY_GLOSSARY_PREFIX = 'countries.iso.';
 
     /**
-     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient
+     * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToGlossaryStorageClientInterface $glossaryStorageClient
+     * @param \FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface $productCountryRestrictionCheckoutConnectorClient
      * @param \Spryker\Shared\Kernel\Store $store
      * @param \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig $config
      */
     public function __construct(
-        CheckoutPageToGlossaryStorageClientBridge $glossaryStorageClient,
+        CheckoutPageToGlossaryStorageClientInterface $glossaryStorageClient,
+        CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface $productCountryRestrictionCheckoutConnectorClient,
         Store $store,
         CheckoutPageConfig $config
     ) {
         $this->glossaryStorageClient = $glossaryStorageClient;
+        $this->productCountryRestrictionCheckoutConnectorClient = $productCountryRestrictionCheckoutConnectorClient;
         $this->store = $store;
         $this->config = $config;
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuoteTransfer $quoteTransfer
+     *
      * @return array
      */
-    public function getCountries(): array
+    public function getCountries(QuoteTransfer $quoteTransfer): array
     {
-        if (strpos(strtoupper($this->store->getStoreName()), '_COM') !== false) {
-            return $this->getComStoreCountries();
+        $blacklistedCountryCollectionTransfer = $this->productCountryRestrictionCheckoutConnectorClient
+            ->getBlacklistedCountryCollectionByQuote($quoteTransfer);
+
+        $iso2codes = [];
+
+        foreach ($blacklistedCountryCollectionTransfer->getBlacklistedCountries() as $blacklistedCountryTransfer) {
+            $iso2codes[] = $blacklistedCountryTransfer->getIso2code();
         }
 
-        return $this->getDefault();
+        if (strpos(strtoupper($this->store->getStoreName()), '_COM') !== false) {
+            return array_diff_key($this->getComStoreCountries(), array_flip($iso2codes));
+        }
+
+        return array_diff_key($this->getDefault(), array_flip($iso2codes));
     }
 
     /**

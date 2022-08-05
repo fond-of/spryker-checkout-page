@@ -51,7 +51,7 @@ class CheckoutPageFactory extends SprykerShopCheckoutPageFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCustomerPageWidgetPlugins(): array
     {

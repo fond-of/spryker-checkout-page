@@ -171,6 +171,7 @@ class CheckoutControllerTest extends Unit
 
             /**
              * @param \Spryker\Yves\Kernel\AbstractFactory $factory
+             * @param \Spryker\Yves\Kernel\View\View $sprykerView
              */
             public function __construct(AbstractFactory $factory, View $sprykerView)
             {
@@ -392,7 +393,7 @@ class CheckoutControllerTest extends Unit
         $this->formFactoryMock->expects(static::atLeastOnce())
             ->method('createShippingAddressFormCollection')
             ->willReturn($this->formCollectionHandlereMock);
-        @$this->stepEngineMock->expects(static::atLeastOnce())
+        $this->stepEngineMock->expects(static::atLeastOnce())
             ->method('process')
             ->with($this->requestMock, $this->formCollectionHandlereMock)
             ->willReturn([]);

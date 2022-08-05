@@ -12,11 +12,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CheckoutShippingAddressCollectionForm extends AbstractType
 {
+    /**
+     * @var string
+     */
     public const FIELD_SHIPPING_ADDRESS = 'shippingAddress';
+
+    /**
+     * @var string
+     */
     public const OPTION_ADDRESS_CHOICES = 'address_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_COUNTRY_CHOICES = 'country_choices';
+
+    /**
+     * @var string
+     */
     public const OPTION_SALUTATION = 'salutations';
+
     public const GROUP_SHIPPING_ADDRESS = self::FIELD_SHIPPING_ADDRESS;
+
+    /**
+     * @var string
+     */
     public const COUNTRY_CLIENT = 'country_client';
 
     /**
@@ -34,7 +54,6 @@ class CheckoutShippingAddressCollectionForm extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        /** @var \Symfony\Component\OptionsResolver\OptionsResolver $resolver */
         $resolver->setDefaults([
             'validation_groups' => [self::GROUP_SHIPPING_ADDRESS],
             self::OPTION_ADDRESS_CHOICES => [],
