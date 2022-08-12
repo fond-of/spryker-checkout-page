@@ -2,9 +2,9 @@
 
 namespace FondOfSpryker\Yves\CheckoutPage\Process;
 
+use FondOfSpryker\Shared\CheckoutPage\CheckoutPageConstants;
 use FondOfSpryker\Yves\CheckoutPage\CheckoutPageDependencyProvider;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface;
-use FondOfSpryker\Yves\CheckoutPage\Plugin\Provider\CheckoutPageControllerProvider;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\BillingAddressStepExecutor;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep\ShippingAddressStepExecutor;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\BillingAddressStep;
@@ -14,12 +14,10 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
-use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Plugin\Router\CheckoutPageRouteProviderPlugin;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
-use SprykerShop\Yves\HomePage\Plugin\Provider\HomePageControllerProvider;
 
 /**
  * @method \FondOfSpryker\Yves\CheckoutPage\CheckoutPageConfig getConfig()
@@ -53,7 +51,7 @@ class StepFactory extends SprykerShopStepFactory
         return new CustomerStep(
             $this->getCustomerClient(),
             $this->getCustomerStepHandler(),
-            CheckoutPageControllerProvider::CHECKOUT_CUSTOMER,
+            CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_CUSTOMER,
             $this->getConfig()->getEscapeRoute(),
             $this->getRouter()->generate(static::ROUTE_LOGOUT)
         );
@@ -66,7 +64,7 @@ class StepFactory extends SprykerShopStepFactory
     {
         return new BillingAddressStep(
             $this->getCalculationClient(),
-            CheckoutPageControllerProvider::CHECKOUT_BILLING_ADDRESS,
+            CheckoutPageConstants::ROUTE_CHECKOUT_BILLING_ADDRESS,
             $this->getConfig()->getEscapeRoute(),
             $this->createBillingAddressStepExecutor(),
             $this->createAddressStepPostConditionChecker(),
@@ -83,7 +81,7 @@ class StepFactory extends SprykerShopStepFactory
     {
         return new ShippingAddressStep(
             $this->getCalculationClient(),
-            CheckoutPageControllerProvider::CHECKOUT_SHIPPING_ADDRESS,
+            CheckoutPageConstants::ROUTE_CHECKOUT_SHIPPING_ADDRESS,
             $this->getConfig()->getEscapeRoute(),
             $this->createShippingAddressStepExecutor(),
             $this->createShipmentStepPostConditionChecker(),
@@ -103,7 +101,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getShipmentPlugins(),
             $this->createShipmentStepPostConditionChecker(),
             $this->createGiftCardItemsChecker(),
-            CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
+            CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_SHIPMENT,
             $this->getConfig()->getEscapeRoute(),
             $this->getCheckoutShipmentStepEnterPreCheckPlugins(),
             $this->getConfig()
@@ -137,12 +135,12 @@ class StepFactory extends SprykerShopStepFactory
             $this->getFlashMessenger(),
             $this->getLocaleClient()->getCurrentLocale(),
             $this->getGlossaryStorageClient(),
-            CheckoutPageControllerProvider::CHECKOUT_PLACE_ORDER,
+            CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_PLACE_ORDER,
             $this->getConfig()->getEscapeRoute(),
             [
                 static::ERROR_CODE_GENERAL_FAILURE => static::ROUTE_CART,
-                'payment failed' => CheckoutPageControllerProvider::CHECKOUT_PAYMENT,
-                'shipment failed' => CheckoutPageControllerProvider::CHECKOUT_SHIPMENT,
+                'payment failed' => CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_PAYMENT,
+                'shipment failed' => CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_SHIPMENT,
             ]
         );
     }
@@ -158,7 +156,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getConfig(),
             $this->getPayoneClient(),
             $this->getSalesClient(),
-            CheckoutPageControllerProvider::CHECKOUT_SUCCESS,
+            CheckoutPageRouteProviderPlugin::ROUTE_NAME_CHECKOUT_SUCCESS,
             $this->getConfig()->getEscapeRoute()
         );
     }
