@@ -27,6 +27,7 @@ class PlaceOrderStep extends SprykerShopPlaceOrderStep
         if ($checkoutResponseTransfer->getSaveOrder() !== null) {
             $quoteTransfer->setOrderReference($checkoutResponseTransfer->getSaveOrder()->getOrderReference());
             $quoteTransfer->setIdSalesOrder($checkoutResponseTransfer->getSaveOrder()->getIdSalesOrder());
+            $quoteTransfer->setIsOrderPlacedSuccessfully($checkoutResponseTransfer->getIsSuccess());
         }
 
         $this->setCheckoutErrorMessages($checkoutResponseTransfer);
