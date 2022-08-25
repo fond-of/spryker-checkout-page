@@ -13,6 +13,8 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\PlaceOrderStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetter;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Spryker\Shared\Log\LoggerTrait;
 use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
@@ -126,7 +128,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getFlashMessenger(),
             $this->getCalculationClient(),
             $this->getCheckoutPaymentStepEnterPreCheckPlugins(),
-            $this->getLogger()
+            $this->createOrderReferenceResetter()
         );
     }
 
@@ -198,6 +200,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCustomerService(),
             $this->getCustomerClient(),
             $this->getShoppingListItemExpanderPlugins(),
+            $this->createOrderReferenceResetter(),
         );
     }
 
@@ -210,6 +213,15 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCustomerService(),
             $this->getCustomerClient(),
             $this->getShoppingListItemExpanderPlugins(),
+            $this->createOrderReferenceResetter(),
         );
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface
+     */
+    protected function createOrderReferenceResetter(): OrderReferenceResetterInterface
+    {
+        return new OrderReferenceResetter($this->getLogger());
     }
 }
