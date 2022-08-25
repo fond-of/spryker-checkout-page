@@ -128,7 +128,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getFlashMessenger(),
             $this->getCalculationClient(),
             $this->getCheckoutPaymentStepEnterPreCheckPlugins(),
-            $this->createOrderReferenceResetter()
+            $this->createOrderReferenceResetter(),
         );
     }
 

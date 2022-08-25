@@ -3,7 +3,6 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
-use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -26,7 +25,7 @@ class PaymentStep extends SprykerPaymentStep
      * @param string|null $escapeRoute
      * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
-     * @param \SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutPaymentStepEnterPreCheckPluginInterface[] $checkoutPaymentStepEnterPreCheckPlugins
+     * @param array<\SprykerShop\Yves\CheckoutPageExtension\Dependency\Plugin\CheckoutPaymentStepEnterPreCheckPluginInterface> $checkoutPaymentStepEnterPreCheckPlugins
      * @param \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface $orderReferenceResetter
      */
     public function __construct(
@@ -46,7 +45,7 @@ class PaymentStep extends SprykerPaymentStep
             $escapeRoute,
             $flashMessenger,
             $calculationClient,
-            $checkoutPaymentStepEnterPreCheckPlugins
+            $checkoutPaymentStepEnterPreCheckPlugins,
         );
 
         $this->orderReferenceResetter = $orderReferenceResetter;

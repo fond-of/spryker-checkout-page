@@ -8,12 +8,12 @@ use Psr\Log\LoggerInterface;
 class OrderReferenceResetter implements OrderReferenceResetterInterface
 {
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -31,8 +31,8 @@ class OrderReferenceResetter implements OrderReferenceResetterInterface
             $this->logger->notice(
                 sprintf(
                     '[ORDER RESET] Order with reference %s has been reseted.',
-                    $quoteTransfer->getOrderReference()
-                )
+                    $quoteTransfer->getOrderReference(),
+                ),
             );
             $quoteTransfer->setCheckoutConfirmed(false);
             $quoteTransfer->setOrderReference(null);

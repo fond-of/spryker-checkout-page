@@ -27,7 +27,7 @@ class BillingAddressStepExecutor extends SprykerAddressStepExecutor
         CheckoutPageToCustomerServiceInterface $customerService,
         CheckoutPageToCustomerClientInterface $customerClient,
         array $addressTransferExpanderPlugins,
-        OrderReferenceResetterInterface $orderReferenceResetter,
+        OrderReferenceResetterInterface $orderReferenceResetter
     ) {
         parent::__construct($customerService, $customerClient, $addressTransferExpanderPlugins);
 

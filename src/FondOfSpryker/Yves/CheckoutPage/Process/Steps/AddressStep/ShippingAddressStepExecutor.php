@@ -29,7 +29,7 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
         CheckoutPageToCustomerServiceInterface $customerService,
         CheckoutPageToCustomerClientInterface $customerClient,
         array $addressTransferExpanderPlugins,
-        OrderReferenceResetterInterface $orderReferenceResetter,
+        OrderReferenceResetterInterface $orderReferenceResetter
     ) {
         parent::__construct($customerService, $customerClient, $addressTransferExpanderPlugins);
 
@@ -82,10 +82,9 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     protected function hydrateShippingAddress(
-        QuoteTransfer    $quoteTransfer,
+        QuoteTransfer $quoteTransfer,
         CustomerTransfer $customerTransfer
-    ): QuoteTransfer
-    {
+    ): QuoteTransfer {
         if ($quoteTransfer->getBillingSameAsShipping()) {
             return $this->hydrateItemLevelShippingAddressesSameAsBillingAddress($quoteTransfer, $customerTransfer);
         }
@@ -100,10 +99,9 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     protected function hydrateItemLevelShippingAddresses(
-        QuoteTransfer     $quoteTransfer,
+        QuoteTransfer $quoteTransfer,
         ?CustomerTransfer $customerTransfer
-    ): QuoteTransfer
-    {
+    ): QuoteTransfer {
         if ($quoteTransfer->getItems()->count() === 0) {
             return $quoteTransfer;
         }
@@ -145,10 +143,9 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
      * @return \Generated\Shared\Transfer\QuoteTransfer
      */
     protected function hydrateItemLevelShippingAddressesSameAsBillingAddress(
-        QuoteTransfer     $quoteTransfer,
+        QuoteTransfer $quoteTransfer,
         ?CustomerTransfer $customerTransfer
-    ): QuoteTransfer
-    {
+    ): QuoteTransfer {
         $billingAddressTransfer = $quoteTransfer->getBillingAddress();
 
         foreach ($quoteTransfer->getItems() as $itemTransfer) {
