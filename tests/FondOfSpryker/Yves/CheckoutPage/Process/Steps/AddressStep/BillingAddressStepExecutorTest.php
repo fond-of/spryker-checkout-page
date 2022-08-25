@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep;
 
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
@@ -28,6 +29,21 @@ class BillingAddressStepExecutorTest extends Unit
     public const CUSTOMER_E_MAIL = 'test@test.dev';
 
     /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $orderReferenceResetterMock;
+
+    /**
+     * @return void
+     */
+    protected function _before(): void
+    {
+        $this->orderReferenceResetterMock = $this->getMockBuilder(OrderReferenceResetterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @return void
      */
     public function testUpdateCustomerDataFromBillingAddressFromQuote()
@@ -50,7 +66,17 @@ class BillingAddressStepExecutorTest extends Unit
 
         $quoteTransfer->setBillingAddress($billingAddressTransfer);
 
-        $executor = new BillingAddressStepExecutor($customerServiceMock, $customerClientMock, []);
+        $this->orderReferenceResetterMock->expects($this->once())
+            ->method('reset')
+            ->with($quoteTransfer)
+            ->willReturn($quoteTransfer);
+
+        $executor = new BillingAddressStepExecutor(
+            $customerServiceMock,
+            $customerClientMock,
+            [],
+            $this->orderReferenceResetterMock
+        );
         $quoteTransfer = $executor->execute($requestMock, $quoteTransfer);
 
         $this->assertSame($quoteTransfer->getCustomer()->getEmail(), static::CUSTOMER_E_MAIL);
@@ -77,7 +103,17 @@ class BillingAddressStepExecutorTest extends Unit
 
         $quoteTransfer->setBillingAddress($billingAddressTransfer);
 
-        $executor = new BillingAddressStepExecutor($customerServiceMock, $customerClientMock, []);
+        $this->orderReferenceResetterMock->expects($this->once())
+            ->method('reset')
+            ->with($quoteTransfer)
+            ->willReturn($quoteTransfer);
+
+        $executor = new BillingAddressStepExecutor(
+            $customerServiceMock,
+            $customerClientMock,
+            [],
+            $this->orderReferenceResetterMock
+        );
         $quoteTransfer = $executor->execute($requestMock, $quoteTransfer);
 
         $this->assertSame($quoteTransfer->getCustomer()->getEmail(), static::CUSTOMER_E_MAIL);

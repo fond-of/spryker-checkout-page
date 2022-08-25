@@ -59,7 +59,7 @@ class PaymentStep extends SprykerPaymentStep
      */
     public function execute(Request $request, AbstractTransfer $quoteTransfer)
     {
-        $this->orderReferenceResetter->reset($quoteTransfer);
+        $quoteTransfer = $this->orderReferenceResetter->reset($quoteTransfer);
 
         return parent::execute($request, $quoteTransfer);
     }
