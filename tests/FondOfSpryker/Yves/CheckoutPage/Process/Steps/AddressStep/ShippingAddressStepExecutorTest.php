@@ -77,7 +77,7 @@ class ShippingAddressStepExecutorTest extends Unit
             $customerServiceMock,
             $customerClientMock,
             [],
-            $this->orderReferenceResetterMock
+            $this->orderReferenceResetterMock,
         );
         $executor->execute($requestMock, $quoteTransferMock);
     }
@@ -113,7 +113,7 @@ class ShippingAddressStepExecutorTest extends Unit
             $customerServiceMock,
             $customerClientMock,
             [],
-            $this->orderReferenceResetterMock
+            $this->orderReferenceResetterMock,
         );
         $executor->execute($requestMock, $quoteTransferMock);
     }

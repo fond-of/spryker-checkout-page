@@ -5,8 +5,8 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Generated\Shared\Transfer\QuoteTransfer;
-use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Spryker\Shared\Log\Config\LoggerConfigInterface;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessenger;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -75,6 +75,9 @@ class PaymentStepTest extends Unit
         $this->orderReferenceResetterMock = $this->getMockBuilder(OrderReferenceResetterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentStep = new class (
             $paymentClientMock,
@@ -89,7 +92,7 @@ class PaymentStepTest extends Unit
             $this->orderReferenceResetterMock
 ) extends PaymentStep {
             /**
-             * @param \SprykerShop\Yves\CheckoutPage\Depe3ndency\Client\CheckoutPageToPaymentClientInterface $paymentClient
+             * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
              * @param string $stepRoute
              * @param string|null $escapeRoute
@@ -97,6 +100,7 @@ class PaymentStepTest extends Unit
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
              * @param array $checkoutPaymentStepEnterPreCheckPlugins
              * @param \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor
+             * @param \Psr\Log\LoggerInterface $loggerMock
              * @param \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface $orderReferenceResetterMock
              */
             public function __construct(
@@ -120,8 +124,7 @@ class PaymentStepTest extends Unit
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
                     $paymentMethodKeyExtractor,
-                    $checkoutPaymentStepEnterPreCheckPlugins,
-                    $orderReferenceResetterMock
+                    $orderReferenceResetterMock,
                 );
 
                 $this->loggerMock = $loggerMock;

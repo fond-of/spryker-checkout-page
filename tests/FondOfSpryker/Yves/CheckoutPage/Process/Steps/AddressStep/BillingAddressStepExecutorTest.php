@@ -8,7 +8,6 @@ use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
-use PHPUnit\Framework\MockObject\MockObject;
 use SprykerShop\Yves\CheckoutPage\Dependency\Service\CheckoutPageToCustomerServiceBridge;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -78,7 +77,7 @@ class BillingAddressStepExecutorTest extends Unit
             $customerServiceMock,
             $customerClientMock,
             [],
-            $this->orderReferenceResetterMock
+            $this->orderReferenceResetterMock,
         );
         $quoteTransfer = $executor->execute($requestMock, $quoteTransfer);
 
@@ -115,7 +114,7 @@ class BillingAddressStepExecutorTest extends Unit
             $customerServiceMock,
             $customerClientMock,
             [],
-            $this->orderReferenceResetterMock
+            $this->orderReferenceResetterMock,
         );
         $quoteTransfer = $executor->execute($requestMock, $quoteTransfer);
 
