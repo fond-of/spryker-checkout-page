@@ -48,11 +48,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
     /**
      * @var string
      */
-    public const CLIENT_PAYONE = 'CLIENT_PAYONE';
-
-    /**
-     * @var string
-     */
     public const CLIENT_SALES = 'CLIENT_SALES';
 
     /**
@@ -83,7 +78,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addBillingAddressFormDataProvider($container);
         $container = $this->addShippingAddressStepSubForm($container);
         $container = $this->addShippingAddressFormDataProvider($container);
-        $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
         $container = $this->addCountryClient($container);
         $container = $this->addProductCountryRestrictionCheckoutConnectorClient($container);
@@ -118,20 +112,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         return new CheckoutPageToProductCountryRestrictionCheckoutConnectorBridge(
             $container->getLocator()->productCountryRestrictionCheckoutConnector()->client(),
         );
-    }
-
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
-    protected function addPayoneClient(Container $container): Container
-    {
-        $container[self::CLIENT_PAYONE] = function (Container $container) {
-            return $container->getLocator()->payone()->client();
-        };
-
-        return $container;
     }
 
     /**
