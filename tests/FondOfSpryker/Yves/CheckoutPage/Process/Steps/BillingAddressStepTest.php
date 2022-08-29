@@ -34,7 +34,7 @@ class BillingAddressStepTest extends Unit
     {
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getItems')->willReturn(
-            new ArrayObject([$this->createMock(ItemTransfer::class)])
+            new ArrayObject([$this->createMock(ItemTransfer::class)]),
         );
 
         $customerClientMock = $this->createMock(CheckoutPageToCustomerClientBridge::class);
@@ -55,7 +55,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->preCondition($dataTransferMock));
     }
@@ -85,7 +85,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertFalse($step->postCondition($dataTransferMock));
     }
@@ -118,7 +118,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertFalse($step->postCondition($dataTransferMock));
     }
@@ -152,7 +152,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -186,7 +186,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -213,7 +213,7 @@ class BillingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
 
         $this->assertSame($step->getBreadcrumbItemTitle(), BillingAddressStep::BREADCRUMB_ITEM_TITLE);

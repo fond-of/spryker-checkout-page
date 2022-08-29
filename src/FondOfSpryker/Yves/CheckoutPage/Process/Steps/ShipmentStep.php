@@ -48,7 +48,7 @@ class ShipmentStep extends SprykerShopShipmentStep
             $giftCardItemsChecker,
             $stepRoute,
             $escapeRoute,
-            $checkoutShipmentStepEnterPreCheckPlugins
+            $checkoutShipmentStepEnterPreCheckPlugins,
         );
 
         $this->config = $config;

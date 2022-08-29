@@ -48,7 +48,7 @@ class BillingAddressStep extends AddressStep
             $stepExecutor,
             $postConditionChecker,
             $checkoutPageConfig,
-            $checkoutAddressStepEnterPreCheckPlugins
+            $checkoutAddressStepEnterPreCheckPlugins,
         );
 
         $this->giftCardItemsChecker = $giftCardItemsChecker;

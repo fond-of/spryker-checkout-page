@@ -37,8 +37,8 @@ class PaymentStep extends SprykerPaymentStep
         $this->getLogger()->notice(
             sprintf(
                 '[ORDER RESET] Order with reference %s has been reseted.',
-                $quoteTransfer->getOrderReference()
-            )
+                $quoteTransfer->getOrderReference(),
+            ),
         );
         $quoteTransfer->setCheckoutConfirmed(false);
         $quoteTransfer->setOrderReference(null);
@@ -55,12 +55,13 @@ class PaymentStep extends SprykerPaymentStep
     protected function getPaymentSelectionWithFallback(QuoteTransfer $quoteTransfer): ?string
     {
         //ToDo 2022 Spryker Upgrade - since the payment selection is an object and a string is expected I had to override it.
-        if (method_exists($quoteTransfer, 'getPayment')){
+        if (method_exists($quoteTransfer, 'getPayment')) {
             $paymentTransfer = $quoteTransfer->getPayment();
 
             if ($paymentTransfer) {
                 $selection = $paymentTransfer->getPaymentSelection();
-                if (is_object($selection) && method_exists($selection, 'getName')){
+                // @phpstan-ignore-next-line
+                if (is_object($selection) && method_exists($selection, 'getName')) {
                     $paymentTransfer->setPaymentSelection($selection->getName());
                     $quoteTransfer->setPayment($paymentTransfer);
                 }

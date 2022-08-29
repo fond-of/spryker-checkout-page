@@ -24,10 +24,12 @@ class EmptyPaymentMethodValidator implements RequestValidatorInterface
     public function validate(Request $request): Request
     {
         if ($request->request->has(static::PAYMENT_FORM_NAME)) {
+            //ToDo validate if formData really is an array
             $formData = $request->request->get(static::PAYMENT_FORM_NAME);
+
             if (
-                $formData !== null &&
-                 array_key_exists(static::PAYMENT_FORM_SELECTION_NAME, $formData) &&
+                $formData !== null && // @phpstan-ignore-line
+                 array_key_exists(static::PAYMENT_FORM_SELECTION_NAME, $formData) && // @phpstan-ignore-line
                  $formData[static::PAYMENT_FORM_SELECTION_NAME] === ''
             ) {
                 $request = $this->cleanRequest($request);

@@ -21,12 +21,12 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentStepTest extends Unit
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\QuoteTransfer
      */
     private $quoteTransferMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\Request
      */
     private $requestMock;
 
@@ -77,9 +77,9 @@ class PaymentStepTest extends Unit
             $flashMessagenerMock,
             $calculationClientMock,
             [],
+            $this->paymentMethodKeyExtractorMock,
             $this->loggerMock
         ) extends PaymentStep {
-
             /**
              * @var \Psr\Log\LoggerInterface
              */
@@ -117,7 +117,7 @@ class PaymentStepTest extends Unit
                     $flashMessenger,
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
-                    $paymentMethodKeyExtractor
+                    $paymentMethodKeyExtractor,
                 );
 
                 $this->loggerMock = $loggerMock;
@@ -126,9 +126,9 @@ class PaymentStepTest extends Unit
             /**
              * @param \Spryker\Shared\Log\Config\LoggerConfigInterface|null $loggerConfig
              *
-             * @return \Psr\Log\LoggerInterface|null
+             * @return \Psr\Log\LoggerInterface
              */
-            protected function getLogger(?LoggerConfigInterface $loggerConfig = null)
+            protected function getLogger(?LoggerConfigInterface $loggerConfig = null): LoggerInterface
             {
                 return $this->loggerMock;
             }

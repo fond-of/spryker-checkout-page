@@ -58,7 +58,6 @@ class SummaryForm extends SprykerShopSummaryForm
         ]);
     }
 
-
     /**
      * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
      *

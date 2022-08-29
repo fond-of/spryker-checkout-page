@@ -3,6 +3,7 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Generated\Shared\Transfer\CustomerTransfer;
+use Generated\Shared\Transfer\QuoteTransfer;
 use Spryker\Shared\Kernel\Transfer\AbstractTransfer;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithBreadcrumbInterface;
 use Spryker\Yves\StepEngine\Dependency\Step\StepWithExternalRedirectInterface;
@@ -45,7 +46,7 @@ class CustomerStep extends SprykerShopCustomerStep implements StepWithBreadcrumb
      */
     public function postCondition(AbstractTransfer $quoteTransfer): bool
     {
-        if ($this->isCustomerInQuote($quoteTransfer) === false) {
+        if (($quoteTransfer instanceof QuoteTransfer) === false || $this->isCustomerInQuote($quoteTransfer) === false) {
             return false;
         }
 

@@ -55,7 +55,7 @@ class CheckoutPageToCountryBridgeTest extends Unit
 
         static::assertEquals(
             $this->countryTransferMock,
-            $this->bridge->getRegionsByCountryTransfer($this->countryTransferMock)
+            $this->bridge->getRegionsByCountryTransfer($this->countryTransferMock),
         );
     }
 }

@@ -19,7 +19,7 @@ class PaymentForm extends SprykerShopPaymentForm
     protected function addPaymentMethodChoices(FormBuilderInterface $builder, array $paymentMethodSubForms)
     {
         $choices = [];
-        foreach ($paymentMethodSubForms as $choice){
+        foreach ($paymentMethodSubForms as $choice) {
             $choices[$choice->getName()] = $choice->getName();
         }
 
@@ -50,7 +50,7 @@ class PaymentForm extends SprykerShopPaymentForm
                 'constraints' => [
                     new NotBlank(),
                 ],
-            ]
+            ],
         );
 
         return $this;

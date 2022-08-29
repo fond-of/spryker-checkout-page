@@ -52,7 +52,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertFalse($step->requireInput($dataTransferMock));
     }
@@ -65,7 +65,7 @@ class ShippingAddressStepTest extends Unit
         $dataTransferMock = $this->createMock(QuoteTransfer::class);
         $dataTransferMock->method('getBillingSameAsShipping')->willReturn(false);
         $dataTransferMock->method('getItems')->willReturn(
-            new ArrayObject([$this->createMock(ItemTransfer::class)])
+            new ArrayObject([$this->createMock(ItemTransfer::class)]),
         );
 
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
@@ -86,7 +86,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->requireInput($dataTransferMock));
     }
@@ -116,7 +116,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -154,7 +154,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertTrue($step->postCondition($dataTransferMock));
     }
@@ -196,7 +196,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
         $this->assertFalse($step->postCondition($dataTransferMock));
     }
@@ -223,7 +223,7 @@ class ShippingAddressStepTest extends Unit
             $postConditionCheckerMock,
             $checkoutPageConfigMock,
             [],
-            $giftCardItemCheckerMock
+            $giftCardItemCheckerMock,
         );
 
         $this->assertSame($step->getBreadcrumbItemTitle(), ShippingAddressStep::BREADCRUMB_ITEM_TITLE);

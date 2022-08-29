@@ -102,7 +102,7 @@ class ShippingAddressStepExecutor extends SprykerAddressStepExecutor
 
             $shipmentTransfer = $this->getShipmentWithUniqueShippingAddress(
                 $shipmentTransfer,
-                $customerTransfer
+                $customerTransfer,
             );
             $itemTransfer->setShipment($shipmentTransfer);
         }

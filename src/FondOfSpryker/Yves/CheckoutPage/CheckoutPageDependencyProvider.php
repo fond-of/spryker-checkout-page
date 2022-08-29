@@ -13,16 +13,8 @@ use FondOfSpryker\Yves\CheckoutPage\Form\CheckoutShippingAddressCollectionForm;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutBillingAddressFormDataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutShippingAddressFormDataProvider;
 use FondOfSpryker\Yves\CheckoutPage\Form\DataProvider\CheckoutStoreCountryDataProvider;
-use Generated\Shared\Transfer\PaymentTransfer;
 use Spryker\Shared\Kernel\Store;
-use Spryker\Shared\Nopayment\NopaymentConfig;
 use Spryker\Yves\Kernel\Container;
-use Spryker\Yves\Nopayment\Plugin\NopaymentHandlerPlugin;
-use Spryker\Yves\StepEngine\Dependency\Plugin\Form\SubFormPluginCollection;
-use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
-use SprykerEco\Yves\Payone\Plugin\PayoneCreditCardSubFormPlugin;
-use SprykerEco\Yves\Payone\Plugin\PayoneEWalletSubFormPlugin;
-use SprykerEco\Yves\Payone\Plugin\PayoneHandlerPlugin;
 use SprykerShop\Yves\CheckoutPage\CheckoutPageDependencyProvider as SprykerShopCheckoutPageDependencyProvider;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsChecker;
 use SprykerShop\Yves\CheckoutPage\GiftCard\GiftCardItemsCheckerInterface;
@@ -94,8 +86,6 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         $container = $this->addPayoneClient($container);
         $container = $this->addSalesClient($container);
         $container = $this->addCountryClient($container);
-        $container = $this->extendPaymentMethodHandler($container);
-        $container = $this->extendPaymentSubForms($container);
         $container = $this->addProductCountryRestrictionCheckoutConnectorClient($container);
 
         return $container;
@@ -126,7 +116,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
         Container $container
     ): CheckoutPageToProductCountryRestrictionCheckoutConnectorInterface {
         return new CheckoutPageToProductCountryRestrictionCheckoutConnectorBridge(
-            $container->getLocator()->productCountryRestrictionCheckoutConnector()->client()
+            $container->getLocator()->productCountryRestrictionCheckoutConnector()->client(),
         );
     }
 
@@ -273,7 +263,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
             $this->getCheckoutStoreCountryProvider($container),
-            $this->getGiftCardItemsChecker()
+            $this->getGiftCardItemsChecker(),
         );
     }
 
@@ -288,7 +278,7 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $container[static::CLIENT_GLOSSARY_STORAGE],
             $container[static::CLIENT_PRODUCT_COUNTRY_RESTRICTION_CHECKOUT_CONNECTOR],
             $this->getStore(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -341,47 +331,8 @@ class CheckoutPageDependencyProvider extends SprykerShopCheckoutPageDependencyPr
             $this->getCustomerClient($container),
             $this->getCountryClient($container),
             $this->getCheckoutStoreCountryProvider($container),
-            $this->getGiftCardItemsChecker()
+            $this->getGiftCardItemsChecker(),
         );
-    }
-
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
-    protected function extendPaymentSubForms(Container $container): Container
-    {
-        $container->extend(self::PAYMENT_SUB_FORMS, function (SubFormPluginCollection $subFormPluginCollection) {
-            $subFormPluginCollection->add(new PayoneCreditCardSubFormPlugin());
-            $subFormPluginCollection->add(new PayoneEWalletSubFormPlugin());
-
-            return $subFormPluginCollection;
-        });
-
-        return $container;
-    }
-
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
-    protected function extendPaymentMethodHandler(Container $container): Container
-    {
-        $container->extend(
-            self::PAYMENT_METHOD_HANDLER,
-            function (StepHandlerPluginCollection $handlerPluginCollection) {
-                $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_CREDIT_CARD);
-                $handlerPluginCollection->add(new PayoneHandlerPlugin(), PaymentTransfer::PAYONE_E_WALLET);
-                $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_METHOD_NAME);
-                $handlerPluginCollection->add(new NopaymentHandlerPlugin(), NopaymentConfig::PAYMENT_PROVIDER_NAME);
-
-                return $handlerPluginCollection;
-            }
-        );
-
-        return $container;
     }
 
     /**

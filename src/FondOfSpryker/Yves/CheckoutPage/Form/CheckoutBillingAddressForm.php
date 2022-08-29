@@ -517,6 +517,7 @@ class CheckoutBillingAddressForm extends AbstractType
                 $addressTransfer = $quoteTransfer->getBillingAddress();
                 $pattern = '~[\d]+~';
 
+                // @phpstan-ignore-next-line
                 if ($addressTransfer->getHouseNumberValidation() === '1') {
                     return;
                 }

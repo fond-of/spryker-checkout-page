@@ -25,6 +25,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ShippingAddressStepExecutorTest extends Unit
 {
+    /**
+     * @var string
+     */
     public const CUSTOMER_E_MAIL = 'test@test.dev';
 
     /**
@@ -32,10 +35,10 @@ class ShippingAddressStepExecutorTest extends Unit
      */
     public function testUpdateQuoteShipmentTransferFromQuoteWithBillingSameAsShippingFalse()
     {
-        $customerServiceMock = $this->createCustomerServiceMock(['getUniqueAddressKey']);
+        $customerServiceMock = $this->getMockBuilder(CheckoutPageToCustomerServiceBridge::class)->disableOriginalConstructor()->setMethods(['getUniqueAddressKey'])->getMock();
         $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn('');
 
-        $customerClientMock = $this->createCustomerClientMock(['getCustomer']);
+        $customerClientMock = $this->getMockBuilder(CheckoutPageToCustomerClientBridge::class)->disableOriginalConstructor()->setMethods(['getCustomer'])->getMock();
         $customerClientMock->method('getCustomer')->willReturn(null);
 
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
@@ -58,11 +61,11 @@ class ShippingAddressStepExecutorTest extends Unit
      */
     public function testUpdateQuoteShipmentTransferFromClientWithBillingSameAsShippingFalse()
     {
-        $customerServiceMock = $this->createCustomerServiceMock(['getUniqueAddressKey']);
+        $customerServiceMock = $this->getMockBuilder(CheckoutPageToCustomerServiceBridge::class)->disableOriginalConstructor()->setMethods(['getUniqueAddressKey'])->getMock();
         $customerServiceMock->expects($this->exactly(0))->method('getUniqueAddressKey')->willReturn('');
 
         $customerTransfer = new CustomerTransfer();
-        $customerClientMock = $this->createCustomerClientMock(['getCustomer']);
+        $customerClientMock = $this->getMockBuilder(CheckoutPageToCustomerClientBridge::class)->disableOriginalConstructor()->setMethods(['getCustomer'])->getMock();
         $customerClientMock->method('getCustomer')->willReturn($customerTransfer);
 
         $requestMock = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
@@ -77,25 +80,5 @@ class ShippingAddressStepExecutorTest extends Unit
 
         $executor = new ShippingAddressStepExecutor($customerServiceMock, $customerClientMock, []);
         $executor->execute($requestMock, $quoteTransferMock);
-    }
-
-    /**
-     * @param array $methods
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createCustomerServiceMock(array $methods)
-    {
-        return $this->getMockBuilder(CheckoutPageToCustomerServiceBridge::class)->disableOriginalConstructor()->setMethods($methods)->getMock();
-    }
-
-    /**
-     * @param array $methods
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createCustomerClientMock(array $methods)
-    {
-        return $this->getMockBuilder(CheckoutPageToCustomerClientBridge::class)->disableOriginalConstructor()->setMethods($methods)->getMock();
     }
 }
