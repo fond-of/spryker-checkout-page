@@ -14,6 +14,11 @@ use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShipmentStep;
 use FondOfSpryker\Yves\CheckoutPage\Process\Steps\ShippingAddressStep;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientInterface as SprykerShopCheckoutPageToCustomerClientInterface;
 use SprykerShop\Yves\CheckoutPage\Plugin\Router\CheckoutPageRouteProviderPlugin;
+use FondOfSpryker\Yves\CheckoutPage\Process\Steps\SuccessStep;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetter;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
+use Spryker\Shared\Log\LoggerTrait;
+use Spryker\Yves\StepEngine\Process\StepCollection;
 use SprykerShop\Yves\CheckoutPage\Process\StepFactory as SprykerShopStepFactory;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\AbstractBaseStep;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
@@ -23,11 +28,31 @@ use SprykerShop\Yves\CheckoutPage\Process\Steps\StepExecutorInterface;
  */
 class StepFactory extends SprykerShopStepFactory
 {
+    use LoggerTrait;
+
     /**
      * @return array<\Spryker\Yves\StepEngine\Dependency\Step\StepInterface>
      */
     public function getSteps(): array
     {
+        $stepCollection = new StepCollection(
+            $this->getUrlGenerator(),
+            CheckoutPageControllerProvider::CHECKOUT_ERROR,
+        );
+
+        $stepCollection
+            ->addStep($this->createEntryStep())
+            ->addStep($this->createCustomerStep())
+            ->addStep($this->createBillingAddressStep())
+            ->addStep($this->createShippingAddresStep())
+            ->addStep($this->createShipmentStep())
+            ->addStep($this->createPaymentStep())
+            ->addStep($this->createSummaryStep())
+            ->addStep($this->createPlaceOrderStep())
+            ->addStep($this->createSuccessStep());
+
+        return $stepCollection;
+
         return [
             $this->createEntryStep(),
             $this->createCustomerStep(),
@@ -121,6 +146,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCalculationClient(),
             $this->getCheckoutPaymentStepEnterPreCheckPlugins(),
             $this->createPaymentMethodKeyExtractor(),
+            $this->createOrderReferenceResetter(),
         );
     }
 
@@ -153,6 +179,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCustomerService(),
             $this->getCustomerClient(),
             $this->getShoppingListItemExpanderPlugins(),
+            $this->createOrderReferenceResetter(),
         );
     }
 
@@ -165,6 +192,7 @@ class StepFactory extends SprykerShopStepFactory
             $this->getCustomerService(),
             $this->getCustomerClient(),
             $this->getShoppingListItemExpanderPlugins(),
+            $this->createOrderReferenceResetter(),
         );
     }
 
@@ -174,5 +202,13 @@ class StepFactory extends SprykerShopStepFactory
     public function getCustomerClient(): SprykerShopCheckoutPageToCustomerClientInterface
     {
         return $this->getProvidedDependency(CheckoutPageDependencyProvider::CLIENT_CUSTOMER);
+    }
+
+    /**
+     * @return \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface
+     */
+    protected function createOrderReferenceResetter(): OrderReferenceResetterInterface
+    {
+        return new OrderReferenceResetter($this->getLogger());
     }
 }

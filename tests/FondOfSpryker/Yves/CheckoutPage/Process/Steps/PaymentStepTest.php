@@ -3,10 +3,10 @@
 namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps;
 
 use Codeception\Test\Unit;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Generated\Shared\Transfer\QuoteTransfer;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Spryker\Shared\Log\Config\LoggerConfigInterface;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessenger;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
@@ -46,6 +46,11 @@ class PaymentStepTest extends Unit
     private $paymentStep;
 
     /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $orderReferenceResetterMock;
+
+    /**
      * @return void
      */
     protected function _before(): void
@@ -54,7 +59,6 @@ class PaymentStepTest extends Unit
             ->onlyMethods(['setCheckoutConfirmed', 'setOrderReference', 'setIdSalesOrder', 'getCheckoutConfirmed'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Request::class)->getMock();
-        $this->loggerMock = $this->getMockBuilder(Logger::class)->disableOriginalConstructor()->getMock();
         $paymentClientMock = $this->getMockBuilder(CheckoutPageToPaymentClientBridge::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,6 +72,9 @@ class PaymentStepTest extends Unit
         $this->paymentMethodKeyExtractorMock = $this->getMockBuilder(PaymentMethodKeyExtractor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->orderReferenceResetterMock = $this->getMockBuilder(OrderReferenceResetterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentStep = new class (
             $paymentClientMock,
@@ -78,17 +85,11 @@ class PaymentStepTest extends Unit
             $calculationClientMock,
             [],
             $this->paymentMethodKeyExtractorMock,
-            $this->loggerMock
-        ) extends PaymentStep {
+            $this->loggerMock,
+            $this->orderReferenceResetterMock
+) extends PaymentStep {
             /**
-             * @var \Psr\Log\LoggerInterface
-             */
-            protected $loggerMock;
-
-            /**
-             *  constructor.
-             *
-             * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
+             * @param \SprykerShop\Yves\CheckoutPage\Depe3ndency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
              * @param string $stepRoute
              * @param string|null $escapeRoute
@@ -96,7 +97,7 @@ class PaymentStepTest extends Unit
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
              * @param array $checkoutPaymentStepEnterPreCheckPlugins
              * @param \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor
-             * @param \Psr\Log\LoggerInterface $loggerMock
+             * @param \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface $orderReferenceResetterMock
              */
             public function __construct(
                 CheckoutPageToPaymentClientInterface $paymentClient,
@@ -107,7 +108,8 @@ class PaymentStepTest extends Unit
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,
                 PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor,
-                LoggerInterface $loggerMock
+                LoggerInterface $loggerMock,
+                OrderReferenceResetterInterface $orderReferenceResetterMock
             ) {
                 parent::__construct(
                     $paymentClient,
@@ -118,6 +120,8 @@ class PaymentStepTest extends Unit
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
                     $paymentMethodKeyExtractor,
+                    $checkoutPaymentStepEnterPreCheckPlugins,
+                    $orderReferenceResetterMock
                 );
 
                 $this->loggerMock = $loggerMock;
@@ -138,24 +142,10 @@ class PaymentStepTest extends Unit
     /**
      * @return void
      */
-    public function testExecuteCheckoutConfirmed(): void
+    public function testExecute(): void
     {
         $this->quoteTransferMock->method('getCheckoutConfirmed')->willReturn(true);
-        $this->quoteTransferMock->expects($this->once())->method('setCheckoutConfirmed')->with(false);
-        $this->quoteTransferMock->expects($this->once())->method('setOrderReference')->with(null);
-        $this->quoteTransferMock->expects($this->once())->method('setIdSalesOrder')->with(null);
-        $this->paymentStep->execute($this->requestMock, $this->quoteTransferMock);
-    }
-
-    /**
-     * @return void
-     */
-    public function testExecuteCheckoutNotConfirmed(): void
-    {
-        $this->quoteTransferMock->method('getCheckoutConfirmed')->willReturn(false);
-        $this->quoteTransferMock->expects($this->never())->method('setCheckoutConfirmed');
-        $this->quoteTransferMock->expects($this->never())->method('setOrderReference');
-        $this->quoteTransferMock->expects($this->never())->method('setIdSalesOrder');
+        $this->orderReferenceResetterMock->expects($this->once())->method('reset')->with($this->quoteTransferMock);
         $this->paymentStep->execute($this->requestMock, $this->quoteTransferMock);
     }
 }

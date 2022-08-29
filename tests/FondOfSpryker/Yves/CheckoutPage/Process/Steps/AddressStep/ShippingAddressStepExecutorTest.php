@@ -4,6 +4,7 @@ namespace FondOfSpryker\Yves\CheckoutPage\Process\Steps\AddressStep;
 
 use Codeception\Test\Unit;
 use FondOfSpryker\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCustomerClientBridge;
+use FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface;
 use Generated\Shared\Transfer\AddressTransfer;
 use Generated\Shared\Transfer\CustomerTransfer;
 use Generated\Shared\Transfer\QuoteTransfer;
@@ -31,6 +32,21 @@ class ShippingAddressStepExecutorTest extends Unit
     public const CUSTOMER_E_MAIL = 'test@test.dev';
 
     /**
+     * @var \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $orderReferenceResetterMock;
+
+    /**
+     * @return void
+     */
+    protected function _before(): void
+    {
+        $this->orderReferenceResetterMock = $this->getMockBuilder(OrderReferenceResetterInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @return void
      */
     public function testUpdateQuoteShipmentTransferFromQuoteWithBillingSameAsShippingFalse()
@@ -52,7 +68,17 @@ class ShippingAddressStepExecutorTest extends Unit
         $shipmentTransferMock = $this->getMockBuilder(ShipmentTransfer::class)->setMethods(['getShipment'])->getMock();
         $shipmentTransferMock->expects($this->never())->method('getShipment');
 
-        $executor = new ShippingAddressStepExecutor($customerServiceMock, $customerClientMock, []);
+        $this->orderReferenceResetterMock->expects($this->once())
+            ->method('reset')
+            ->with($quoteTransferMock)
+            ->willReturn($quoteTransferMock);
+
+        $executor = new ShippingAddressStepExecutor(
+            $customerServiceMock,
+            $customerClientMock,
+            [],
+            $this->orderReferenceResetterMock
+        );
         $executor->execute($requestMock, $quoteTransferMock);
     }
 
@@ -78,7 +104,17 @@ class ShippingAddressStepExecutorTest extends Unit
         $shipmentTransferMock = $this->getMockBuilder(ShipmentTransfer::class)->setMethods(['getShipment'])->getMock();
         $shipmentTransferMock->expects($this->never())->method('getShipment');
 
-        $executor = new ShippingAddressStepExecutor($customerServiceMock, $customerClientMock, []);
+        $this->orderReferenceResetterMock->expects($this->once())
+            ->method('reset')
+            ->with($quoteTransferMock)
+            ->willReturn($quoteTransferMock);
+
+        $executor = new ShippingAddressStepExecutor(
+            $customerServiceMock,
+            $customerClientMock,
+            [],
+            $this->orderReferenceResetterMock
+        );
         $executor->execute($requestMock, $quoteTransferMock);
     }
 }
