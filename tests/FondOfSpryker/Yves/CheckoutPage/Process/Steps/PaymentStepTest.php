@@ -14,10 +14,17 @@ use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationCli
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientBridge;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
+use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor;
+use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaymentStepTest extends Unit
 {
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|(\SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor&\PHPUnit\Framework\MockObject\MockObject)
+     */
+    protected $paymentMethodKeyExtractorMock;
+
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\QuoteTransfer
      */
@@ -62,6 +69,9 @@ class PaymentStepTest extends Unit
         $calculationClientMock = $this->getMockBuilder(CheckoutPageToCalculationClientBridge::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->paymentMethodKeyExtractorMock = $this->getMockBuilder(PaymentMethodKeyExtractor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderReferenceResetterMock = $this->getMockBuilder(OrderReferenceResetterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,9 +87,10 @@ class PaymentStepTest extends Unit
             $flashMessagenerMock,
             $calculationClientMock,
             [],
+            $this->paymentMethodKeyExtractorMock,
             $this->loggerMock,
             $this->orderReferenceResetterMock
-) extends PaymentStep {
+        ) extends PaymentStep {
             /**
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins
@@ -99,6 +110,7 @@ class PaymentStepTest extends Unit
                 FlashMessengerInterface $flashMessenger,
                 CheckoutPageToCalculationClientInterface $calculationClient,
                 array $checkoutPaymentStepEnterPreCheckPlugins,
+                PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor,
                 LoggerInterface $loggerMock,
                 OrderReferenceResetterInterface $orderReferenceResetterMock
             ) {
@@ -110,7 +122,8 @@ class PaymentStepTest extends Unit
                     $flashMessenger,
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
-                    $orderReferenceResetterMock,
+                    $paymentMethodKeyExtractor,
+                    $orderReferenceResetterMock
                 );
 
                 $this->loggerMock = $loggerMock;
