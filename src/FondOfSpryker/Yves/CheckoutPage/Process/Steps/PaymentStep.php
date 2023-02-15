@@ -9,7 +9,6 @@ use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
 use Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface;
 use SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface;
-use SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface;
 use SprykerShop\Yves\CheckoutPage\Process\Steps\PaymentStep as SprykerPaymentStep;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,7 +27,6 @@ class PaymentStep extends SprykerPaymentStep
      * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
      * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
      * @param array $checkoutPaymentStepEnterPreCheckPlugins
-     * @param \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor
      * @param \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface $orderReferenceResetter
      */
     public function __construct(
@@ -39,7 +37,6 @@ class PaymentStep extends SprykerPaymentStep
         FlashMessengerInterface $flashMessenger,
         CheckoutPageToCalculationClientInterface $calculationClient,
         array $checkoutPaymentStepEnterPreCheckPlugins,
-        PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor,
         OrderReferenceResetterInterface $orderReferenceResetter
     ) {
         parent::__construct(
@@ -50,7 +47,6 @@ class PaymentStep extends SprykerPaymentStep
             $flashMessenger,
             $calculationClient,
             $checkoutPaymentStepEnterPreCheckPlugins,
-            $paymentMethodKeyExtractor,
         );
 
         $this->orderReferenceResetter = $orderReferenceResetter;
