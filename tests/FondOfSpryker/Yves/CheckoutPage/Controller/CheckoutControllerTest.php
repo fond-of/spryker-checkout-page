@@ -206,26 +206,6 @@ class CheckoutControllerTest extends Unit
     public function testIndexAction(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getQuoteClient')
-            ->willReturn($this->quoteClientMock);
-
-        $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getCheckoutClient')
-            ->willReturn($this->checkoutClientMock);
-
-        $this->quoteClientMock->expects(static::atLeastOnce())
-            ->method('getQuote')
-            ->willReturn($this->quoteTransferMock);
-
-        $this->checkoutClientMock->expects(static::atLeastOnce())
-            ->method('isQuoteApplicableForCheckout')
-            ->willReturn($this->quoteValidationResponseTransferMock);
-
-        $this->quoteValidationResponseTransferMock->expects(static::atLeastOnce())
-            ->method('getIsSuccessful')
-            ->willReturn(true);
-
-        $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
             ->willReturn($this->stepEngineMock);
 
@@ -429,22 +409,6 @@ class CheckoutControllerTest extends Unit
     public function testPaymentActionReturnResponse(): void
     {
         $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getQuoteClient')
-            ->willReturn($this->quoteClientMock);
-
-        $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getCheckoutClient')
-            ->willReturn($this->checkoutClientMock);
-
-        $this->checkoutClientMock->expects(static::atLeastOnce())
-            ->method('isQuoteApplicableForCheckout')
-            ->willReturn($this->quoteValidationResponseTransferMock);
-
-        $this->quoteValidationResponseTransferMock->expects(static::atLeastOnce())
-            ->method('getIsSuccessful')
-            ->willReturn(true);
-
-        $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
             ->willReturn($this->stepEngineMock);
 
@@ -459,10 +423,6 @@ class CheckoutControllerTest extends Unit
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createEmptyPaymentMethodValidator')
             ->willReturn($this->emptyPaymentMethodValidatorMock);
-
-        $this->quoteClientMock->expects(static::atLeastOnce())
-            ->method('getQuote')
-            ->willReturn($this->quoteTransferMock);
 
         $this->emptyPaymentMethodValidatorMock->expects(static::atLeastOnce())
             ->method('validate')
@@ -485,26 +445,6 @@ class CheckoutControllerTest extends Unit
      */
     public function testPaymentActionReturnView(): void
     {
-        $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getQuoteClient')
-            ->willReturn($this->quoteClientMock);
-
-        $this->factoryMock->expects(static::atLeastOnce())
-            ->method('getCheckoutClient')
-            ->willReturn($this->checkoutClientMock);
-
-        $this->quoteClientMock->expects(static::atLeastOnce())
-            ->method('getQuote')
-            ->willReturn($this->quoteTransferMock);
-
-        $this->checkoutClientMock->expects(static::atLeastOnce())
-            ->method('isQuoteApplicableForCheckout')
-            ->willReturn($this->quoteValidationResponseTransferMock);
-
-        $this->quoteValidationResponseTransferMock->expects(static::atLeastOnce())
-            ->method('getIsSuccessful')
-            ->willReturn(true);
-
         $this->factoryMock->expects(static::atLeastOnce())
             ->method('createCheckoutProcess')
             ->willReturn($this->stepEngineMock);

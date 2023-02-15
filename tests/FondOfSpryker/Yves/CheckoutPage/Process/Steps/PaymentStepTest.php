@@ -21,6 +21,11 @@ use Symfony\Component\HttpFoundation\Request;
 class PaymentStepTest extends Unit
 {
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|(\SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor&\PHPUnit\Framework\MockObject\MockObject)
+     */
+    protected $paymentMethodKeyExtractorMock;
+
+    /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\Generated\Shared\Transfer\QuoteTransfer
      */
     private $quoteTransferMock;
@@ -34,11 +39,6 @@ class PaymentStepTest extends Unit
      * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
-
-    /**
-     * @var \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractor|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $paymentMethodKeyExtractorMock;
 
     /**
      * @var \FondOfSpryker\Yves\CheckoutPage\Process\Steps\PaymentStep
@@ -90,7 +90,7 @@ class PaymentStepTest extends Unit
             $this->paymentMethodKeyExtractorMock,
             $this->loggerMock,
             $this->orderReferenceResetterMock
-) extends PaymentStep {
+        ) extends PaymentStep {
             /**
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToPaymentClientInterface $paymentClient
              * @param \Spryker\Yves\StepEngine\Dependency\Plugin\Handler\StepHandlerPluginCollection $paymentPlugins

@@ -13,14 +13,6 @@ class CheckoutPageConfig extends SprykerCheckoutPageConfig
     public const PAYMENT_METHOD_NAME_NO_PAYMENT = 'paid';
 
     /**
-     * @return bool
-     */
-    public function cleanCartAfterOrderCreation()
-    {
-        return false;
-    }
-
-    /**
      * @return array
      */
     public function getRegionsForCountries(): array
