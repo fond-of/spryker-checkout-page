@@ -34,8 +34,8 @@ class PaymentStep extends SprykerPaymentStep
     public function __construct(
         CheckoutPageToPaymentClientInterface $paymentClient,
         StepHandlerPluginCollection $paymentPlugins,
-                                             $stepRoute,
-                                             $escapeRoute,
+        $stepRoute,
+        $escapeRoute,
         FlashMessengerInterface $flashMessenger,
         CheckoutPageToCalculationClientInterface $calculationClient,
         array $checkoutPaymentStepEnterPreCheckPlugins,
@@ -50,7 +50,7 @@ class PaymentStep extends SprykerPaymentStep
             $flashMessenger,
             $calculationClient,
             $checkoutPaymentStepEnterPreCheckPlugins,
-            $paymentMethodKeyExtractor
+            $paymentMethodKeyExtractor,
         );
 
         $this->orderReferenceResetter = $orderReferenceResetter;

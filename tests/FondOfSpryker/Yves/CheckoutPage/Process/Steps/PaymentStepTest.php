@@ -99,6 +99,7 @@ class PaymentStepTest extends Unit
              * @param \Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface $flashMessenger
              * @param \SprykerShop\Yves\CheckoutPage\Dependency\Client\CheckoutPageToCalculationClientInterface $calculationClient
              * @param array $checkoutPaymentStepEnterPreCheckPlugins
+             * @param \SprykerShop\Yves\CheckoutPage\Extractor\PaymentMethodKeyExtractorInterface $paymentMethodKeyExtractor
              * @param \Psr\Log\LoggerInterface $loggerMock
              * @param \FondOfSpryker\Yves\CheckoutPage\Resetter\OrderReferenceResetterInterface $orderReferenceResetterMock
              */
@@ -123,7 +124,7 @@ class PaymentStepTest extends Unit
                     $calculationClient,
                     $checkoutPaymentStepEnterPreCheckPlugins,
                     $paymentMethodKeyExtractor,
-                    $orderReferenceResetterMock
+                    $orderReferenceResetterMock,
                 );
 
                 $this->loggerMock = $loggerMock;
