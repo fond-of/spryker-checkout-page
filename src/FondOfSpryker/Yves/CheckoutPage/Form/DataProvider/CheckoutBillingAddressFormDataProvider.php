@@ -111,7 +111,7 @@ class CheckoutBillingAddressFormDataProvider implements StepEngineFormDataProvid
         $customerTransfer = $this->customerClient->getCustomer();
 
         if ($customerTransfer !== null && $quoteTransfer->getBillingAddress() === null) {
-            $billingAddressTransfer->setIdCustomerAddress((int)$customerTransfer->getDefaultBillingAddress());
+            $billingAddressTransfer->setIdCustomerAddress($customerTransfer->getDefaultBillingAddress());
         }
 
         return $billingAddressTransfer;
