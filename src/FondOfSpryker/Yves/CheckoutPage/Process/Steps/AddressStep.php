@@ -52,7 +52,7 @@ class AddressStep extends SprykerShopAddressStep
         }
 
         $hasName = (!empty($addressTransfer->getFirstName()) && !empty($addressTransfer->getLastName()));
-        if ($addressTransfer->getIdCustomerAddress() === null && $hasName === false) {
+        if ($hasName === false && ($addressTransfer->getIdCustomerAddress() === null || $addressTransfer->getAddress1() === null)) {
             return true;
         }
 
