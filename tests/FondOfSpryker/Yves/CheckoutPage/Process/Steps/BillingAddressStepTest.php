@@ -167,6 +167,7 @@ class BillingAddressStepTest extends Unit
         $addressTransferMock->method('getFirstName')->willReturn('');
         $addressTransferMock->method('getLastName')->willReturn('');
         $addressTransferMock->method('getIdCustomerAddress')->willReturn(0);
+        $addressTransferMock->method('getAddress1')->willReturn('');
         $dataTransferMock->method('getBillingAddress')->willReturn($addressTransferMock);
 
         $calculationClientMock = $this->createMock(CheckoutPageToCalculationClientBridge::class);
